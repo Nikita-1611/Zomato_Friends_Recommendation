@@ -58,6 +58,7 @@ def build():
     css = []
     for k, (code, a, b) in DISH_ART.items():
         css.append(f".a-{k} {{ background: url({img(code)}) center/76% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
+        css.append(f".i-{k} {{ background: url({img(code)}) center/contain no-repeat; }}")
     for k, (c1, c2, a, b) in REST_ART.items():
         css.append(f".a-rest-{k} {{ background: url({img(c1)}) 24% 58%/38% no-repeat, url({img(c2)}) 76% 46%/34% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
 
