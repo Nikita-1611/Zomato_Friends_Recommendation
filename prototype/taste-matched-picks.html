@@ -43,6 +43,7 @@
 }
 
 html, body { height: 100%; }
+[hidden] { display: none !important; }
 body {
   background: var(--stage-bg);
   color: var(--stage-fg);
@@ -334,6 +335,103 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 .fav-preview span { font-size: 13px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
 
+/* ---------- Home ---------- */
+#s-home .scroll, #s-friends .scroll { padding-bottom: 96px; }
+.home-hero { background: linear-gradient(180deg, #6e1820 0%, #9b2d36 70%, #b2414a 100%); color: #fff; padding: 8px 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.home-loc { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.home-loc .where { min-width: 0; }
+.home-loc b { display: flex; align-items: center; gap: 4px; font-size: 18px; font-weight: 800; }
+.home-loc b svg { width: 16px; height: 16px; }
+.home-loc span { display: block; font-size: 12.5px; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.avatar-btn { width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,255,255,.7); background: #f2c6a8; color: #6e1820; font-weight: 800; font-size: 15px; flex-shrink: 0; }
+.search-row { display: flex; align-items: center; gap: 10px; }
+.search { flex: 1; min-width: 0; height: 46px; border-radius: 14px; background: #fff; color: #8a8a8a; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14px; box-sizing: border-box; }
+.search svg { width: 18px; height: 18px; color: var(--brand); flex-shrink: 0; }
+.vegtog { display: flex; flex-direction: column; align-items: center; gap: 4px; border: 0; background: none; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .08em; padding: 0; }
+.vegtog .sw { width: 38px; height: 22px; border-radius: 999px; background: rgba(255,255,255,.35); position: relative; transition: background .2s; }
+.vegtog .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.vegtog[aria-pressed="true"] .sw { background: var(--veg); }
+.vegtog[aria-pressed="true"] .sw::after { transform: translateX(16px); }
+.newhere { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 16px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
+.newhere h2 { font-size: 19px; font-weight: 800; margin: 0; line-height: 1.2; text-wrap: balance; }
+.newhere p { margin: 0; font-size: 12.5px; opacity: .9; line-height: 1.4; grid-column: 1; }
+.newhere .pin { grid-row: 1 / span 2; grid-column: 2; width: 48px; height: 48px; border-radius: 14px; background: #fff; color: var(--brand); display: grid; place-items: center; }
+.newhere .pin svg { width: 26px; height: 26px; }
+.cats { display: flex; gap: 8px; overflow-x: auto; padding: 14px 16px 2px; scrollbar-width: none; background: var(--app-surface); }
+.cats::-webkit-scrollbar, .rail::-webkit-scrollbar, .following::-webkit-scrollbar { display: none; }
+.cat { flex-shrink: 0; border: 1px solid var(--line); background: var(--app-surface); color: var(--ink); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; }
+.cat[aria-pressed="true"] { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand); }
+.sec-title { padding: 22px 16px 10px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.sec-title h3 { margin: 0; font-size: 12.5px; letter-spacing: .16em; color: #5c5c5c; font-weight: 700; text-transform: uppercase; }
+.sec-title .sub { display: block; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--muted); font-weight: 500; margin-top: 3px; }
+.seeall { border: 0; background: none; color: var(--brand); font-weight: 700; font-size: 13px; padding: 0; white-space: nowrap; }
+.rail { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 6px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pcard { flex: 0 0 152px; scroll-snap-align: start; background: var(--app-surface); border-radius: 16px; box-shadow: 0 2px 12px -5px rgba(0,0,0,.18); overflow: hidden; text-align: left; border: 0; padding: 0; display: flex; flex-direction: column; color: var(--ink); }
+.pcard .img { height: 100px; width: 100%; border-radius: 0; position: relative; }
+.chip { position: absolute; left: 8px; bottom: -11px; display: inline-flex; align-items: center; gap: 5px; background: #fff; border-radius: 999px; padding: 3px 9px 3px 3px; font-size: 11.5px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,.15); max-width: calc(100% - 16px); box-sizing: border-box; }
+.chip.taste { color: var(--rating); padding-left: 8px; }
+.pcard .body { padding: 18px 10px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.pcard .dn { font-weight: 800; font-size: 14px; line-height: 1.25; }
+.pcard .pl { font-size: 12px; color: var(--muted); }
+.pcard .rs { font-size: 12px; line-height: 1.35; margin-top: 3px; color: #4a4a4a; }
+.pcard .eta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+.pcard.more { align-items: center; justify-content: center; gap: 8px; background: var(--brand-soft); box-shadow: none; border: 1px dashed var(--brand-line); color: var(--brand); font-weight: 700; font-size: 13px; padding: 16px; text-align: center; }
+.pcard.more .circle { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.av { width: 22px; height: 22px; border-radius: 50%; color: #fff; display: inline-grid; place-items: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+.rcard { display: block; width: calc(100% - 32px); margin: 0 16px 16px; background: var(--app-surface); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px -5px rgba(0,0,0,.18); border: 0; padding: 0; text-align: left; color: var(--ink); }
+.rcard .img { height: 140px; width: 100%; border-radius: 0; position: relative; }
+.rcard .offer-tag { position: absolute; left: 10px; top: 10px; background: rgba(20,20,20,.72); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+.rcard .body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.rcard .row1 { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rcard .row1 b { font-size: 17px; font-weight: 800; }
+.rcard .mini { background: var(--rating); color: #fff; font-weight: 800; font-size: 12px; padding: 2px 7px; border-radius: 6px; }
+.rcard .meta { font-size: 12.5px; color: var(--muted); }
+.rcard .social { margin-top: 6px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 12.5px; display: flex; align-items: center; gap: 6px; color: #4a4a4a; }
+.t-rest1 { background: radial-gradient(circle at 25% 60%, #f4d38a 0 16%, transparent 17%), radial-gradient(circle at 70% 45%, #6b2f1c 0 18%, #f3e1c0 19% 22%, transparent 23%), linear-gradient(135deg, #b9652c, #6f2f17); }
+.t-rest2 { background: radial-gradient(circle at 60% 55%, #f6c35b 0 26%, transparent 27%), linear-gradient(135deg, #e09a3a, #8d4f1c); }
+.t-rest3 { background: radial-gradient(ellipse at 50% 55%, #f3cf85 0 40%, transparent 41%), linear-gradient(135deg, #7c9a52, #3f5a2a); }
+
+/* Bottom nav */
+.bottomnav { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 6; background: #fff; border-radius: 999px; box-shadow: 0 6px 22px -6px rgba(0,0,0,.3); display: flex; padding: 5px; gap: 2px; }
+.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink); position: relative; }
+.bottomnav button svg { width: 18px; height: 18px; flex-shrink: 0; }
+.bottomnav button.on { background: #262626; color: #fff; flex: 1.35; }
+.bottomnav .dot { position: absolute; top: 9px; right: 14px; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+
+/* Friends dashboard */
+.fhero { padding: 8px 16px 6px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.fhero h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.fhero p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.following { display: flex; gap: 14px; overflow-x: auto; padding: 10px 16px 6px; scrollbar-width: none; }
+.person { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; font-size: 12px; font-weight: 600; color: var(--ink); padding: 0; width: 60px; }
+.person .av { width: 54px; height: 54px; font-size: 20px; box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px transparent; transition: box-shadow .15s; }
+.person[aria-pressed="true"] .av { box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--brand); }
+.person[aria-pressed="true"] { color: var(--brand); }
+.person .av.all { background: #262626; font-size: 13px; }
+.person .av.add { background: var(--app-surface); color: var(--brand); border: 1.5px dashed var(--brand-line); box-sizing: border-box; }
+.fcard { margin: 0 12px 12px; background: var(--app-surface); border-radius: 18px; padding: 14px; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); display: flex; flex-direction: column; gap: 12px; }
+.fcard .top { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.fcard .top .av { width: 28px; height: 28px; font-size: 12px; }
+.fcard .dish-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; }
+.fcard .dish-row .thumb { width: 64px; height: 64px; }
+.fcard .dn { font-weight: 800; font-size: 15px; }
+.fcard .pl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.fcard .acts { display: flex; gap: 8px; }
+.ghost { border: 1px solid var(--line); background: var(--app-surface); color: var(--ink); border-radius: 10px; height: 34px; padding: 0 12px; font-weight: 700; font-size: 13px; }
+.ghost.saved { border-color: var(--brand-line); color: var(--brand); background: var(--brand-soft); }
+.fempty { margin: 0 12px 12px; padding: 22px 16px; text-align: center; border: 1px dashed var(--line); border-radius: 16px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.sugg { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
+.sugg + .sugg { border-top: 1px solid var(--line); }
+.sugg .av { width: 40px; height: 40px; font-size: 16px; }
+.sugg b { font-size: 14px; display: block; }
+.sugg small { font-size: 12px; color: var(--muted); }
+.followbtn { border: 1px solid var(--brand); background: var(--brand); color: #fff; border-radius: 10px; height: 34px; min-width: 92px; font-weight: 700; font-size: 13px; }
+.followbtn[aria-pressed="true"] { background: var(--app-surface); color: var(--ink); border-color: var(--line); }
+.fsettings { margin: 4px 12px 12px; width: calc(100% - 24px); display: flex; align-items: center; gap: 12px; text-align: left; background: var(--app-surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; color: var(--ink); }
+.fsettings svg { width: 22px; height: 22px; color: var(--brand); flex-shrink: 0; }
+.fsettings b { display: block; font-size: 14px; }
+.fsettings small { font-size: 12px; color: var(--muted); }
+
 /* Toast */
 .toast {
   position: absolute; left: 16px; right: 16px; top: 54px; z-index: 60;
@@ -368,11 +466,12 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
     <h1>Taste‑matched picks</h1>
     <p class="scenario">You are Ananya. You moved to a new area three weeks ago. It's 9 pm, you're hungry, and you don't know which places are good yet.</p>
     <ol id="guide-steps">
-      <li data-step="1"><span class="n">1</span><span>See <b>Picks for you</b> at the top of the restaurant</span></li>
-      <li data-step="2"><span class="n">2</span><span>Tap a reason to see <b>Why this pick?</b>, then add it</span></li>
+      <li data-step="1"><span class="n">1</span><span>On Home, tap a card in <b>Picks from friends</b> or <b>Loved by your taste twins</b></span></li>
+      <li data-step="2"><span class="n">2</span><span>Read <b>Why this pick?</b>, then add it to the cart</span></li>
       <li data-step="3"><span class="n">3</span><span>Open the cart and place the order</span></li>
       <li data-step="4"><span class="n">4</span><span>Tap <b>Order again</b> until the same dish lands a 3rd time</span></li>
-      <li data-step="5"><span class="n">5</span><span>Open <b>Friends &amp; picks</b> to control what friends see</span></li>
+      <li data-step="5"><span class="n">5</span><span>Open the <b>Friends</b> tab and follow someone</span></li>
+      <li data-step="6"><span class="n">6</span><span>Open <b>Your picks and privacy</b> to control what followers see</span></li>
     </ol>
     <p class="fine">Concept prototype styled after a food delivery app. Not affiliated with any company. All names, dishes, ratings and prices are made up.</p>
     <button class="restart" type="button" data-action="restart">
@@ -386,11 +485,77 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 
     <div class="screens">
 
+      <!-- 0. Home -->
+      <section class="screen active" id="s-home" aria-label="Home">
+        <div class="scroll">
+          <div class="home-hero">
+            <div class="home-loc">
+              <div class="where">
+                <b><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Home</b>
+                <span>Flat 4B, Maple Lane, Greenfield Nagar</span>
+              </div>
+              <button class="avatar-btn" type="button" data-go="s-privacy" aria-label="Your profile and privacy">A</button>
+            </div>
+            <div class="search-row">
+              <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search "paneer roll"</div>
+              <button class="vegtog" type="button" id="veg-toggle" aria-pressed="false">VEG<span class="sw"></span></button>
+            </div>
+            <div class="newhere">
+              <h2>New to Greenfield Nagar?</h2>
+              <p>Start with dishes your friends and neighbours keep reordering.</p>
+              <div class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></div>
+            </div>
+          </div>
+          <div class="cats" id="cats">
+            <button class="cat" type="button" aria-pressed="true">All</button>
+            <button class="cat" type="button" aria-pressed="false">Rolls</button>
+            <button class="cat" type="button" aria-pressed="false">North Indian</button>
+            <button class="cat" type="button" aria-pressed="false">Biryani</button>
+            <button class="cat" type="button" aria-pressed="false">South Indian</button>
+          </div>
+
+          <div class="sec-title"><h3>Picks from friends<span class="sub">Dishes they keep coming back to</span></h3><button class="seeall" type="button" data-go="s-friends">See all</button></div>
+          <div class="rail" id="rail-friends"></div>
+
+          <div class="sec-title"><h3>Loved by your taste twins<span class="sub">People nearby who order like you</span></h3></div>
+          <div class="rail" id="rail-taste"></div>
+
+          <div class="sec-title"><h3>Restaurants for you</h3></div>
+          <div id="home-rests"></div>
+        </div>
+      </section>
+
+      <!-- Friends dashboard -->
+      <section class="screen" id="s-friends" aria-label="Friends">
+        <div class="scroll">
+          <div class="fhero">
+            <div>
+              <h1>Friends' picks</h1>
+              <p>Dishes friends keep reordering. Only friends who chose to share show up here.</p>
+            </div>
+            <button class="iconbtn" type="button" data-go="s-privacy" aria-label="Friends and picks settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+            </button>
+          </div>
+          <div class="following" id="following"></div>
+          <div class="sec-title"><h3 id="feed-title">From people you follow</h3></div>
+          <div id="feed"></div>
+          <div class="sec-title"><h3>Friends who share picks<span class="sub">From your contacts. Follow or unfollow anytime</span></h3></div>
+          <div class="block" id="suggest"></div>
+          <button class="fsettings" type="button" data-go="s-privacy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            <span><b>Your picks and privacy</b><small>Choose what friends who follow you can see</small></span>
+          </button>
+        </div>
+      </section>
+
       <!-- 1. Restaurant -->
-      <section class="screen active" id="s-rest" aria-label="Restaurant">
+      <section class="screen" id="s-rest" aria-label="Restaurant">
         <div class="scroll">
           <div class="topbar">
-            <div class="where"><b>Home · Flat 4B</b>Maple Lane, Greenfield Nagar</div>
+            <button class="iconbtn" type="button" data-action="back" aria-label="Back">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+            </button>
             <button class="iconbtn" type="button" data-go="s-privacy" aria-label="Friends and picks settings">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
             </button>
@@ -405,11 +570,11 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 
           <section class="picks" aria-labelledby="picks-title">
             <div class="picks-head"><h2 id="picks-title">Picks for you</h2><span>From repeat orders, not ratings</span></div>
-            <div class="pick">
+            <div class="pick" id="rest-pick-riya">
               <div class="thumb t-roll" aria-hidden="true"></div>
               <div>
                 <div class="name"><span class="vmark" title="Vegetarian"></span>Paneer kathi roll</div>
-                <button class="reason" type="button" data-why="roll">
+                <button class="reason" type="button" data-why="p-roll">
                   <span class="who" aria-hidden="true">R</span>
                   <span><u>Riya keeps coming back to this</u></span>
                 </button>
@@ -420,7 +585,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
               <div class="thumb t-dal" aria-hidden="true"></div>
               <div>
                 <div class="name"><span class="vmark" title="Vegetarian"></span>Dal makhani</div>
-                <button class="reason" type="button" data-why="dal">
+                <button class="reason" type="button" data-why="p-dal">
                   <span class="who anon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M13 17c.8-1.4 1.8-2 3-2 2 0 4 1 5 4"/></svg></span>
                   <span><u>Loved by people near you with your taste</u></span>
                 </button>
@@ -514,7 +679,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       <h2 id="why-title">Why this pick?</h2>
       <div class="sheet-dish">
         <div class="thumb lg" id="why-thumb"></div>
-        <div><div class="name" id="why-name"></div><div class="r" id="why-reason"></div></div>
+        <div><div class="name" id="why-name"></div><div class="r" id="why-place"></div><div class="r" id="why-reason"></div></div>
       </div>
       <ul class="facts" id="why-facts"></ul>
       <div class="sheet-actions">
@@ -537,6 +702,13 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
         <button class="primary" type="button" data-action="fav-yes">Recommend</button>
       </div>
     </section>
+
+    <nav class="bottomnav" id="bottomnav" aria-label="Main">
+      <button type="button" data-tab="s-home" class="on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>Home</button>
+      <button type="button" data-tab="s-friends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5M16 14.6c2.6 0 4.6 1.7 5.5 4.9"/></svg>Friends<span class="dot" id="friends-dot"></span></button>
+      <button type="button" data-tab="healthy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9-9c-1.3-3 .6-6.5 4-6.5 2 0 3.4 1 5 2.8 1.6-1.8 3-2.8 5-2.8 3.4 0 5.3 3.5 4 6.5-2 4.6-9 9-9 9z"/></svg>Healthy</button>
+      <button type="button" data-tab="dining"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 16a8 8 0 0 1 16 0zM2 19h20M12 5v3"/></svg>Dining</button>
+    </nav>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -561,17 +733,43 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   };
   var MENU = ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"];
 
+  var REST = "Spice Route Kitchen";
+  var FRIENDS = {
+    riya:  { name: "Riya",  color: "#7a5aa6" },
+    kabir: { name: "Kabir", color: "#2d7fb8" },
+    meera: { name: "Meera", color: "#c26a1b" },
+    arjun: { name: "Arjun", color: "#3a8d5c", sub: "In your contacts" },
+    sana:  { name: "Sana",  color: "#b0396b", sub: "In your contacts" }
+  };
+  var FRIEND_ORDER = ["riya", "kabir", "meera", "arjun", "sana"];
+  // A pick is either a Spice Route dish (dish) or a dish elsewhere (ext). Friend picks never carry price, time or counts.
+  var PICKS = {
+    "p-roll":    { dish: "roll",   who: "riya",  reason: "keeps coming back to this" },
+    "p-dosa":    { ext: { name: "Ghee roast dosa", place: "Udupi Corner", t: "t-dosa", veg: true }, who: "riya", reason: "has this on repeat" },
+    "p-butter":  { dish: "butter", who: "kabir", reason: "has this on repeat" },
+    "p-coffee":  { ext: { name: "Cold coffee", place: "Bean Street", t: "t-coffee", veg: true }, who: "kabir", reason: "keeps coming back to this" },
+    "p-biryani": { ext: { name: "Veg dum biryani", place: "Lucknow Lane", t: "t-biryani", veg: true }, who: "meera", reason: "keeps coming back to this" },
+    "p-chole":   { dish: "chole",  who: "arjun", reason: "keeps coming back to this" },
+    "p-filter":  { ext: { name: "Filter coffee", place: "Udupi Corner", t: "t-coffee", veg: true }, who: "sana", reason: "has this on repeat" },
+    "p-dal":     { dish: "dal",    eta: "30–35 mins", reason: "Loved by people near you with your taste" },
+    "p-hyd":     { ext: { name: "Hyderabadi veg biryani", place: "Lucknow Lane", t: "t-biryani", veg: true }, eta: "35–40 mins", reason: "Loved by people near you with your taste" },
+    "p-chroll":  { dish: "chroll", eta: "30–35 mins", reason: "Loved by people near you with your taste" },
+    "p-masala":  { ext: { name: "Masala dosa", place: "Udupi Corner", t: "t-dosa", veg: true }, eta: "25–30 mins", reason: "Loved by people near you with your taste" }
+  };
+  var FRIEND_PICKS = ["p-roll", "p-butter", "p-biryani", "p-dosa", "p-coffee", "p-chole", "p-filter"];
+  var TASTE_PICKS = ["p-dal", "p-hyd", "p-masala", "p-chroll"];
+  function pickDish(p) { return p.dish ? DISHES[p.dish] : p.ext; }
+  function pickPlace(p) { return p.dish ? REST : p.ext.place; }
+  function pickReason(p) { return p.who ? FRIENDS[p.who].name + " " + p.reason : p.reason; }
+  function friendFacts(n) {
+    return [
+      ["friend", n + " chose to share picks", n + " turned on sharing, and you follow " + n + ". You only see picks from friends who opted in."],
+      ["repeat", "Based on repeat orders", "A dish becomes a pick when someone keeps reordering it. Star ratings aren't used."],
+      ["lock", "Nobody's orders are shown", "You won't see when " + n + " ordered, how often, or what was paid."]
+    ];
+  }
   var WHY = {
-    roll: {
-      reason: "Riya keeps coming back to this",
-      facts: [
-        ["friend", "Riya chose to share picks", "Riya turned on sharing with friends. You only see picks from friends who opted in."],
-        ["repeat", "Based on repeat orders", "A dish becomes a pick when someone with similar taste keeps reordering it. Star ratings aren't used."],
-        ["lock", "Nobody's orders are shown", "You won't see when Riya ordered, how often, or what was paid."]
-      ]
-    },
-    dal: {
-      reason: "Loved by people near you with your taste",
+    anon: {
       facts: [
         ["repeat", "Based on repeat orders", "People within a few km who order like you keep coming back to this dish. Star ratings aren't used."],
         ["taste", "Matched on taste", "We compare what you reorder with what they reorder, so the pick fits how you eat."],
@@ -579,6 +777,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       ]
     }
   };
+  var CLOCK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
   var ICONS = {
     friend: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
     repeat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>',
@@ -599,7 +798,9 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       cart: {}, orders: {}, prompted: {}, lastOrder: null,
       share: true,
       picks: SEED_PICKS.map(function (p) { return Object.assign({}, p); }),
-      history: ["s-rest"], whyFor: null, favFor: null,
+      history: ["s-home"], whyFor: null, favFor: null,
+      following: { riya: true, kabir: true, meera: true, arjun: false, sana: false },
+      saved: {}, vegOnly: false, filter: null, seenFriends: false,
       steps: {}
     };
   }
@@ -698,15 +899,81 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
         (visible.length > 2 ? "<br>and " + (visible.length - 2) + " more" : "");
   }
 
+  function av(id) { var f = FRIENDS[id]; return '<span class="av" style="background:' + f.color + '">' + f.name[0] + '</span>'; }
+  function visibleFriendPicks() {
+    return FRIEND_PICKS.filter(function (k) {
+      var p = PICKS[k];
+      return state.following[p.who] && (!state.vegOnly || pickDish(p).veg) && (!state.filter || state.filter === p.who);
+    });
+  }
+
+  function renderHome() {
+    var vf = FRIEND_PICKS.filter(function (k) { var p = PICKS[k]; return state.following[p.who] && (!state.vegOnly || pickDish(p).veg); });
+    $("#rail-friends").innerHTML = (vf.length ? vf.map(function (k) {
+      var p = PICKS[k], d = pickDish(p), f = FRIENDS[p.who];
+      return '<button class="pcard" type="button" data-why="' + k + '"><div class="thumb img ' + d.t + '"><span class="chip">' + av(p.who) + f.name + '</span></div>' +
+        '<div class="body"><div class="dn">' + vmark(d) + d.name + '</div><div class="pl">' + pickPlace(p) + '</div><div class="rs">' + f.name + ' ' + p.reason + '</div></div></button>';
+    }).join("") : "") +
+      '<button class="pcard more" type="button" data-go="s-friends"><span class="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>' +
+      (vf.length ? 'Follow more friends' : 'Follow friends to see their picks') + '</button>';
+
+    $("#rail-taste").innerHTML = TASTE_PICKS.filter(function (k) { return !state.vegOnly || pickDish(PICKS[k]).veg; }).map(function (k) {
+      var p = PICKS[k], d = pickDish(p);
+      return '<button class="pcard" type="button" data-why="' + k + '"><div class="thumb img ' + d.t + '"><span class="chip taste">Your taste</span></div>' +
+        '<div class="body"><div class="dn">' + vmark(d) + d.name + '</div><div class="pl">' + pickPlace(p) + '</div><div class="eta">' + CLOCK + p.eta + '</div></div></button>';
+    }).join("");
+
+    var riyaLine = state.following.riya
+      ? '<div class="social">' + av("riya") + '<span><b>Riya</b> keeps coming back to the Paneer kathi roll</span></div>' : '';
+    $("#home-rests").innerHTML =
+      '<button class="rcard" type="button" data-go="s-rest"><div class="thumb img t-rest1"><span class="offer-tag">Flat ₹75 off above ₹299</span></div><div class="body">' +
+      '<div class="row1"><b>' + REST + '</b><span class="mini">4.1 ★</span></div><div class="meta">North Indian, Rolls · 30–35 mins · 1.8 km</div>' + riyaLine + '</div></button>' +
+      '<button class="rcard" type="button" data-rest="Lucknow Lane"><div class="thumb img t-rest2"><span class="offer-tag">20% off up to ₹100</span></div><div class="body">' +
+      '<div class="row1"><b>Lucknow Lane</b><span class="mini">4.3 ★</span></div><div class="meta">Biryani, Awadhi · 35–40 mins · 2.6 km</div></div></button>' +
+      '<button class="rcard" type="button" data-rest="Udupi Corner"><div class="thumb img t-rest3"></div><div class="body">' +
+      '<div class="row1"><b>Udupi Corner</b><span class="mini">4.2 ★</span></div><div class="meta">South Indian · 25–30 mins · 1.1 km</div></div></button>';
+    $("#veg-toggle").setAttribute("aria-pressed", String(state.vegOnly));
+    $("#rest-pick-riya").hidden = !state.following.riya;
+    $("#friends-dot").hidden = state.seenFriends;
+  }
+
+  function renderFriends() {
+    var followed = FRIEND_ORDER.filter(function (id) { return state.following[id]; });
+    if (state.filter && !state.following[state.filter]) state.filter = null;
+    $("#following").innerHTML =
+      '<button class="person" type="button" data-filter="" aria-pressed="' + !state.filter + '"><span class="av all">All</span>All</button>' +
+      followed.map(function (id) {
+        return '<button class="person" type="button" data-filter="' + id + '" aria-pressed="' + (state.filter === id) + '">' +
+          '<span class="av" style="background:' + FRIENDS[id].color + '">' + FRIENDS[id].name[0] + '</span>' + FRIENDS[id].name + '</button>';
+      }).join("");
+    $("#feed-title").textContent = state.filter ? FRIENDS[state.filter].name + "'s picks" : "From people you follow";
+    var items = visibleFriendPicks();
+    $("#feed").innerHTML = items.length ? items.map(function (k) {
+      var p = PICKS[k], d = pickDish(p), f = FRIENDS[p.who];
+      var action = p.dish
+        ? '<button class="ghost" type="button" data-quickadd="' + p.dish + '">Add</button>'
+        : '<button class="ghost' + (state.saved[k] ? ' saved' : '') + '" type="button" data-save="' + k + '">' + (state.saved[k] ? 'Saved' : 'Save') + '</button>';
+      return '<div class="fcard"><div class="top">' + av(p.who) + '<span><b>' + f.name + '</b> ' + p.reason + '</span></div>' +
+        '<div class="dish-row"><div class="thumb ' + d.t + '"></div><div><div class="dn">' + vmark(d) + d.name + '</div><div class="pl">' + pickPlace(p) + '</div></div>' +
+        '<div class="acts"><button class="ghost" type="button" data-why="' + k + '">Why?</button>' + action + '</div></div></div>';
+    }).join("") : '<div class="fempty">You aren\'t following anyone yet. Follow a friend below to see the dishes they keep coming back to.</div>';
+    $("#suggest").innerHTML = FRIEND_ORDER.map(function (id) {
+      var f = FRIENDS[id], on = state.following[id];
+      return '<div class="sugg">' + '<span class="av" style="background:' + f.color + '">' + f.name[0] + '</span>' +
+        '<div><b>' + f.name + '</b><small>' + (f.sub || "Friend") + ' · shares picks</small></div>' +
+        '<button class="followbtn" type="button" data-follow="' + id + '" aria-pressed="' + on + '">' + (on ? 'Following' : 'Follow') + '</button></div>';
+    }).join("");
+  }
+
   function renderAll() {
-    renderMenu(); renderCartBar(); renderCart(); renderPrivacy();
+    renderMenu(); renderCartBar(); renderCart(); renderPrivacy(); renderHome(); renderFriends();
   }
 
   /* ---------- Demo guide ---------- */
   function step(n) {
     state.steps[n] = true;
     var current = 1;
-    while (state.steps[current] && current <= 5) current++;
+    while (state.steps[current] && current <= 6) current++;
     $$("#guide-steps li").forEach(function (li) {
       var s = +li.getAttribute("data-step");
       li.classList.toggle("done", !!state.steps[s]);
@@ -718,15 +985,20 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   function go(id, opts) {
     closeSheets();
     $$(".screen").forEach(function (s) { s.classList.toggle("active", s.id === id); });
+    if (id === "s-rest" && state.history[state.history.length - 1] === "s-done") state.history = ["s-home"];
     if (!(opts && opts.replace)) state.history.push(id);
     if (id === "s-cart") renderCart();
-    if (id === "s-privacy") { renderPrivacy(); step(5); }
+    if (id === "s-privacy") { renderPrivacy(); step(6); }
+    if (id === "s-friends") { state.seenFriends = true; renderFriends(); renderHome(); }
+    if (id === "s-home") renderHome();
+    $("#bottomnav").hidden = !(id === "s-home" || id === "s-friends");
+    $$("#bottomnav [data-tab]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === id); });
     var sc = document.querySelector("#" + id + " .scroll");
     if (sc && !(opts && opts.keepScroll)) sc.scrollTop = 0;
   }
   function back() {
     state.history.pop();
-    var prev = state.history.pop() || "s-rest";
+    var prev = state.history.pop() || "s-home";
     go(prev, { keepScroll: true });
   }
 
@@ -734,16 +1006,18 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   function openSheet(el) { $("#scrim").classList.add("open"); el.classList.add("open"); }
   function closeSheets() { $("#scrim").classList.remove("open"); $$(".sheet").forEach(function (s) { s.classList.remove("open"); }); }
 
-  function openWhy(id) {
-    var d = DISHES[id], w = WHY[id];
-    state.whyFor = id;
+  function openWhy(key) {
+    var p = PICKS[key], d = pickDish(p);
+    var facts = p.who ? friendFacts(FRIENDS[p.who].name) : WHY.anon.facts;
+    state.whyFor = key;
     $("#why-thumb").className = "thumb lg " + d.t;
     $("#why-name").innerHTML = vmark(d) + d.name;
-    $("#why-reason").textContent = w.reason;
-    $("#why-facts").innerHTML = w.facts.map(function (f) {
+    $("#why-place").textContent = pickPlace(p);
+    $("#why-reason").textContent = pickReason(p);
+    $("#why-facts").innerHTML = facts.map(function (f) {
       return '<li><span class="ic">' + ICONS[f[0]] + '</span><div><b>' + f[1] + '</b><span>' + f[2] + '</span></div></li>';
     }).join("");
-    $("#why-add").textContent = state.cart[id] ? "Add another" : "Add to cart";
+    $("#why-add").textContent = p.dish ? (state.cart[p.dish] ? "Add another" : "Add to cart") : (state.saved[key] ? "Saved for later" : "Save for later");
     openSheet($("#sheet-why"));
     step(1);
   }
@@ -771,6 +1045,11 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
     if (state.cart[id] <= 0) delete state.cart[id];
     renderMenu(); renderCartBar(); if (isActive("s-cart")) renderCart();
   }
+  function quickAdd(dishId) {
+    closeSheets(); add(dishId); step(1); step(2);
+    if (!isActive("s-rest")) go("s-rest");
+    toast(DISHES[dishId].name + " added to cart.");
+  }
   function isActive(id) { return document.getElementById(id).classList.contains("active"); }
 
   var placing = false;
@@ -786,7 +1065,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       state.cart = {};
       placing = false; btn.disabled = false;
       renderAll(); renderDone();
-      state.history = ["s-rest"];
+      state.history = ["s-home"];
       go("s-done");
       step(3);
       var fav = Object.keys(state.lastOrder).filter(function (id) { return state.orders[id] >= FAV_AT && !state.prompted[id]; })[0];
@@ -826,8 +1105,11 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
     closeSheets();
     $("#toast").classList.remove("show");
     renderAll();
-    $$(".screen").forEach(function (s) { s.classList.toggle("active", s.id === "s-rest"); });
-    var sc = document.querySelector("#s-rest .scroll"); if (sc) sc.scrollTop = 0;
+    $$(".screen").forEach(function (s) { s.classList.toggle("active", s.id === "s-home"); });
+    $$(".scroll").forEach(function (sc) { sc.scrollTop = 0; });
+    $$(".rail").forEach(function (r) { r.scrollLeft = 0; });
+    $("#bottomnav").hidden = false;
+    $$("#bottomnav [data-tab]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === "s-home"); });
     step(0);
   }
 
@@ -850,8 +1132,37 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       return;
     }
     if (t.id === "why-add") {
-      var id = state.whyFor; closeSheets(); add(id); step(2);
-      toast(DISHES[id].name + " added to cart.");
+      var key = state.whyFor, pk = PICKS[key];
+      if (pk.dish) { quickAdd(pk.dish); return; }
+      state.saved[key] = !state.saved[key]; closeSheets(); renderFriends();
+      toast(state.saved[key] ? pk.ext.name + " saved for later." : pk.ext.name + " removed from saved.");
+      return;
+    }
+    if ((a = t.getAttribute("data-quickadd"))) return quickAdd(a);
+    if ((a = t.getAttribute("data-save"))) {
+      state.saved[a] = !state.saved[a]; renderFriends();
+      toast(state.saved[a] ? PICKS[a].ext.name + " saved for later." : PICKS[a].ext.name + " removed from saved.");
+      return;
+    }
+    if ((a = t.getAttribute("data-follow"))) {
+      state.following[a] = !state.following[a]; renderFriends(); renderHome();
+      if (state.following[a]) step(5);
+      toast(state.following[a] ? "Following " + FRIENDS[a].name + ". Their picks now show on Home." : "Unfollowed " + FRIENDS[a].name + ".");
+      return;
+    }
+    if (t.hasAttribute("data-filter")) { state.filter = t.getAttribute("data-filter") || null; renderFriends(); return; }
+    if ((a = t.getAttribute("data-tab"))) {
+      if (a === "s-home" || a === "s-friends") { state.history = ["s-home"]; return go(a, a === "s-home" ? { replace: true } : null); }
+      return toast((a === "healthy" ? "Healthy" : "Dining") + " isn't part of this demo. Try Home or Friends.");
+    }
+    if ((a = t.getAttribute("data-rest"))) return toast(a + " isn't built in this demo. Open Spice Route Kitchen.");
+    if (t.id === "veg-toggle") {
+      state.vegOnly = !state.vegOnly; renderHome(); renderFriends();
+      toast(state.vegOnly ? "Showing vegetarian picks only." : "Showing all picks.");
+      return;
+    }
+    if (t.classList.contains("cat")) {
+      $$("#cats .cat").forEach(function (c) { c.setAttribute("aria-pressed", String(c === t)); });
       return;
     }
     if (t.id === "place-order") return placeOrder();
