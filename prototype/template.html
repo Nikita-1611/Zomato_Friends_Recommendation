@@ -158,6 +158,12 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .fcard .art { width: 100%; height: 108px; border-radius: 0; position: relative; }
 .chip { position: absolute; left: 8px; bottom: -12px; display: inline-flex; align-items: center; gap: 6px; background: #fff; border-radius: 999px; padding: 3px 10px 3px 3px; font-size: 12px; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
 .fcard .info { padding: 18px 12px 0; }
+.un { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.fcard .un { display: block; margin-bottom: 4px; }
+.ptag { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #256fef; background: #eaf1ff; border-radius: 5px; padding: 1px 5px; vertical-align: 1px; }
+.pubs { display: flex; flex-direction: column; gap: 6px; }
+.pubs div { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13.5px; }
+.pubs .av { width: 26px; height: 26px; }
 .fcard .dn { font-weight: 800; font-size: 14px; line-height: 1.25; }
 .fcard .pl { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .fcard .why { padding: 6px 12px 12px; }
@@ -203,7 +209,8 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .fhero h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
 .fhero p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
 .following { display: flex; gap: 14px; overflow-x: auto; padding: 12px 16px 6px; scrollbar-width: none; }
-.person { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; font-size: 12px; font-weight: 600; padding: 0; width: 60px; }
+.person { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; font-size: 12px; font-weight: 600; padding: 0; width: 64px; }
+.person .nm { max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .person .av, .person .all { width: 54px; height: 54px; box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px transparent; transition: box-shadow .15s; }
 .person .all { border-radius: 50%; background: #262626; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
 .person[aria-pressed="true"] .av, .person[aria-pressed="true"] .all { box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--brand); }
@@ -317,7 +324,9 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .profile { display: flex; align-items: center; gap: 14px; padding: 6px 16px 16px; }
 .profile .av { width: 60px; height: 60px; }
 .profile b { display: block; font-size: 22px; font-weight: 800; }
-.profile small { font-size: 13px; color: var(--muted); }
+.profile small { font-size: 13px; color: var(--muted); display: block; }
+.profile .handle { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+.toggle-row + .toggle-row { border-top: 1px solid var(--line); }
 .toggle-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 14px 0; }
 .toggle-row b { font-size: 15px; display: block; margin-bottom: 4px; }
 .toggle-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
@@ -506,15 +515,19 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       <!-- Friends tab -->
       <section class="screen with-nav" id="s-friends" aria-label="Friends">
         <div class="scroll">
-          <div class="fhero"><h1>Friends' picks</h1><p>Dishes your friends keep reordering. Only friends who chose to share show up here.</p></div>
+          <div class="fhero"><h1>Friends' picks</h1><p>Dishes people you follow keep reordering. Friends who chose to share, plus public profiles you follow.</p></div>
           <div class="following" id="following"></div>
           <div class="section" style="margin-top:12px">
             <div class="sec-head"><div class="row"><h2 id="feed-title">From people you follow</h2></div></div>
             <div id="feed"></div>
           </div>
           <div class="section">
-            <div class="sec-head"><div class="row"><h2>Friends who share picks</h2></div><p>From your contacts. Follow or unfollow anytime.</p></div>
+            <div class="sec-head"><div class="row"><h2>Friends who share picks</h2></div><p>From your contacts, so you see their name and username.</p></div>
             <div class="block" id="suggest"></div>
+          </div>
+          <div class="section">
+            <div class="sec-head"><div class="row"><h2>Public profiles near you</h2></div><p>People who turned on a public profile. You only see their username.</p></div>
+            <div class="block" id="suggest-public"></div>
           </div>
           <button class="linkcard" type="button" data-tab="s-privacy">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -563,7 +576,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       <!-- Profile / privacy -->
       <section class="screen with-nav" id="s-privacy" aria-label="Profile">
         <div class="scroll">
-          <div class="profile"><span class="av" data-avatar="ananya"></span><div><b>Ananya</b><small>Greenfield Nagar · joined 3 weeks ago</small></div></div>
+          <div class="profile"><span class="av" data-avatar="ananya"></span><div><b>Ananya</b><small class="handle">@ananya_newintown</small><small>Greenfield Nagar · joined 3 weeks ago</small></div></div>
           <div class="block-title" style="margin-top:0">Sharing &amp; privacy</div>
           <div class="block">
             <div class="toggle-row">
@@ -573,16 +586,25 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
               </div>
               <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="share-label" id="share-toggle"></button>
             </div>
+            <div class="toggle-row">
+              <div>
+                <b id="public-label">Public profile</b>
+                <p>Let people who aren't in your contacts see your username and shared picks. They never see your real name.</p>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="public-label" id="public-toggle"></button>
+            </div>
           </div>
           <div class="block-title">My shared picks</div>
           <div class="block" id="mypicks-block">
             <div class="off-note" id="off-note" hidden>Sharing is off, so friends can't see any of these.</div>
             <div id="mypicks"></div>
           </div>
-          <div class="seen-as"><b>What friends see</b><span id="seen-as"></span></div>
+          <div class="seen-as"><b>What your contacts see</b><span id="seen-as"></span></div>
+          <div class="seen-as"><b>What everyone else sees</b><span id="seen-public"></span></div>
           <div class="block-title">How we protect you</div>
           <ul class="rules">
-            <li>Strangers never see your name. Your orders only count inside groups of 20 or more people.</li>
+            <li>Strangers never see your real name. They only see your username if you turn on a public profile.</li>
+            <li>Otherwise your orders only count inside groups of 20 or more people, with no names or usernames.</li>
             <li>Friends only appear to you if they opted in, and you only appear to friends while this switch is on.</li>
           </ul>
           <p class="home-end"><button type="button" data-action="restart">Restart demo</button></p>
@@ -674,13 +696,27 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
   // Friends from contacts. Only opted-in friends are ever shown. "dev" has not opted in and must never appear.
   const FRIENDS = {
-    riya:  { name: "Riya",  optIn: true,  share: "Riya chose to share her favourites. She's ordered this more than once." },
-    kabir: { name: "Kabir", optIn: true,  share: "Kabir chose to share their favourites. They've ordered this more than once." },
-    meera: { name: "Meera", optIn: true,  share: "Meera chose to share their favourites. They've ordered this more than once." },
-    arjun: { name: "Arjun", optIn: true,  share: "Arjun chose to share their favourites. They've ordered this more than once." },
-    sana:  { name: "Sana",  optIn: true,  share: "Sana chose to share their favourites. They've ordered this more than once." },
-    dev:   { name: "Dev",   optIn: false, share: "" }
+    riya:  { name: "Riya",  user: "riya.eats",      optIn: true,  share: "Riya chose to share her favourites. She's ordered this more than once." },
+    kabir: { name: "Kabir", user: "kabirbrews",     optIn: true,  share: "Kabir chose to share their favourites. They've ordered this more than once." },
+    meera: { name: "Meera", user: "meeramunches",   optIn: true,  share: "Meera chose to share their favourites. They've ordered this more than once." },
+    arjun: { name: "Arjun", user: "arjun_tadka",    optIn: true,  share: "Arjun chose to share their favourites. They've ordered this more than once." },
+    sana:  { name: "Sana",  user: "sana.dosa",      optIn: true,  share: "Sana chose to share their favourites. They've ordered this more than once." },
+    dev:   { name: "Dev",   user: "devdines",       optIn: false, share: "" }
   };
+  // Strangers who turned on a public profile: shown by username only, never a real name.
+  // Strangers without a public profile never appear individually; they only count inside groups of 20+.
+  const PUBLIC = {
+    dosadiaries:    { user: "dosadiaries",    inGroup: true },
+    spicyfork:      { user: "spicyfork_42",   inGroup: true },
+    midnightmasala: { user: "midnightmasala", inGroup: false }
+  };
+  const PUBLIC_ORDER = ["dosadiaries", "spicyfork", "midnightmasala"];
+  const PUBLIC_PICKS = [
+    { f: "dosadiaries",    d: "mdosa", label: "has this on repeat" },
+    { f: "spicyfork",      d: "dal",   label: "keeps coming back to this" },
+    { f: "midnightmasala", d: "kebab", label: "loved this" }
+  ];
+  const ME = { name: "Ananya", user: "ananya_newintown" };
   const FRIEND_ORDER = ["riya", "kabir", "meera", "arjun", "sana", "dev"];
   // Labels are limited to: liked this / loved this / keeps coming back to this / has this on repeat.
   const FRIEND_PICKS = [
@@ -727,7 +763,9 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     return {
       cart: {}, cartRest: null, orders: Object.assign({}, SEED_HISTORY), prompted: {}, lastOrder: null,
       addr: "home", share: true, vegOnly: false,
-      following: { riya: true, kabir: true, meera: true, arjun: false, sana: false },
+      following: { riya: true, kabir: true, meera: true, arjun: false, sana: false,
+                   dosadiaries: false, spicyfork: false, midnightmasala: false },
+      publicProfile: false,
       filter: null, seenFriends: false,
       shared: SEED_SHARED.map(p => Object.assign({}, p)),
       rest: "sr", history: ["s-home"], whyKey: null, favFor: null, steps: {}
@@ -751,14 +789,21 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   const friendPicks = () => FRIEND_PICKS.filter(p => FRIENDS[p.f].optIn && state.following[p.f] && vegOK(p.d));
   // Keys: "f:<friend>:<dish>", "g:<dish>" (group, repeat orders), "r:<dish>" (ratings fallback)
   const anonKeys = () => (groupOK() ? GROUP_PICKS.map(d => "g:" + d) : RATED_PICKS.map(d => "r:" + d)).filter(k => vegOK(k.split(":")[1]));
-  function parseKey(k) { const p = k.split(":"); return p[0] === "f" ? { kind: "f", f: p[1], d: p[2] } : { kind: p[0], d: p[1] }; }
-  const friendLabel = (f, d) => FRIEND_PICKS.find(p => p.f === f && p.d === d).label;
+  // "p:<profile>:<dish>" is a pick from a public profile the user follows.
+  function parseKey(k) { const p = k.split(":"); return (p[0] === "f" || p[0] === "p") ? { kind: p[0], f: p[1], d: p[2] } : { kind: p[0], d: p[1] }; }
+  const pickLabel = (kind, f, d) => (kind === "p" ? PUBLIC_PICKS : FRIEND_PICKS).find(p => p.f === f && p.d === d).label;
+  const handle = f => "@" + (FRIENDS[f] || PUBLIC[f]).user;
+  // Contacts: real name + username. Public profiles: username only.
+  const whoName = (kind, f) => kind === "p" ? `<b>${handle(f)}</b> <span class="ptag">Public</span>` : `<b>${FRIENDS[f].name}</b> <span class="un">${handle(f)}</span>`;
+  const publicPicks = () => PUBLIC_PICKS.filter(p => state.following[p.f] && vegOK(p.d));
+  const followedPicks = () => friendPicks().map(p => Object.assign({ kind: "f" }, p)).concat(publicPicks().map(p => Object.assign({ kind: "p" }, p)));
   const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
   const groupLine = () => `${groupSize()} people near you who reorder the same places as you keep coming back to this.`;
 
   function reasonText(k) {
     const p = parseKey(k);
-    if (p.kind === "f") return `${FRIENDS[p.f].name} ${friendLabel(p.f, p.d)}`;
+    if (p.kind === "f") return `${FRIENDS[p.f].name} ${pickLabel("f", p.f, p.d)}`;
+    if (p.kind === "p") return `${handle(p.f)} ${pickLabel("p", p.f, p.d)}`;
     if (p.kind === "g") return groupReason();
     const d = DISHES[p.d];
     return `Highly rated nearby: ${d.stars}★ from ${d.votes} ratings`;
@@ -779,7 +824,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       return `<div class="fcard">
         <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${restOf(p.d).name}">
           <div class="art a-${p.d}"><span class="chip">${av(p.f)}${FRIENDS[p.f].name}</span></div>
-          <div class="info"><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
+          <div class="info"><span class="un">${handle(p.f)}</span><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
         </button>
         <div class="why">${reasonBtn(k)}</div>
       </div>`;
@@ -817,22 +862,28 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   }
 
   function renderFriends() {
-    const followed = sharingFriends().filter(f => state.following[f]);
+    const followed = sharingFriends().concat(PUBLIC_ORDER).filter(f => state.following[f]);
     if (state.filter && !state.following[state.filter]) state.filter = null;
     $("#following").innerHTML =
       `<button class="person" type="button" data-filter="" aria-pressed="${!state.filter}"><span class="all">All</span>All</button>` +
-      followed.map(f => `<button class="person" type="button" data-filter="${f}" aria-pressed="${state.filter === f}">${av(f)}${FRIENDS[f].name}</button>`).join("");
-    $("#feed-title").textContent = state.filter ? `${FRIENDS[state.filter].name}'s picks` : "From people you follow";
-    const items = friendPicks().filter(p => !state.filter || p.f === state.filter);
+      followed.map(f => `<button class="person" type="button" data-filter="${f}" aria-pressed="${state.filter === f}">${av(f)}<span class="nm">${FRIENDS[f] ? FRIENDS[f].name : handle(f)}</span></button>`).join("");
+    const fname = f => FRIENDS[f] ? FRIENDS[f].name : handle(f);
+    $("#feed-title").textContent = state.filter ? `${fname(state.filter)}'s picks` : "From people you follow";
+    const items = followedPicks().filter(p => !state.filter || p.f === state.filter);
     $("#feed").innerHTML = items.length ? items.map(p => {
-      const d = DISHES[p.d], k = `f:${p.f}:${p.d}`;
-      return `<div class="feedcard"><div class="top">${av(p.f)}<span><b>${FRIENDS[p.f].name}</b> ${p.label}</span></div>
+      const d = DISHES[p.d], k = `${p.kind}:${p.f}:${p.d}`;
+      return `<div class="feedcard"><div class="top">${av(p.f)}<span>${whoName(p.kind, p.f)}<br>${p.label}</span></div>
         <div class="dish-row">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
         <div class="acts"><button class="ghost" type="button" data-why="${k}">Why?</button><button class="add" type="button" data-quickadd="${p.d}">ADD</button></div></div></div>`;
     }).join("") : `<div class="fempty">You aren't following anyone yet. Follow a friend below to see the dishes they keep coming back to.</div>`;
     $("#suggest").innerHTML = sharingFriends().map(f => {
       const on = state.following[f];
-      return `<div class="sugg">${av(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares picks</small></div>
+      return `<div class="sugg">${av(f)}<div><b>${FRIENDS[f].name}</b><small>${handle(f)} · in your contacts</small></div>
+        <button class="followbtn" type="button" data-follow="${f}" aria-pressed="${on}">${on ? "Following" : "Follow"}</button></div>`;
+    }).join("");
+    $("#suggest-public").innerHTML = PUBLIC_ORDER.map(f => {
+      const on = state.following[f];
+      return `<div class="sugg">${av(f)}<div><b>${handle(f)}</b><small>Public profile${PUBLIC[f].inGroup ? " · reorders the same places as you" : ""}</small></div>
         <button class="followbtn" type="button" data-follow="${f}" aria-pressed="${on}">${on ? "Following" : "Follow"}</button></div>`;
     }).join("");
   }
@@ -843,7 +894,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     return `<span class="stepper"><button type="button" data-dec="${id}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-add="${id}" aria-label="Add one">+</button></span>`;
   }
   function restPicks(rid) {
-    const keys = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => `f:${p.f}:${p.d}`);
+    const keys = followedPicks().filter(p => DISHES[p.d].r === rid).map(p => `${p.kind}:${p.f}:${p.d}`);
     return keys.concat(anonKeys().filter(k => DISHES[parseKey(k).d].r === rid)).slice(0, 3);
   }
   function renderRest() {
@@ -852,7 +903,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         <div class="picks-head"><h2 id="picks-title">Picks for you</h2><span>Tap a reason to check it</span></div>
         ${picks.map(k => {
           const p = parseKey(k), d = DISHES[p.d];
-          const who = p.kind === "f" ? av(p.f) : `<span class="gicon ${p.kind === "g" ? "repeat" : "ratings"}">${p.kind === "g" ? ICON.repeat : ICON.star}</span>`;
+          const who = (p.kind === "f" || p.kind === "p") ? av(p.f) : `<span class="gicon ${p.kind === "g" ? "repeat" : "ratings"}">${p.kind === "g" ? ICON.repeat : ICON.star}</span>`;
           return `<div class="prow">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="src">${who}<span>${reasonBtn(k)}</span></div></div>${ctl(p.d)}</div>`;
         }).join("")}
       </section>` : "";
@@ -923,8 +974,12 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         <button class="hidebtn" type="button" data-hide="${i}" aria-pressed="${p.hidden}">${p.hidden ? "Unhide" : "Hide"}</button></div>`;
     }).join("");
     const vis = state.shared.filter(p => !p.hidden);
+    $("#public-toggle").setAttribute("aria-checked", String(state.publicProfile));
     $("#seen-as").innerHTML = !state.share || !vis.length ? "Nothing. Your favourites are private right now."
-      : vis.map(p => `"${DISHES[p.d].name}: Ananya ${p.label}"`).join("<br>");
+      : vis.map(p => `"${DISHES[p.d].name}: ${ME.name} (@${ME.user}) ${p.label}"`).join("<br>");
+    $("#seen-public").innerHTML = !state.publicProfile || !state.share || !vis.length
+      ? "Nothing. People outside your contacts can't see you or your picks."
+      : vis.map(p => `"${DISHES[p.d].name}: @${ME.user} ${p.label}"`).join("<br>");
   }
   function renderAddr() {
     $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => {
@@ -986,15 +1041,23 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     const q = $("#why-quote");
     if (p.kind === "f") {
       q.className = "quote friends";
-      q.innerHTML = `${av(p.f)}<span><b>${FRIENDS[p.f].name}</b> ${friendLabel(p.f, p.d)}</span>`;
+      q.innerHTML = `${av(p.f)}<span>${whoName("f", p.f)}<br>${pickLabel("f", p.f, p.d)}</span>`;
       $("#why-body").innerHTML = `<p>${FRIENDS[p.f].share}</p>
         <p class="note">${ICON.lock}No order counts, dates, times or prices are ever shown for friends.</p>`;
+    } else if (p.kind === "p") {
+      q.className = "quote friends";
+      q.innerHTML = `${av(p.f)}<span>${whoName("p", p.f)}<br>${pickLabel("p", p.f, p.d)}</span>`;
+      $("#why-body").innerHTML = `<p>${handle(p.f)} turned on a public profile and shares their favourites. They're not in your contacts, so you only see their username.</p>
+        <p class="note">${ICON.lock}No real name, order counts, dates, times or prices are ever shown.</p>`;
     } else if (p.kind === "g") {
       q.className = "quote repeat";
       q.innerHTML = `<span class="gicon repeat">${ICON.repeat}</span><span>${groupLine()}</span>`;
       $("#why-body").innerHTML = `<span class="k">Places you have in common with this group</span>
         <ul class="places">${GROUP.places.map(n => `<li><span>${ICON.pin}</span>${n}</li>`).join("")}</ul>
         <div class="gsize"><b>${groupSize()}</b><span>people in this group. Groups need at least ${GROUP.min} people before we show anything.</span></div>
+        <span class="k">Public profiles in this group</span>
+        <div class="pubs">${PUBLIC_ORDER.filter(f => PUBLIC[f].inGroup).map(f => `<div>${av(f)}${handle(f)}</div>`).join("")}</div>
+        <p style="font-size:12.5px;color:var(--muted)">Everyone else in the group stays anonymous, with no name or username.</p>
         <p class="note">${ICON.lock}Based on repeat orders, not star ratings. Nobody's individual orders are shown.</p>`;
     } else {
       q.className = "quote ratings";
@@ -1010,7 +1073,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   function openFav(id) {
     state.favFor = id;
     $("#fav-art").className = `art a-${id}`;
-    $("#fav-preview").innerHTML = `<b>${DISHES[id].name}</b>: Ananya keeps coming back to this`;
+    $("#fav-preview").innerHTML = `<b>${DISHES[id].name}</b>: ${ME.name} (@${ME.user}) keeps coming back to this`;
     openSheet($("#sheet-fav"));
   }
   let toastTimer;
@@ -1123,7 +1186,10 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       const f = ds.follow; state.following[f] = !state.following[f];
       renderFriends(); renderHome();
       if (state.following[f]) step(4);
-      return toast(state.following[f] ? `Following ${FRIENDS[f].name}. Their picks now show on Home.` : `Unfollowed ${FRIENDS[f].name}.`);
+      const nm = FRIENDS[f] ? FRIENDS[f].name : handle(f);
+      return toast(state.following[f]
+        ? (FRIENDS[f] ? `Following ${nm}. Their picks now show on Home.` : `Following ${nm}. Their picks now show in your Friends feed.`)
+        : `Unfollowed ${nm}.`);
     }
     if (ds.hide !== undefined) {
       const p = state.shared[+ds.hide]; p.hidden = !p.hidden; renderPrivacy(); step(6);
@@ -1132,6 +1198,10 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     if (t.id === "share-toggle") {
       state.share = !state.share; renderPrivacy();
       return toast(state.share ? "Friends can see your shared picks." : "Sharing is off. Friends can't see any of your picks.");
+    }
+    if (t.id === "public-toggle") {
+      state.publicProfile = !state.publicProfile; renderPrivacy();
+      return toast(state.publicProfile ? `Public profile on. People outside your contacts see @${ME.user}, never your name.` : "Public profile off. Only your contacts can see your picks.");
     }
     if (t.id === "veg-toggle") {
       state.vegOnly = !state.vegOnly; renderHome(); renderFriends();
