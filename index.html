@@ -2,42 +2,44 @@
 <title>Taste-matched Picks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: a phone-sized app centred on a quiet stage, with a demo guide beside it on wide screens. */
+/* Layout: a phone-sized app in a Zomato-style UI (red accent, green rating pills, white cards), centred on a quiet stage with a demo guide beside it. */
 :root {
   /* Stage (outside the phone) follows the viewer's theme */
-  --stage-bg: #eef1ee;
-  --stage-fg: #23302a;
-  --stage-muted: #5d6b64;
-  --stage-line: #d3dbd5;
+  --stage-bg: #f1eeee;
+  --stage-fg: #2a2324;
+  --stage-muted: #6b5f60;
+  --stage-line: #ddd3d4;
   --stage-chip: #ffffff;
 
   /* App (inside the phone) is one fixed light look */
-  --app-bg: #f7f8f6;
+  --app-bg: #f4f5f7;
   --app-surface: #ffffff;
-  --ink: #1b2620;
-  --muted: #66736c;
-  --line: #e3e8e4;
-  --brand: #1d6a52;        /* deep curry-leaf green */
+  --ink: #1c1c1c;
+  --muted: #696969;
+  --line: #e8e8e8;
+  --brand: #e23744;        /* food-app red */
   --brand-ink: #ffffff;
-  --brand-soft: #e6f1eb;
+  --brand-soft: #fdeced;
+  --brand-line: #f6c3c7;
+  --rating: #24963f;
   --saffron: #d9922b;
   --saffron-soft: #fbf0dc;
-  --veg: #2f8a3e;
-  --nonveg: #9a3b22;
+  --veg: #3ab757;
+  --nonveg: #c0392b;
 
-  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-display: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --stage-bg: #141a17; --stage-fg: #e4ebe6; --stage-muted: #98a69e; --stage-line: #2c3631; --stage-chip: #1e2622;
+    --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --stage-bg: #141a17; --stage-fg: #e4ebe6; --stage-muted: #98a69e; --stage-line: #2c3631; --stage-chip: #1e2622;
+  --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
   color-scheme: dark;
 }
 
@@ -70,7 +72,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 .guide li .n { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--stage-line); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
 .guide li.now { background: var(--stage-chip); color: var(--stage-fg); }
 .guide li.now .n { border-color: var(--saffron); color: var(--saffron); }
-.guide li.done .n { background: var(--brand); border-color: var(--brand); color: #fff; }
+.guide li.done .n { background: var(--rating); border-color: var(--rating); color: #fff; }
 .guide .fine { font-size: 12px; color: var(--stage-muted); margin: 0; line-height: 1.5; }
 
 .restart {
@@ -123,24 +125,37 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   display: grid; place-items: center; color: var(--ink); flex-shrink: 0;
 }
 .iconbtn svg { width: 18px; height: 18px; }
-.screen-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin: 0; flex: 1; }
+.screen-title { font-family: var(--font-display); font-weight: 800; font-size: 18px; margin: 0; flex: 1; }
 
 /* Restaurant header */
 .rest-head { padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
-.rest-head h1 { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
+.rest-head h1 { font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
 .rest-head .meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; }
-.rest-head .meta span + span::before { content: "·"; margin-right: 10px; color: var(--line); }
+.rest-head .meta span + span::before { content: "·"; margin-right: 10px; color: #bbb; }
+.rest-card { margin: 0 12px 12px; background: var(--app-surface); border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px -4px rgba(0,0,0,.12); display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; }
+.rest-card h1 { font-weight: 800; font-size: 24px; line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+.rest-card .meta { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.rest-card .meta span + span::before { content: "·"; margin-right: 10px; color: #bbb; }
+.rest-card .time { display: inline-flex; align-items: center; gap: 4px; background: #eef7f1; color: var(--rating); padding: 3px 8px; border-radius: 8px; font-weight: 700; font-size: 12px; }
+.rating { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.rating .pill { background: var(--rating); color: #fff; font-weight: 800; font-size: 14px; padding: 4px 8px; border-radius: 8px; display: inline-flex; gap: 3px; align-items: center; font-variant-numeric: tabular-nums; }
+.rating small { font-size: 10px; color: var(--muted); border-bottom: 1px dashed #bbb; }
+.offer { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px; font-weight: 700; color: #256fef; }
+.offer svg { width: 18px; height: 18px; }
+.tag-best { display: inline-block; font-size: 11px; font-weight: 700; color: #e2a03b; background: #fff6e8; border: 1px solid #f7deb3; padding: 1px 6px; border-radius: 4px; margin: 4px 0 0; }
+.dish-rate { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+.dish-rate .stars { color: #f3a51a; letter-spacing: 1px; }
 
 /* Picks card */
 .picks {
-  margin: 0 12px 18px; padding: 14px 14px 6px; border-radius: 18px;
-  background: var(--brand-soft); border: 1px solid #cfe3d7;
+  margin: 0 12px 18px; padding: 14px 14px 6px; border-radius: 20px;
+  background: linear-gradient(180deg, var(--brand-soft), var(--app-surface) 70px); border: 1px solid var(--brand-line);
 }
 .picks-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
-.picks-head h2 { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0; color: var(--brand); }
+.picks-head h2 { font-family: var(--font-display); font-size: 17px; font-weight: 800; margin: 0; color: var(--brand); }
 .picks-head span { font-size: 11px; color: var(--muted); }
 .pick { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; }
-.pick + .pick { border-top: 1px solid #cfe3d7; }
+.pick + .pick { border-top: 1px dashed var(--line); }
 .pick .name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
 .reason {
   display: inline-flex; align-items: flex-start; gap: 6px; text-align: left;
@@ -150,14 +165,14 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
   font-size: 10px; font-weight: 700; color: #fff; background: #7a5aa6; margin-top: 0;
 }
-.reason .who.anon { background: var(--brand); }
+.reason .who.anon { background: var(--rating); }
 .reason .who.anon svg { width: 11px; height: 11px; }
 .reason u { text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; text-decoration-color: var(--muted); }
 .reason .why { color: var(--brand); font-weight: 600; white-space: nowrap; }
 
 /* Dish thumbnails: painted tiles, no photos */
 .thumb { width: 52px; height: 52px; border-radius: 12px; position: relative; flex-shrink: 0; }
-.thumb.lg { width: 84px; height: 84px; border-radius: 14px; }
+.thumb.lg { width: 112px; height: 104px; border-radius: 16px; }
 .t-roll    { background: radial-gradient(circle at 35% 40%, #f4d38a 0 28%, transparent 29%), linear-gradient(135deg, #e8b765, #b77a35); }
 .t-dal     { background: radial-gradient(circle at 50% 50%, #6b2f1c 0 30%, #f3e1c0 31% 36%, transparent 37%), linear-gradient(135deg, #8b4325, #5a2416); }
 .t-chroll  { background: radial-gradient(circle at 60% 40%, #e06a3c 0 25%, transparent 26%), linear-gradient(135deg, #e3b26a, #a8682d); }
@@ -178,11 +193,12 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 
 /* Add / stepper */
 .add {
-  min-width: 72px; height: 34px; border-radius: 10px; border: 1.5px solid var(--brand);
-  background: var(--app-surface); color: var(--brand); font-weight: 700; font-size: 13px; letter-spacing: .04em;
+  min-width: 80px; height: 34px; border-radius: 10px; border: 1px solid var(--brand-line);
+  background: #fff8f8; color: var(--brand); font-weight: 800; font-size: 14px; letter-spacing: .04em; position: relative;
 }
+.add::after { content: "+"; position: absolute; top: 1px; right: 6px; font-size: 13px; font-weight: 800; }
 .stepper {
-  min-width: 72px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--brand-ink);
+  min-width: 80px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--brand-ink);
   display: inline-flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
@@ -190,12 +206,13 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 
 /* Menu */
 .menu-head { padding: 0 16px; display: flex; align-items: baseline; justify-content: space-between; }
-.menu-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0 0 4px; }
+.menu-head h3 { font-family: var(--font-display); font-weight: 800; font-size: 17px; margin: 0 0 4px; }
 .menu-head span { font-size: 12px; color: var(--muted); }
-.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 16px; border-bottom: 1px solid var(--line); }
+.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 18px 16px; border-bottom: 1px dashed var(--line); background: var(--app-surface); }
+#menu { background: var(--app-surface); margin: 8px 0 0; border-radius: 20px 20px 0 0; overflow: hidden; }
 .dish .info { min-width: 0; }
-.dish .name { font-weight: 700; font-size: 15px; }
-.dish .price { font-size: 14px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.dish .name { font-weight: 700; font-size: 16px; margin-top: 6px; }
+.dish .price { font-size: 15px; font-weight: 600; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .dish .desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
 .dish .side { display: flex; flex-direction: column; align-items: center; gap: 0; }
 .dish .side .add, .dish .side .stepper { position: relative; z-index: 1; margin-top: -16px; box-shadow: 0 4px 10px -4px rgba(0,0,0,.2); }
@@ -207,11 +224,11 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px 16px; border-radius: 14px; border: 0;
   background: var(--brand); color: var(--brand-ink); text-align: left;
-  box-shadow: 0 10px 24px -10px rgba(29,106,82,.7);
+  box-shadow: 0 10px 24px -10px rgba(226,55,68,.7);
   transform: translateY(0); transition: transform .25s ease, opacity .25s ease;
 }
 .cartbar[hidden] { display: flex !important; transform: translateY(120px); opacity: 0; pointer-events: none; }
-.cartbar small { display: block; font-size: 12px; opacity: .85; font-variant-numeric: tabular-nums; }
+.cartbar small { display: block; font-size: 12px; opacity: .9; margin-top: 1px; font-variant-numeric: tabular-nums; }
 .cartbar b { font-size: 15px; }
 .cartbar .go { font-weight: 700; display: flex; align-items: center; gap: 4px; }
 
@@ -226,7 +243,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 .bill.total { color: var(--ink); font-weight: 700; border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 4px; }
 .addr { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
 .addr b { color: var(--ink); display: block; font-size: 14px; }
-.addr svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; margin-top: 1px; }
+.addr svg { width: 20px; height: 20px; color: var(--rating); flex-shrink: 0; margin-top: 1px; }
 .empty { text-align: center; padding: 60px 24px; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
 
 .footer { padding: 12px 12px 18px; background: var(--app-surface); border-top: 1px solid var(--line); }
@@ -234,6 +251,9 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink);
   font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;
 }
+.primary.split { justify-content: space-between; padding: 0 16px; text-align: left; }
+.primary.split small { display: block; font-size: 10px; font-weight: 600; opacity: .85; letter-spacing: .06em; }
+.primary.split .go { display: flex; align-items: center; gap: 4px; font-size: 16px; }
 .primary:disabled { opacity: .7; cursor: progress; }
 .secondary {
   width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--app-surface); color: var(--ink);
@@ -245,10 +265,10 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 
 /* Delivered */
 .done-wrap { padding: 28px 20px 20px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
-.done-badge { width: 84px; height: 84px; border-radius: 50%; background: var(--brand); display: grid; place-items: center; color: #fff; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
+.done-badge { width: 84px; height: 84px; border-radius: 50%; background: var(--rating); display: grid; place-items: center; color: #fff; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
 .done-badge svg { width: 42px; height: 42px; }
 @keyframes pop { from { transform: scale(.5); opacity: 0; } }
-.done-wrap h2 { font-family: var(--font-display); font-size: 26px; margin: 0; }
+.done-wrap h2 { font-family: var(--font-display); font-weight: 800; font-size: 26px; margin: 0; }
 .done-wrap p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .receipt { width: 100%; text-align: left; box-sizing: border-box; }
 .receipt .line { grid-template-columns: auto 1fr; }
@@ -266,7 +286,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 .toggle-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
 .switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #c8d0cb; position: relative; transition: background .2s; padding: 0; }
 .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
-.switch[aria-checked="true"] { background: var(--brand); }
+.switch[aria-checked="true"] { background: var(--rating); }
 .switch[aria-checked="true"]::after { transform: translateX(20px); }
 .mypick { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; transition: opacity .2s; }
 .mypick + .mypick { border-top: 1px solid var(--line); }
@@ -294,7 +314,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 }
 .sheet.open { transform: none; }
 .sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); align-self: center; }
-.sheet h2 { font-family: var(--font-display); font-size: 21px; margin: 4px 0 0; }
+.sheet h2 { font-family: var(--font-display); font-weight: 800; font-size: 21px; margin: 4px 0 0; }
 .sheet-dish { display: flex; gap: 14px; align-items: center; }
 .sheet-dish .name { font-weight: 700; font-size: 16px; }
 .sheet-dish .r { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
@@ -330,7 +350,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   .phone { width: 100%; height: 100%; min-height: 0; border-radius: 0; box-shadow: none; }
   .statusbar { display: none; }
   .screens { inset: 0; }
-  .toast { top: 12px; }
+  .toast { top: 52px; }
   .restart-mobile {
     display: inline-flex; position: absolute; z-index: 70; right: 58px; top: 12px;
     align-items: center; gap: 5px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line);
@@ -355,7 +375,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       <li data-step="4"><span class="n">4</span><span>Tap <b>Order again</b> until the same dish lands a 3rd time</span></li>
       <li data-step="5"><span class="n">5</span><span>Open <b>Friends &amp; picks</b> to control what friends see</span></li>
     </ol>
-    <p class="fine">All names, dishes and prices are made up.</p>
+    <p class="fine">Concept prototype styled after a food delivery app. Not affiliated with any company. All names, dishes, ratings and prices are made up.</p>
     <button class="restart" type="button" data-action="restart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
       Restart demo
@@ -376,9 +396,12 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
             </button>
           </div>
-          <div class="rest-head">
-            <h1>Spice Route Kitchen</h1>
-            <div class="meta"><span>North Indian, Rolls</span><span>1.8 km</span><span>30–35 min</span></div>
+          <div class="rest-card">
+            <div><h1>Spice Route Kitchen</h1></div>
+            <div class="rating"><span class="pill">4.1 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg></span><small>2.4K ratings</small></div>
+            <div class="meta"><span class="time"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>30–35 mins</span><span>1.8 km</span><span>Greenfield Nagar</span></div>
+            <div class="meta"><span>North Indian, Rolls</span><span>₹300 for one</span></div>
+            <div class="offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Flat ₹75 off above ₹299</div>
           </div>
 
           <section class="picks" aria-labelledby="picks-title">
@@ -412,7 +435,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
           <div class="menu-end">Spice Route Kitchen is a made-up restaurant for this demo.</div>
         </div>
         <button class="cartbar" type="button" data-go="s-cart" id="cartbar" hidden>
-          <span><small id="cartbar-count">1 item</small><b id="cartbar-total">₹0</b></span>
+          <span><b id="cartbar-count">1 item added</b><small id="cartbar-total">₹0</small></span>
           <span class="go">View cart <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
         </button>
       </section>
@@ -427,7 +450,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
         </div>
         <div class="scroll" id="cart-body"></div>
         <div class="footer" id="cart-footer">
-          <button class="primary" type="button" id="place-order">Place order</button>
+          <button class="primary split" type="button" id="place-order">Place order</button>
         </div>
       </section>
 
@@ -528,14 +551,14 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
 <script>
 (function () {
   var DISHES = {
-    roll:    { name: "Paneer kathi roll",  price: 189, veg: true,  t: "t-roll",   desc: "Charred paneer tikka, pickled onion and mint chutney in a flaky paratha." },
-    dal:     { name: "Dal makhani",        price: 229, veg: true,  t: "t-dal",    desc: "Black lentils slow-cooked overnight with butter and cream." },
-    chroll:  { name: "Chicken tikka roll", price: 219, veg: false, t: "t-chroll", desc: "Smoky chicken tikka, egg-washed paratha, green chutney." },
-    butter:  { name: "Butter chicken",     price: 319, veg: false, t: "t-butter", desc: "Tandoori chicken in a mild tomato and fenugreek gravy." },
-    chole:   { name: "Chole bhature",      price: 199, veg: true,  t: "t-chole",  desc: "Spiced chickpeas with two puffed bhature and onion salad." },
-    rice:    { name: "Jeera rice",         price: 149, veg: true,  t: "t-rice",   desc: "Basmati tempered with cumin and ghee." },
-    naan:    { name: "Garlic naan",        price: 69,  veg: true,  t: "t-naan",   desc: "Tandoor-baked, brushed with garlic butter." },
-    jamun:   { name: "Gulab jamun (2 pcs)",price: 99,  veg: true,  t: "t-jamun",  desc: "Warm, soaked in cardamom syrup." }
+    roll:    { name: "Paneer kathi roll",  price: 189, veg: true,  best: true, r: 4.5, rc: 212, t: "t-roll",   desc: "Charred paneer tikka, pickled onion and mint chutney in a flaky paratha." },
+    dal:     { name: "Dal makhani",        price: 229, veg: true,  best: true, r: 4.6, rc: 318, t: "t-dal",    desc: "Black lentils slow-cooked overnight with butter and cream." },
+    chroll:  { name: "Chicken tikka roll", price: 219, veg: false, r: 4.2, rc: 96, t: "t-chroll", desc: "Smoky chicken tikka, egg-washed paratha, green chutney." },
+    butter:  { name: "Butter chicken",     price: 319, veg: false, best: true, r: 4.3, rc: 187, t: "t-butter", desc: "Tandoori chicken in a mild tomato and fenugreek gravy." },
+    chole:   { name: "Chole bhature",      price: 199, veg: true,  r: 4.0, rc: 74, t: "t-chole",  desc: "Spiced chickpeas with two puffed bhature and onion salad." },
+    rice:    { name: "Jeera rice",         price: 149, veg: true,  r: 4.1, rc: 58, t: "t-rice",   desc: "Basmati tempered with cumin and ghee." },
+    naan:    { name: "Garlic naan",        price: 69,  veg: true,  r: 4.4, rc: 140, t: "t-naan",   desc: "Tandoor-baked, brushed with garlic butter." },
+    jamun:   { name: "Gulab jamun (2 pcs)",price: 99,  veg: true,  r: 4.3, rc: 66, t: "t-jamun",  desc: "Warm, soaked in cardamom syrup." }
   };
   var MENU = ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"];
 
@@ -598,7 +621,8 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   function renderMenu() {
     $("#menu").innerHTML = MENU.map(function (id) {
       var d = DISHES[id];
-      return '<div class="dish"><div class="info"><div class="name">' + vmark(d) + d.name + '</div><div class="price">' + rupees(d.price) +
+      return '<div class="dish"><div class="info"><div>' + vmark(d) + (d.best ? '<span class="tag-best">Bestseller</span>' : '') + '</div><div class="name">' + d.name +
+        '</div><div class="dish-rate"><span class="stars">' + "★★★★★".slice(0, Math.round(d.r)) + '</span>' + d.r.toFixed(1) + ' (' + d.rc + ')</div><div class="price">' + rupees(d.price) +
         '</div><div class="desc">' + d.desc + '</div></div><div class="side"><div class="thumb lg ' + d.t + '" aria-hidden="true"></div>' + ctl(id) + '</div></div>';
     }).join("");
     $$("[data-ctl]").forEach(function (el) { el.innerHTML = ctl(el.getAttribute("data-ctl")); });
@@ -614,7 +638,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
   function renderCartBar() {
     var t = cartTotals();
     $("#cartbar").hidden = t.items === 0;
-    $("#cartbar-count").textContent = t.items + (t.items === 1 ? " item" : " items");
+    $("#cartbar-count").textContent = t.items + (t.items === 1 ? " item added" : " items added");
     $("#cartbar-total").textContent = rupees(t.sub);
   }
 
@@ -639,7 +663,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
       '<div class="bill total"><span>To pay</span><span>' + rupees(t.total) + '</span></div></div>' +
       '<div class="block-title">Deliver to</div><div class="block"><div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><b>Home · Flat 4B</b>Maple Lane, Greenfield Nagar</div></div></div>' +
       '<div style="height:12px"></div>';
-    $("#place-order").textContent = "Place order · " + rupees(t.total);
+    $("#place-order").innerHTML = '<span>' + rupees(t.total) + '<small>TOTAL</small></span><span class="go">Place Order <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>';
   }
 
   function renderDone() {
@@ -756,7 +780,7 @@ button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
     placing = true;
     var btn = $("#place-order");
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Placing order…';
+    btn.innerHTML = '<span style="margin:auto;display:flex;gap:8px;align-items:center"><span class="spinner"></span> Placing order…</span>';
     setTimeout(function () {
       state.lastOrder = Object.assign({}, state.cart);
       Object.keys(state.cart).forEach(function (id) { state.orders[id] = (state.orders[id] || 0) + 1; });
