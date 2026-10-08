@@ -367,6 +367,18 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .circ svg { width: 17px; height: 17px; }
 .circ[aria-pressed="true"] { color: var(--brand); border-color: var(--brand-line); }
 .circ[aria-pressed="true"] svg { fill: currentColor; }
+.cmt { display: flex; gap: 8px; align-items: flex-start; width: 100%; margin-top: 10px; padding: 8px 10px; border: 1px solid #ececec; border-radius: 12px; background: #fafafa; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; }
+.cmt .av { width: 22px; height: 22px; }
+.cmt q { font-style: italic; }
+.cmt q::before { content: "“"; } .cmt q::after { content: "”"; }
+.cmt .more { display: block; color: var(--brand); font-weight: 700; margin-top: 3px; font-style: normal; }
+.feedcard .say { font-size: 13px; font-style: italic; color: #3f3f3f; background: #fafafa; border-left: 3px solid var(--brand-line); padding: 6px 10px; border-radius: 0 8px 8px 0; }
+.clist { display: flex; flex-direction: column; }
+.citem { display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding: 12px 0; }
+.citem + .citem { border-top: 1px dashed var(--line); }
+.citem .av { width: 36px; height: 36px; }
+.citem .who { font-size: 13.5px; }
+.citem p { margin: 4px 0 0; font-size: 14px; line-height: 1.45; }
 .custom { font-size: 11.5px; color: #9a9a9a; margin-top: 6px; }
 .menufab { position: absolute; right: 14px; bottom: 82px; z-index: 6; display: inline-flex; align-items: center; gap: 8px; background: #262626; color: #fff; border: 0; border-radius: 16px; padding: 12px 18px; font-weight: 700; font-size: 15px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
 .menufab svg { width: 18px; height: 18px; }
@@ -761,6 +773,15 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       </div>
     </section>
 
+    <section class="sheet" id="sheet-cmt" role="dialog" aria-modal="true" aria-labelledby="cmt-title">
+      <div class="grab"></div>
+      <h2 id="cmt-title">What people say</h2>
+      <div class="sheet-dish"><div class="art" id="cmt-art"></div><div><div class="dn" id="cmt-name"></div><div class="pl" id="cmt-place"></div></div></div>
+      <div class="clist" id="cmt-list"></div>
+      <p class="note" id="cmt-note"></p>
+      <div class="sheet-actions"><button class="primary" type="button" id="cmt-add">Add to cart</button></div>
+    </section>
+
     <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
       <div class="grab"></div>
       <div class="fav-art"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
@@ -872,6 +893,25 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     { d: "gdosa", label: "keeps coming back to this", hidden: false },
     { d: "cold",  label: "has this on repeat", hidden: false }
   ];
+  // Dish comments. Only from opted-in contacts (name + username) and public profiles (username only).
+  // Strangers without a public profile never comment visibly. No dates or order counts are shown with a comment.
+  const COMMENTS = {
+    roll:  [{ by: "riya", text: "The paratha stays flaky even after the ride home. Ask for extra mint chutney." },
+            { by: "dosadiaries", text: "Paneer is properly charred, not rubbery. Best roll around here." },
+            { by: "arjun", text: "Medium spicy, so it's safe if you're ordering for a group." }],
+    dal:   [{ by: "spicyfork", text: "Tastes like it really cooked overnight. Get two garlic naans with it." },
+            { by: "meera", text: "Rich but not too heavy for a weeknight." }],
+    butter:[{ by: "kabir", text: "Gravy is on the sweeter side. Great with garlic naan." }],
+    chole: [{ by: "arjun", text: "Bhature arrive puffy, not oily. Chole has a good tang." }],
+    naan:  [{ by: "spicyfork", text: "Lots of garlic. Arrives soft, eat it quickly." }],
+    gdosa: [{ by: "sana", text: "Crisp till the last bite and the sambar is excellent." },
+            { by: "dosadiaries", text: "Ask for extra podi. You won't regret it." }],
+    mdosa: [{ by: "sana", text: "The potato filling is lightly spiced, just right." }],
+    filter:[{ by: "meera", text: "Strong, the way filter coffee should be." }],
+    vbir:  [{ by: "meera", text: "You can taste real saffron. Don't skip the raita." }],
+    kebab: [{ by: "midnightmasala", text: "Melts in the mouth. Worth every rupee." }],
+    cold:  [{ by: "kabir", text: "Thick, not watery, and not too sweet." }]
+  };
   const FAV_AT = 3;
   const HIGH_REO = 0.7;   // share of all buyers who reorder a dish: shown as the "Highly reordered" bar
 
@@ -927,6 +967,15 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   const handle = f => "@" + (FRIENDS[f] || PUBLIC[f]).user;
   // Contacts: real name + username. Public profiles: username only.
   const whoName = (kind, f) => kind === "p" ? `<b>${handle(f)}</b> <span class="ptag">Public</span>` : `<b>${FRIENDS[f].name}</b> <span class="un">${handle(f)}</span>`;
+  const canShow = id => (FRIENDS[id] && FRIENDS[id].optIn) || !!PUBLIC[id];
+  const commentsFor = d => (COMMENTS[d] || []).filter(c => canShow(c.by));
+  function cmtSnippet(d) {
+    const cs = commentsFor(d);
+    if (!cs.length) return "";
+    const c = cs[0], nm = FRIENDS[c.by] ? FRIENDS[c.by].name : handle(c.by);
+    return `<button class="cmt" type="button" data-comments="${d}">${av(c.by)}<span><q>${c.text}</q> <b>${nm}</b>
+      <span class="more">${cs.length > 1 ? `See all ${cs.length} comments` : "See comment"}</span></span></button>`;
+  }
   const publicPicks = () => PUBLIC_PICKS.filter(p => state.following[p.f] && vegOK(p.d));
   const followedPicks = () => friendPicks().map(p => Object.assign({ kind: "f" }, p)).concat(publicPicks().map(p => Object.assign({ kind: "p" }, p)));
   const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
@@ -1011,6 +1060,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     $("#feed").innerHTML = items.length ? items.map(p => {
       const d = DISHES[p.d], k = `${p.kind}:${p.f}:${p.d}`;
       return `<div class="feedcard"><div class="top">${av(p.f)}<span>${whoName(p.kind, p.f)}<br>${p.label}</span></div>
+        ${(COMMENTS[p.d] || []).filter(c => c.by === p.f).map(c => `<div class="say">"${c.text}"</div>`).join("")}
         <div class="dish-row">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
         <div class="acts"><button class="ghost" type="button" data-why="${k}">Why?</button><button class="add" type="button" data-quickadd="${p.d}">ADD</button></div></div></div>`;
     }).join("") : `<div class="fempty">You aren't following anyone yet. Follow a friend below to see the dishes they keep coming back to.</div>`;
@@ -1064,7 +1114,7 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         const d = DISHES[id];
         const reo = d.reo >= HIGH_REO ? `<div class="reo"><span class="bar"><i style="width:${Math.round(d.reo * 100)}%"></i></span>Highly reordered</div>` : "";
         return `<div class="dish"><div class="info"><div>${vmark(d)}${d.best ? '<span class="best">Bestseller</span>' : ""}</div>
-          <div class="dn">${d.name}</div>${reo}<div class="price">${rupees(d.price)}</div><div class="desc">${d.desc}</div>
+          <div class="dn">${d.name}</div>${reo}<div class="price">${rupees(d.price)}</div><div class="desc">${d.desc}</div>${cmtSnippet(id)}
           <div class="tools"><button class="circ" type="button" data-save-dish="${id}" aria-pressed="${!!state.savedDish[id]}" aria-label="Save ${d.name}">${ICON.bookmark}</button></div></div>
           <div class="side">${art(id)}${ctl(id)}${d.custom ? '<span class="custom">customisable</span>' : ""}</div></div>`;
       }).join("") || `<div class="fempty" style="margin:16px">No dishes match these filters.</div>`}
@@ -1217,6 +1267,17 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     openSheet($("#sheet-why"));
     step(1);
   }
+  let cmtFor = null;
+  function openComments(id) {
+    const d = DISHES[id]; cmtFor = id;
+    $("#cmt-art").className = `art a-${id}`;
+    $("#cmt-name").innerHTML = vmark(d) + d.name;
+    $("#cmt-place").textContent = restOf(id).name;
+    $("#cmt-list").innerHTML = commentsFor(id).map(c => `<div class="citem">${av(c.by)}<div>
+      <div class="who">${whoName(FRIENDS[c.by] ? "f" : "p", c.by)}</div><p>${c.text}</p></div></div>`).join("");
+    $("#cmt-note").innerHTML = `${ICON.lock}Only comments from your contacts and public profiles are shown. No dates or order counts.`;
+    openSheet($("#sheet-cmt"));
+  }
   function openFav(id) {
     state.favFor = id;
     $("#fav-art").className = `art a-${id}`;
@@ -1350,6 +1411,8 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
       state.savedRest[ds.saveRest] = !state.savedRest[ds.saveRest]; renderHome();
       return toast(state.savedRest[ds.saveRest] ? `${RESTS[ds.saveRest].name} saved to your collection.` : `${RESTS[ds.saveRest].name} removed from your collection.`);
     }
+    if (ds.comments) return openComments(ds.comments);
+    if (t.id === "cmt-add") return quickAdd(cmtFor);
     if (ds.saveDish) {
       state.savedDish[ds.saveDish] = !state.savedDish[ds.saveDish]; renderRest();
       return toast(state.savedDish[ds.saveDish] ? `${DISHES[ds.saveDish].name} saved.` : `${DISHES[ds.saveDish].name} removed from saved.`);
