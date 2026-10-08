@@ -81,6 +81,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 .demobar .lbl { width: 100%; text-align: center; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--stage-muted); font-weight: 700; }
 .demobtn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--stage-line); background: var(--stage-chip); color: var(--stage-fg); padding: 7px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
 .demobtn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.demobtn .short { display: none; }
 .demobtn[aria-pressed="true"] { background: var(--stage-fg); color: var(--stage-bg); border-color: var(--stage-fg); }
 
 .statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; background: var(--app-bg); font-variant-numeric: tabular-nums; }
@@ -325,7 +326,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   .demobar .lbl { display: none; }
   .demobar { justify-content: center; }
   .demobtn { flex-shrink: 0; font-size: 12px; padding: 7px 10px; }
-  .demobtn .sim { display: none; }
+  .demobtn .long { display: none; }
+  .demobtn .short { display: inline; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
@@ -501,8 +503,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     <div class="demobar" aria-label="Demo controls">
       <span class="lbl">Demo controls</span>
       <button class="demobtn" type="button" data-action="restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Restart demo</button>
-      <button class="demobtn" type="button" data-action="quiet" id="quiet-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4"/></svg><span id="quiet-lbl"><span class="sim">Simulate </span>quiet area</span></button>
-      <button class="demobtn" type="button" data-action="sim3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg><span><span class="sim">Simulate </span>3rd reorder</span></button>
+      <button class="demobtn" type="button" data-action="quiet" id="quiet-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4"/></svg><span id="quiet-lbl"><span class="long">Simulate quiet area</span><span class="short">Quiet area</span></span></button>
+      <button class="demobtn" type="button" data-action="sim3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg><span><span class="long">Simulate 3rd reorder</span><span class="short">3rd reorder</span></span></button>
     </div>
   </div>
 </div>
@@ -606,6 +608,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   const groupOK = () => groupSize() >= GROUP.min;               // group counts only at 20+
   const visibleFriendPicks = () => FRIEND_PICKS.filter(p => FRIENDS[p.f].optIn);  // opted-in friends only
   // Keys: "f:<friend>:<dish>", "g:<dish>" (group, repeat orders), "r:<dish>" (ratings fallback)
+  // Short reason on cards; the full line with the count lives in the subtitle and the Why sheet.
+  const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
   function groupLine() { return `${groupSize()} people near you who reorder the same places as you keep coming back to this.`; }
   function anonKeys() { return groupOK() ? GROUP_PICKS.map(d => "g:" + d) : RATED_PICKS.map(d => "r:" + d); }
   function parseKey(k) { const p = k.split(":"); return p[0] === "f" ? { kind: "f", f: p[1], d: p[2] } : { kind: p[0], d: p[1] }; }
@@ -615,7 +619,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   function reasonText(k) {
     const p = parseKey(k);
     if (p.kind === "f") return `${FRIENDS[p.f].name} ${friendLabel(p.f, p.d)}`;
-    if (p.kind === "g") return groupLine();
+    if (p.kind === "g") return groupReason();
     const d = DISHES[p.d];
     return `Highly rated nearby: ${d.stars}★ from ${d.votes} ratings`;
   }
@@ -642,7 +646,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     basis.className = "basis " + (ok ? "repeat" : "ratings");
     basis.textContent = ok ? "Repeat orders" : "Based on ratings";
     $("#sec-b-sub").textContent = ok
-      ? "From a group of people near you who reorder the same places as you."
+      ? `${groupSize()} people near you who reorder the same places as you`
       : "Not enough people near you reorder the same places yet, so these picks use star ratings.";
     const gl = $("#group-list");
     gl.classList.toggle("ratings", !ok);
@@ -760,7 +764,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   function renderDemo() {
     const b = $("#quiet-btn");
     b.setAttribute("aria-pressed", String(state.quiet));
-    $("#quiet-lbl").innerHTML = state.quiet ? "Quiet area: on" : `<span class="sim">Simulate </span>quiet area`;
+    $("#quiet-lbl").innerHTML = state.quiet ? "Quiet area: on" : `<span class="long">Simulate quiet area</span><span class="short">Quiet area</span>`;
   }
 
   /* ---------------- Guide ---------------- */
@@ -913,8 +917,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (state.quiet) step(5);
     if (!$("#s-home").classList.contains("active") && !$("#s-rest").classList.contains("active")) home();
     toast(state.quiet
-      ? `Quiet area: fewer than ${GROUP.min} people match your taste, so you see "Highly rated nearby" instead.`
-      : `Back to normal: your taste group has ${GROUP.normal} people again.`);
+      ? `Quiet area: fewer than ${GROUP.min} people near you reorder the same places, so you see "Highly rated nearby" instead.`
+      : `Back to normal: ${GROUP.normal} people near you reorder the same places as you.`);
   }
   function restart() {
     state = fresh(); placing = false;
