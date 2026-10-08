@@ -1,0 +1,847 @@
+<title>Taste-matched Picks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a phone-sized app centred on a quiet stage, with a demo guide beside it on wide screens. */
+:root {
+  /* Stage (outside the phone) follows the viewer's theme */
+  --stage-bg: #eef1ee;
+  --stage-fg: #23302a;
+  --stage-muted: #5d6b64;
+  --stage-line: #d3dbd5;
+  --stage-chip: #ffffff;
+
+  /* App (inside the phone) is one fixed light look */
+  --app-bg: #f7f8f6;
+  --app-surface: #ffffff;
+  --ink: #1b2620;
+  --muted: #66736c;
+  --line: #e3e8e4;
+  --brand: #1d6a52;        /* deep curry-leaf green */
+  --brand-ink: #ffffff;
+  --brand-soft: #e6f1eb;
+  --saffron: #d9922b;
+  --saffron-soft: #fbf0dc;
+  --veg: #2f8a3e;
+  --nonveg: #9a3b22;
+
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stage-bg: #141a17; --stage-fg: #e4ebe6; --stage-muted: #98a69e; --stage-line: #2c3631; --stage-chip: #1e2622;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --stage-bg: #141a17; --stage-fg: #e4ebe6; --stage-muted: #98a69e; --stage-line: #2c3631; --stage-chip: #1e2622;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--stage-bg);
+  color: var(--stage-fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+
+.stage {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+/* ---------- Demo guide (desktop only) ---------- */
+.guide { width: 280px; display: flex; flex-direction: column; gap: 18px; }
+.guide h1 { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.guide .scenario { margin: 0; color: var(--stage-muted); line-height: 1.5; font-size: 14px; }
+.guide ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.guide li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 8px 10px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; color: var(--stage-muted); }
+.guide li .n { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--stage-line); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+.guide li.now { background: var(--stage-chip); color: var(--stage-fg); }
+.guide li.now .n { border-color: var(--saffron); color: var(--saffron); }
+.guide li.done .n { background: var(--brand); border-color: var(--brand); color: #fff; }
+.guide .fine { font-size: 12px; color: var(--stage-muted); margin: 0; line-height: 1.5; }
+
+.restart {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--stage-line); background: var(--stage-chip); color: var(--stage-fg);
+  padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
+}
+.restart svg { width: 14px; height: 14px; }
+.restart-mobile { display: none; }
+
+/* ---------- Phone ---------- */
+.phone {
+  position: relative;
+  width: 390px; height: min(800px, calc(100vh - 48px)); min-height: 640px;
+  border-radius: 44px;
+  background: var(--app-bg);
+  color: var(--ink);
+  box-shadow: 0 0 0 10px #101512, 0 30px 60px -20px rgba(0,0,0,.45);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.statusbar {
+  position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; font-size: 14px; font-weight: 700; color: var(--ink);
+  background: var(--app-bg);
+  font-variant-numeric: tabular-nums;
+}
+.statusbar .icons { display: flex; gap: 6px; align-items: center; }
+.statusbar .batt { width: 22px; height: 11px; border: 1.5px solid var(--ink); border-radius: 3px; position: relative; }
+.statusbar .batt::after { content: ""; position: absolute; inset: 1.5px 6px 1.5px 1.5px; background: var(--ink); border-radius: 1px; }
+
+.screens { position: absolute; inset: 44px 0 0 0; }
+.screen {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  background: var(--app-bg);
+  opacity: 0; visibility: hidden; transform: translateX(16px);
+  transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+}
+.screen.active { opacity: 1; visibility: visible; transform: none; transition: opacity .22s ease, transform .22s ease; }
+.scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 16px 10px; }
+.topbar .where { font-size: 12px; color: var(--muted); line-height: 1.3; min-width: 0; }
+.topbar .where b { display: block; color: var(--ink); font-size: 14px; }
+.iconbtn {
+  width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--app-surface);
+  display: grid; place-items: center; color: var(--ink); flex-shrink: 0;
+}
+.iconbtn svg { width: 18px; height: 18px; }
+.screen-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin: 0; flex: 1; }
+
+/* Restaurant header */
+.rest-head { padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
+.rest-head h1 { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
+.rest-head .meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.rest-head .meta span + span::before { content: "·"; margin-right: 10px; color: var(--line); }
+
+/* Picks card */
+.picks {
+  margin: 0 12px 18px; padding: 14px 14px 6px; border-radius: 18px;
+  background: var(--brand-soft); border: 1px solid #cfe3d7;
+}
+.picks-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.picks-head h2 { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0; color: var(--brand); }
+.picks-head span { font-size: 11px; color: var(--muted); }
+.pick { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; }
+.pick + .pick { border-top: 1px solid #cfe3d7; }
+.pick .name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.reason {
+  display: inline-flex; align-items: flex-start; gap: 6px; text-align: left;
+  border: 0; background: none; padding: 0; color: var(--ink); font-size: 13px; line-height: 1.35;
+}
+.reason .who {
+  flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 10px; font-weight: 700; color: #fff; background: #7a5aa6; margin-top: 0;
+}
+.reason .who.anon { background: var(--brand); }
+.reason .who.anon svg { width: 11px; height: 11px; }
+.reason u { text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; text-decoration-color: var(--muted); }
+.reason .why { color: var(--brand); font-weight: 600; white-space: nowrap; }
+
+/* Dish thumbnails: painted tiles, no photos */
+.thumb { width: 52px; height: 52px; border-radius: 12px; position: relative; flex-shrink: 0; }
+.thumb.lg { width: 84px; height: 84px; border-radius: 14px; }
+.t-roll    { background: radial-gradient(circle at 35% 40%, #f4d38a 0 28%, transparent 29%), linear-gradient(135deg, #e8b765, #b77a35); }
+.t-dal     { background: radial-gradient(circle at 50% 50%, #6b2f1c 0 30%, #f3e1c0 31% 36%, transparent 37%), linear-gradient(135deg, #8b4325, #5a2416); }
+.t-chroll  { background: radial-gradient(circle at 60% 40%, #e06a3c 0 25%, transparent 26%), linear-gradient(135deg, #e3b26a, #a8682d); }
+.t-butter  { background: radial-gradient(circle at 45% 55%, #f6d6a8 0 18%, transparent 19%), linear-gradient(135deg, #e0763a, #b0461f); }
+.t-rice    { background: radial-gradient(circle at 30% 30%, #6c8f3a 0 6%, transparent 7%), radial-gradient(circle at 65% 60%, #6c8f3a 0 5%, transparent 6%), linear-gradient(135deg, #fbf3df, #e9d8b0); }
+.t-naan    { background: radial-gradient(circle at 40% 40%, #c48a3e 0 8%, transparent 9%), radial-gradient(circle at 65% 65%, #c48a3e 0 6%, transparent 7%), linear-gradient(135deg, #f2dba8, #d7ac62); }
+.t-chole   { background: radial-gradient(circle at 70% 35%, #f5e1b0 0 26%, transparent 27%), linear-gradient(135deg, #9a5a2a, #6a3818); }
+.t-jamun   { background: radial-gradient(circle at 35% 50%, #5a1f12 0 18%, transparent 19%), radial-gradient(circle at 66% 50%, #5a1f12 0 18%, transparent 19%), linear-gradient(135deg, #f0c27a, #d39a45); }
+.t-dosa    { background: linear-gradient(135deg, #f0c77e, #c98f3e); }
+.t-coffee  { background: linear-gradient(135deg, #b88a5e, #6d4a2e); }
+.t-biryani { background: linear-gradient(135deg, #f2b950, #c4772a); }
+
+/* Veg / non-veg marks, the square-in-square used on Indian menus */
+.vmark { width: 12px; height: 12px; border: 1.5px solid var(--veg); border-radius: 2px; display: inline-grid; place-items: center; vertical-align: -1px; margin-right: 6px; box-sizing: border-box; }
+.vmark::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--veg); }
+.vmark.nv { border-color: var(--nonveg); }
+.vmark.nv::after { background: var(--nonveg); border-radius: 0; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--nonveg); background: none; }
+
+/* Add / stepper */
+.add {
+  min-width: 72px; height: 34px; border-radius: 10px; border: 1.5px solid var(--brand);
+  background: var(--app-surface); color: var(--brand); font-weight: 700; font-size: 13px; letter-spacing: .04em;
+}
+.stepper {
+  min-width: 72px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--brand-ink);
+  display: inline-flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.stepper button { border: 0; background: none; color: inherit; width: 26px; height: 34px; font-size: 17px; font-weight: 700; }
+
+/* Menu */
+.menu-head { padding: 0 16px; display: flex; align-items: baseline; justify-content: space-between; }
+.menu-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0 0 4px; }
+.menu-head span { font-size: 12px; color: var(--muted); }
+.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 16px; border-bottom: 1px solid var(--line); }
+.dish .info { min-width: 0; }
+.dish .name { font-weight: 700; font-size: 15px; }
+.dish .price { font-size: 14px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.dish .desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+.dish .side { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.dish .side .add, .dish .side .stepper { position: relative; z-index: 1; margin-top: -16px; box-shadow: 0 4px 10px -4px rgba(0,0,0,.2); }
+.menu-end { padding: 20px 16px 110px; font-size: 12px; color: var(--muted); text-align: center; }
+
+/* Cart bar */
+.cartbar {
+  position: absolute; left: 12px; right: 12px; bottom: 16px; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-radius: 14px; border: 0;
+  background: var(--brand); color: var(--brand-ink); text-align: left;
+  box-shadow: 0 10px 24px -10px rgba(29,106,82,.7);
+  transform: translateY(0); transition: transform .25s ease, opacity .25s ease;
+}
+.cartbar[hidden] { display: flex !important; transform: translateY(120px); opacity: 0; pointer-events: none; }
+.cartbar small { display: block; font-size: 12px; opacity: .85; font-variant-numeric: tabular-nums; }
+.cartbar b { font-size: 15px; }
+.cartbar .go { font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+/* Cart screen */
+.block { background: var(--app-surface); margin: 0 12px 12px; border-radius: 16px; padding: 4px 14px; border: 1px solid var(--line); }
+.block-title { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; margin: 14px 16px 8px; }
+.line { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 0; }
+.line + .line { border-top: 1px solid var(--line); }
+.line .name { font-weight: 600; font-size: 14px; }
+.line .amt { font-variant-numeric: tabular-nums; font-size: 14px; min-width: 52px; text-align: right; }
+.bill { display: flex; justify-content: space-between; font-size: 14px; padding: 7px 0; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bill.total { color: var(--ink); font-weight: 700; border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 4px; }
+.addr { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
+.addr b { color: var(--ink); display: block; font-size: 14px; }
+.addr svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; margin-top: 1px; }
+.empty { text-align: center; padding: 60px 24px; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
+
+.footer { padding: 12px 12px 18px; background: var(--app-surface); border-top: 1px solid var(--line); }
+.primary {
+  width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink);
+  font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.primary:disabled { opacity: .7; cursor: progress; }
+.secondary {
+  width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--app-surface); color: var(--ink);
+  font-weight: 700; font-size: 15px;
+}
+.linkbtn { border: 0; background: none; color: var(--brand); font-weight: 600; font-size: 13px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Delivered */
+.done-wrap { padding: 28px 20px 20px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
+.done-badge { width: 84px; height: 84px; border-radius: 50%; background: var(--brand); display: grid; place-items: center; color: #fff; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
+.done-badge svg { width: 42px; height: 42px; }
+@keyframes pop { from { transform: scale(.5); opacity: 0; } }
+.done-wrap h2 { font-family: var(--font-display); font-size: 26px; margin: 0; }
+.done-wrap p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.receipt { width: 100%; text-align: left; box-sizing: border-box; }
+.receipt .line { grid-template-columns: auto 1fr; }
+.demo-note {
+  width: 100%; box-sizing: border-box; text-align: left;
+  border: 1.5px dashed var(--saffron); background: var(--saffron-soft); border-radius: 12px;
+  padding: 10px 12px; font-size: 12.5px; color: #6b4a14; line-height: 1.45;
+}
+.demo-note b { font-weight: 700; }
+.done-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+/* Privacy */
+.toggle-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 14px 0; }
+.toggle-row b { font-size: 15px; display: block; margin-bottom: 4px; }
+.toggle-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #c8d0cb; position: relative; transition: background .2s; padding: 0; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.switch[aria-checked="true"] { background: var(--brand); }
+.switch[aria-checked="true"]::after { transform: translateX(20px); }
+.mypick { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; transition: opacity .2s; }
+.mypick + .mypick { border-top: 1px solid var(--line); }
+.mypick .thumb { width: 44px; height: 44px; border-radius: 10px; }
+.mypick .name { font-weight: 600; font-size: 14px; }
+.mypick .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.mypick.is-hidden .thumb, .mypick.is-hidden .name { opacity: .45; }
+.mypick.is-new .name::after { content: "New"; margin-left: 6px; font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--saffron); background: var(--saffron-soft); padding: 2px 6px; border-radius: 6px; vertical-align: 1px; }
+.hidebtn { border: 1.5px solid var(--line); background: var(--app-surface); color: var(--ink); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 700; }
+.hidebtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.picks-off .mypick { opacity: .5; }
+.off-note { font-size: 12.5px; color: #6b4a14; background: var(--saffron-soft); border-radius: 10px; padding: 10px 12px; margin: 10px 0 4px; line-height: 1.45; }
+.seen-as { margin: 0 12px 12px; padding: 12px 14px; border-radius: 14px; background: var(--brand-soft); font-size: 12.5px; line-height: 1.5; color: var(--ink); }
+.seen-as b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); margin-bottom: 4px; }
+.privacy-end { padding: 4px 28px 32px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* Sheets */
+.scrim { position: absolute; inset: 0; background: rgba(12,20,16,.45); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
+.scrim.open { opacity: 1; visibility: visible; transition: opacity .2s; }
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: var(--app-surface); border-radius: 24px 24px 0 0; padding: 10px 20px 22px;
+  transform: translateY(105%); transition: transform .28s cubic-bezier(.2,.9,.3,1);
+  display: flex; flex-direction: column; gap: 14px; max-height: 85%; overflow-y: auto; box-sizing: border-box;
+}
+.sheet.open { transform: none; }
+.sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); align-self: center; }
+.sheet h2 { font-family: var(--font-display); font-size: 21px; margin: 4px 0 0; }
+.sheet-dish { display: flex; gap: 14px; align-items: center; }
+.sheet-dish .name { font-weight: 700; font-size: 16px; }
+.sheet-dish .r { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.facts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.facts li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; font-size: 13.5px; line-height: 1.45; align-items: start; }
+.facts .ic { width: 30px; height: 30px; border-radius: 9px; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; }
+.facts .ic svg { width: 16px; height: 16px; }
+.facts b { display: block; font-size: 14px; }
+.facts span { color: var(--muted); }
+.sheet-actions { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.fav-art { width: 64px; height: 64px; border-radius: 50%; background: var(--saffron-soft); color: var(--saffron); display: grid; place-items: center; align-self: center; }
+.fav-art svg { width: 32px; height: 32px; }
+#sheet-fav { text-align: center; }
+#sheet-fav p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+.fav-preview { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: center; }
+.fav-preview .thumb { width: 40px; height: 40px; border-radius: 10px; }
+.fav-preview small { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-bottom: 2px; }
+.fav-preview span { font-size: 13px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+
+/* Toast */
+.toast {
+  position: absolute; left: 16px; right: 16px; top: 54px; z-index: 60;
+  background: var(--ink); color: #fff; border-radius: 12px; padding: 11px 14px; font-size: 13px; line-height: 1.4;
+  transform: translateY(-140%); opacity: 0; transition: transform .25s ease, opacity .25s ease; pointer-events: none;
+}
+.toast.show { transform: none; opacity: 1; }
+
+/* ---------- Phone-width viewers: the app fills the screen ---------- */
+@media (max-width: 760px) {
+  .guide { display: none; }
+  .stage { padding: 0; display: block; height: 100%; min-height: 0; }
+  .phone { width: 100%; height: 100%; min-height: 0; border-radius: 0; box-shadow: none; }
+  .statusbar { display: none; }
+  .screens { inset: 0; }
+  .toast { top: 12px; }
+  .restart-mobile {
+    display: inline-flex; position: absolute; z-index: 70; right: 58px; top: 12px;
+    align-items: center; gap: 5px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.92); color: var(--ink); font-size: 11.5px; font-weight: 700;
+    box-shadow: 0 4px 12px -6px rgba(0,0,0,.3);
+  }
+  .restart-mobile svg { width: 12px; height: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+}
+</style>
+
+<div class="stage">
+  <aside class="guide" aria-label="Demo guide">
+    <h1>Taste‑matched picks</h1>
+    <p class="scenario">You are Ananya. You moved to a new area three weeks ago. It's 9 pm, you're hungry, and you don't know which places are good yet.</p>
+    <ol id="guide-steps">
+      <li data-step="1"><span class="n">1</span><span>See <b>Picks for you</b> at the top of the restaurant</span></li>
+      <li data-step="2"><span class="n">2</span><span>Tap a reason to see <b>Why this pick?</b>, then add it</span></li>
+      <li data-step="3"><span class="n">3</span><span>Open the cart and place the order</span></li>
+      <li data-step="4"><span class="n">4</span><span>Tap <b>Order again</b> until the same dish lands a 3rd time</span></li>
+      <li data-step="5"><span class="n">5</span><span>Open <b>Friends &amp; picks</b> to control what friends see</span></li>
+    </ol>
+    <p class="fine">All names, dishes and prices are made up.</p>
+    <button class="restart" type="button" data-action="restart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      Restart demo
+    </button>
+  </aside>
+
+  <div class="phone" id="phone">
+    <div class="statusbar"><span>9:02</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
+
+    <div class="screens">
+
+      <!-- 1. Restaurant -->
+      <section class="screen active" id="s-rest" aria-label="Restaurant">
+        <div class="scroll">
+          <div class="topbar">
+            <div class="where"><b>Home · Flat 4B</b>Maple Lane, Greenfield Nagar</div>
+            <button class="iconbtn" type="button" data-go="s-privacy" aria-label="Friends and picks settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+            </button>
+          </div>
+          <div class="rest-head">
+            <h1>Spice Route Kitchen</h1>
+            <div class="meta"><span>North Indian, Rolls</span><span>1.8 km</span><span>30–35 min</span></div>
+          </div>
+
+          <section class="picks" aria-labelledby="picks-title">
+            <div class="picks-head"><h2 id="picks-title">Picks for you</h2><span>From repeat orders, not ratings</span></div>
+            <div class="pick">
+              <div class="thumb t-roll" aria-hidden="true"></div>
+              <div>
+                <div class="name"><span class="vmark" title="Vegetarian"></span>Paneer kathi roll</div>
+                <button class="reason" type="button" data-why="roll">
+                  <span class="who" aria-hidden="true">R</span>
+                  <span><u>Riya keeps coming back to this</u></span>
+                </button>
+              </div>
+              <div data-ctl="roll"></div>
+            </div>
+            <div class="pick">
+              <div class="thumb t-dal" aria-hidden="true"></div>
+              <div>
+                <div class="name"><span class="vmark" title="Vegetarian"></span>Dal makhani</div>
+                <button class="reason" type="button" data-why="dal">
+                  <span class="who anon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M13 17c.8-1.4 1.8-2 3-2 2 0 4 1 5 4"/></svg></span>
+                  <span><u>Loved by people near you with your taste</u></span>
+                </button>
+              </div>
+              <div data-ctl="dal"></div>
+            </div>
+          </section>
+
+          <div class="menu-head"><h3>Menu</h3><span>8 dishes</span></div>
+          <div id="menu"></div>
+          <div class="menu-end">Spice Route Kitchen is a made-up restaurant for this demo.</div>
+        </div>
+        <button class="cartbar" type="button" data-go="s-cart" id="cartbar" hidden>
+          <span><small id="cartbar-count">1 item</small><b id="cartbar-total">₹0</b></span>
+          <span class="go">View cart <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+        </button>
+      </section>
+
+      <!-- 3. Cart -->
+      <section class="screen" id="s-cart" aria-label="Cart">
+        <div class="topbar">
+          <button class="iconbtn" type="button" data-go="s-rest" aria-label="Back to restaurant">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+          </button>
+          <h2 class="screen-title">Your cart</h2>
+        </div>
+        <div class="scroll" id="cart-body"></div>
+        <div class="footer" id="cart-footer">
+          <button class="primary" type="button" id="place-order">Place order</button>
+        </div>
+      </section>
+
+      <!-- Order delivered -->
+      <section class="screen" id="s-done" aria-label="Order delivered">
+        <div class="scroll">
+          <div class="done-wrap">
+            <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+            <div>
+              <h2>Order delivered</h2>
+              <p>From Spice Route Kitchen. Enjoy your dinner.</p>
+            </div>
+            <div class="block receipt" id="done-items" style="margin:0"></div>
+            <div class="demo-note" id="demo-note"></div>
+            <div class="done-actions">
+              <button class="primary" type="button" data-action="reorder">Order again</button>
+              <button class="secondary" type="button" data-go="s-rest">Back to restaurant</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Privacy -->
+      <section class="screen" id="s-privacy" aria-label="Friends and picks">
+        <div class="topbar">
+          <button class="iconbtn" type="button" data-action="back" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+          </button>
+          <h2 class="screen-title">Friends &amp; picks</h2>
+        </div>
+        <div class="scroll">
+          <div class="block">
+            <div class="toggle-row">
+              <div>
+                <b id="share-label">Share my picks with friends</b>
+                <p>Friends who also share see the dish with a short reason, like "keeps coming back to this". Never when, how often, or what you paid.</p>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="share-label" id="share-toggle"></button>
+            </div>
+          </div>
+
+          <div class="block-title">My picks</div>
+          <div class="block" id="mypicks-block">
+            <div id="off-note" class="off-note" hidden>Sharing is off. None of these are visible to friends, even the ones not hidden.</div>
+            <div id="mypicks"></div>
+          </div>
+
+          <div class="seen-as">
+            <b>What a friend sees</b>
+            <span id="seen-as-text"></span>
+          </div>
+          <p class="privacy-end">Your orders also feed the anonymous "people near you" picks. Those never carry a name, and a dish only shows up once enough people with similar taste reorder it.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sheets -->
+    <div class="scrim" id="scrim" data-action="close-sheet"></div>
+
+    <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
+      <div class="grab"></div>
+      <h2 id="why-title">Why this pick?</h2>
+      <div class="sheet-dish">
+        <div class="thumb lg" id="why-thumb"></div>
+        <div><div class="name" id="why-name"></div><div class="r" id="why-reason"></div></div>
+      </div>
+      <ul class="facts" id="why-facts"></ul>
+      <div class="sheet-actions">
+        <button class="primary" type="button" id="why-add">Add to cart</button>
+        <button class="linkbtn" type="button" data-go="s-privacy">Manage what friends see</button>
+      </div>
+    </section>
+
+    <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
+      <div class="grab"></div>
+      <div class="fav-art"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
+      <h2 id="fav-title">Looks like a favourite. Recommend it to friends?</h2>
+      <p>Friends will see the dish and a short reason. They won't see how often you ordered it, when, or what you paid.</p>
+      <div class="fav-preview">
+        <div class="thumb" id="fav-thumb"></div>
+        <div><small>Friends will see</small><span id="fav-preview-text"></span></div>
+      </div>
+      <div class="row2">
+        <button class="secondary" type="button" data-action="fav-no">Not now</button>
+        <button class="primary" type="button" data-action="fav-yes">Recommend</button>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <button class="restart-mobile" type="button" data-action="restart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      Restart demo
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var DISHES = {
+    roll:    { name: "Paneer kathi roll",  price: 189, veg: true,  t: "t-roll",   desc: "Charred paneer tikka, pickled onion and mint chutney in a flaky paratha." },
+    dal:     { name: "Dal makhani",        price: 229, veg: true,  t: "t-dal",    desc: "Black lentils slow-cooked overnight with butter and cream." },
+    chroll:  { name: "Chicken tikka roll", price: 219, veg: false, t: "t-chroll", desc: "Smoky chicken tikka, egg-washed paratha, green chutney." },
+    butter:  { name: "Butter chicken",     price: 319, veg: false, t: "t-butter", desc: "Tandoori chicken in a mild tomato and fenugreek gravy." },
+    chole:   { name: "Chole bhature",      price: 199, veg: true,  t: "t-chole",  desc: "Spiced chickpeas with two puffed bhature and onion salad." },
+    rice:    { name: "Jeera rice",         price: 149, veg: true,  t: "t-rice",   desc: "Basmati tempered with cumin and ghee." },
+    naan:    { name: "Garlic naan",        price: 69,  veg: true,  t: "t-naan",   desc: "Tandoor-baked, brushed with garlic butter." },
+    jamun:   { name: "Gulab jamun (2 pcs)",price: 99,  veg: true,  t: "t-jamun",  desc: "Warm, soaked in cardamom syrup." }
+  };
+  var MENU = ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"];
+
+  var WHY = {
+    roll: {
+      reason: "Riya keeps coming back to this",
+      facts: [
+        ["friend", "Riya chose to share picks", "Riya turned on sharing with friends. You only see picks from friends who opted in."],
+        ["repeat", "Based on repeat orders", "A dish becomes a pick when someone with similar taste keeps reordering it. Star ratings aren't used."],
+        ["lock", "Nobody's orders are shown", "You won't see when Riya ordered, how often, or what was paid."]
+      ]
+    },
+    dal: {
+      reason: "Loved by people near you with your taste",
+      facts: [
+        ["repeat", "Based on repeat orders", "People within a few km who order like you keep coming back to this dish. Star ratings aren't used."],
+        ["taste", "Matched on taste", "We compare what you reorder with what they reorder, so the pick fits how you eat."],
+        ["lock", "Nobody's orders are shown", "No names, no counts, no individual orders. Only the pattern across many people."]
+      ]
+    }
+  };
+  var ICONS = {
+    friend: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+    repeat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+    taste: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7c0-1.5 1-2 1-3M12 7c0-1.5 1-2 1-3M16 7c0-1.5 1-2 1-3"/></svg>'
+  };
+
+  var SEED_PICKS = [
+    { id: "dosa",   name: "Ghee roast dosa", place: "Udupi Corner (demo)",  t: "t-dosa",    hidden: false },
+    { id: "coffee", name: "Cold coffee",     place: "Bean Street (demo)",   t: "t-coffee",  hidden: false },
+    { id: "biry",   name: "Veg dum biryani", place: "Lucknow Lane (demo)",  t: "t-biryani", hidden: true  }
+  ];
+
+  var FAV_AT = 3;
+  var state;
+  function fresh() {
+    return {
+      cart: {}, orders: {}, prompted: {}, lastOrder: null,
+      share: true,
+      picks: SEED_PICKS.map(function (p) { return Object.assign({}, p); }),
+      history: ["s-rest"], whyFor: null, favFor: null,
+      steps: {}
+    };
+  }
+
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var rupees = function (n) { return "₹" + n.toLocaleString("en-IN"); };
+  var vmark = function (d) { return '<span class="vmark' + (d.veg ? '' : ' nv') + '" title="' + (d.veg ? 'Vegetarian' : 'Non-vegetarian') + '"></span>'; };
+
+  /* ---------- Rendering ---------- */
+  function ctl(id) {
+    var q = state.cart[id] || 0;
+    if (!q) return '<button class="add" type="button" data-add="' + id + '" aria-label="Add ' + DISHES[id].name + '">ADD</button>';
+    return '<span class="stepper"><button type="button" data-dec="' + id + '" aria-label="Remove one">−</button><span>' + q +
+      '</span><button type="button" data-add="' + id + '" aria-label="Add one">+</button></span>';
+  }
+
+  function renderMenu() {
+    $("#menu").innerHTML = MENU.map(function (id) {
+      var d = DISHES[id];
+      return '<div class="dish"><div class="info"><div class="name">' + vmark(d) + d.name + '</div><div class="price">' + rupees(d.price) +
+        '</div><div class="desc">' + d.desc + '</div></div><div class="side"><div class="thumb lg ' + d.t + '" aria-hidden="true"></div>' + ctl(id) + '</div></div>';
+    }).join("");
+    $$("[data-ctl]").forEach(function (el) { el.innerHTML = ctl(el.getAttribute("data-ctl")); });
+  }
+
+  function cartTotals() {
+    var items = 0, sub = 0;
+    Object.keys(state.cart).forEach(function (id) { items += state.cart[id]; sub += state.cart[id] * DISHES[id].price; });
+    var delivery = sub ? 30 : 0, taxes = Math.round(sub * 0.05);
+    return { items: items, sub: sub, delivery: delivery, taxes: taxes, total: sub + delivery + taxes };
+  }
+
+  function renderCartBar() {
+    var t = cartTotals();
+    $("#cartbar").hidden = t.items === 0;
+    $("#cartbar-count").textContent = t.items + (t.items === 1 ? " item" : " items");
+    $("#cartbar-total").textContent = rupees(t.sub);
+  }
+
+  function renderCart() {
+    var t = cartTotals();
+    var ids = Object.keys(state.cart);
+    $("#cart-footer").hidden = !ids.length;
+    if (!ids.length) {
+      $("#cart-body").innerHTML = '<div class="empty"><b style="color:var(--ink);font-size:16px">Your cart is empty</b>Add something from Spice Route Kitchen.<button class="secondary" type="button" data-go="s-rest" style="max-width:220px">Browse the menu</button></div>';
+      return;
+    }
+    $("#cart-body").innerHTML =
+      '<div class="block-title">Spice Route Kitchen</div><div class="block">' +
+      ids.map(function (id) {
+        var d = DISHES[id];
+        return '<div class="line"><div class="name">' + vmark(d) + d.name + '</div>' + ctl(id) + '<div class="amt">' + rupees(d.price * state.cart[id]) + '</div></div>';
+      }).join("") + '</div>' +
+      '<div class="block-title">Bill</div><div class="block" style="padding-block:8px">' +
+      '<div class="bill"><span>Item total</span><span>' + rupees(t.sub) + '</span></div>' +
+      '<div class="bill"><span>Delivery</span><span>' + rupees(t.delivery) + '</span></div>' +
+      '<div class="bill"><span>Taxes</span><span>' + rupees(t.taxes) + '</span></div>' +
+      '<div class="bill total"><span>To pay</span><span>' + rupees(t.total) + '</span></div></div>' +
+      '<div class="block-title">Deliver to</div><div class="block"><div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><b>Home · Flat 4B</b>Maple Lane, Greenfield Nagar</div></div></div>' +
+      '<div style="height:12px"></div>';
+    $("#place-order").textContent = "Place order · " + rupees(t.total);
+  }
+
+  function renderDone() {
+    var o = state.lastOrder || {};
+    $("#done-items").innerHTML = Object.keys(o).map(function (id) {
+      return '<div class="line"><span style="font-weight:700;font-variant-numeric:tabular-nums">' + o[id] + ' ×</span><span class="name">' + DISHES[id].name + '</span></div>';
+    }).join("");
+    // Demo-only helper: tells the presenter how far each dish is from the favourite prompt.
+    var notes = Object.keys(o).map(function (id) {
+      var n = state.orders[id] || 0;
+      if (state.prompted[id]) return '<b>' + DISHES[id].name + '</b>: favourite prompt already shown.';
+      var left = FAV_AT - n;
+      return '<b>' + DISHES[id].name + '</b>: ordered ' + n + ' of ' + FAV_AT + ' times. ' +
+        (left > 0 ? 'Tap <b>Order again</b> ' + (left === 1 ? 'once more' : left + ' more times') + ' to see the favourite prompt.' : '');
+    });
+    $("#demo-note").innerHTML = '<b>Demo note</b><br>' + notes.join("<br>");
+  }
+
+  function renderPrivacy() {
+    var sw = $("#share-toggle");
+    sw.setAttribute("aria-checked", String(state.share));
+    $("#off-note").hidden = state.share;
+    $("#mypicks-block").classList.toggle("picks-off", !state.share);
+    $("#mypicks").innerHTML = state.picks.map(function (p, i) {
+      return '<div class="mypick' + (p.hidden ? ' is-hidden' : '') + (p.isNew ? ' is-new' : '') + '"><div class="thumb ' + p.t + '" aria-hidden="true"></div><div><div class="name">' + p.name +
+        '</div><div class="sub">' + p.place + (p.hidden ? ' · Hidden from friends' : '') + '</div></div><button class="hidebtn" type="button" data-hide="' + i +
+        '" aria-pressed="' + p.hidden + '">' + (p.hidden ? 'Unhide' : 'Hide') + '</button></div>';
+    }).join("");
+    var visible = state.picks.filter(function (p) { return !p.hidden; });
+    $("#seen-as-text").innerHTML = !state.share || !visible.length
+      ? "Nothing. Your picks are private right now."
+      : visible.slice(0, 2).map(function (p) { return '"' + p.name + ': Ananya keeps coming back to this"'; }).join("<br>") +
+        (visible.length > 2 ? "<br>and " + (visible.length - 2) + " more" : "");
+  }
+
+  function renderAll() {
+    renderMenu(); renderCartBar(); renderCart(); renderPrivacy();
+  }
+
+  /* ---------- Demo guide ---------- */
+  function step(n) {
+    state.steps[n] = true;
+    var current = 1;
+    while (state.steps[current] && current <= 5) current++;
+    $$("#guide-steps li").forEach(function (li) {
+      var s = +li.getAttribute("data-step");
+      li.classList.toggle("done", !!state.steps[s]);
+      li.classList.toggle("now", s === current);
+    });
+  }
+
+  /* ---------- Navigation ---------- */
+  function go(id, opts) {
+    closeSheets();
+    $$(".screen").forEach(function (s) { s.classList.toggle("active", s.id === id); });
+    if (!(opts && opts.replace)) state.history.push(id);
+    if (id === "s-cart") renderCart();
+    if (id === "s-privacy") { renderPrivacy(); step(5); }
+    var sc = document.querySelector("#" + id + " .scroll");
+    if (sc && !(opts && opts.keepScroll)) sc.scrollTop = 0;
+  }
+  function back() {
+    state.history.pop();
+    var prev = state.history.pop() || "s-rest";
+    go(prev, { keepScroll: true });
+  }
+
+  /* ---------- Sheets ---------- */
+  function openSheet(el) { $("#scrim").classList.add("open"); el.classList.add("open"); }
+  function closeSheets() { $("#scrim").classList.remove("open"); $$(".sheet").forEach(function (s) { s.classList.remove("open"); }); }
+
+  function openWhy(id) {
+    var d = DISHES[id], w = WHY[id];
+    state.whyFor = id;
+    $("#why-thumb").className = "thumb lg " + d.t;
+    $("#why-name").innerHTML = vmark(d) + d.name;
+    $("#why-reason").textContent = w.reason;
+    $("#why-facts").innerHTML = w.facts.map(function (f) {
+      return '<li><span class="ic">' + ICONS[f[0]] + '</span><div><b>' + f[1] + '</b><span>' + f[2] + '</span></div></li>';
+    }).join("");
+    $("#why-add").textContent = state.cart[id] ? "Add another" : "Add to cart";
+    openSheet($("#sheet-why"));
+    step(1);
+  }
+
+  function openFav(id) {
+    var d = DISHES[id];
+    state.favFor = id;
+    $("#fav-thumb").className = "thumb " + d.t;
+    $("#fav-preview-text").innerHTML = "<b>" + d.name + "</b>: Ananya keeps coming back to this";
+    openSheet($("#sheet-fav"));
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var t = $("#toast");
+    t.innerHTML = msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2600);
+  }
+
+  /* ---------- Actions ---------- */
+  function add(id) { state.cart[id] = (state.cart[id] || 0) + 1; renderMenu(); renderCartBar(); if (isActive("s-cart")) renderCart(); }
+  function dec(id) {
+    state.cart[id] = (state.cart[id] || 0) - 1;
+    if (state.cart[id] <= 0) delete state.cart[id];
+    renderMenu(); renderCartBar(); if (isActive("s-cart")) renderCart();
+  }
+  function isActive(id) { return document.getElementById(id).classList.contains("active"); }
+
+  var placing = false;
+  function placeOrder() {
+    if (placing || !Object.keys(state.cart).length) return;
+    placing = true;
+    var btn = $("#place-order");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Placing order…';
+    setTimeout(function () {
+      state.lastOrder = Object.assign({}, state.cart);
+      Object.keys(state.cart).forEach(function (id) { state.orders[id] = (state.orders[id] || 0) + 1; });
+      state.cart = {};
+      placing = false; btn.disabled = false;
+      renderAll(); renderDone();
+      state.history = ["s-rest"];
+      go("s-done");
+      step(3);
+      var fav = Object.keys(state.lastOrder).filter(function (id) { return state.orders[id] >= FAV_AT && !state.prompted[id]; })[0];
+      if (fav) {
+        state.prompted[fav] = true;
+        renderDone();
+        setTimeout(function () { if (isActive("s-done")) openFav(fav); }, 700);
+      }
+    }, 900);
+  }
+
+  function reorder() {
+    if (!state.lastOrder) return go("s-rest");
+    state.cart = Object.assign({}, state.lastOrder);
+    renderAll();
+    go("s-cart");
+  }
+
+  function favAnswer(yes) {
+    var id = state.favFor, d = DISHES[id];
+    closeSheets();
+    step(4);
+    if (!yes) { toast("No problem. We won't ask about " + d.name + " again."); return; }
+    var existing = state.picks.filter(function (p) { return p.id === id; })[0];
+    if (existing) existing.hidden = false;
+    else state.picks.unshift({ id: id, name: d.name, place: "Spice Route Kitchen", t: d.t, hidden: false, isNew: true });
+    renderPrivacy();
+    toast(state.share
+      ? "Added to your picks. Friends see the dish and a reason, nothing else."
+      : "Added to your picks. Sharing is off, so friends won't see it until you turn it on.");
+  }
+
+  function restart() {
+    state = fresh();
+    placing = false;
+    var btn = $("#place-order"); btn.disabled = false;
+    closeSheets();
+    $("#toast").classList.remove("show");
+    renderAll();
+    $$(".screen").forEach(function (s) { s.classList.toggle("active", s.id === "s-rest"); });
+    var sc = document.querySelector("#s-rest .scroll"); if (sc) sc.scrollTop = 0;
+    step(0);
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("button, [data-action]");
+    if (!t) return;
+    var a;
+    if ((a = t.getAttribute("data-add"))) { add(a); if (state.cart && Object.keys(state.cart).length) step(2); return; }
+    if ((a = t.getAttribute("data-dec"))) return dec(a);
+    if ((a = t.getAttribute("data-why"))) return openWhy(a);
+    if ((a = t.getAttribute("data-go"))) return go(a);
+    if ((a = t.getAttribute("data-hide")) !== null) {
+      var p = state.picks[+a]; p.hidden = !p.hidden; renderPrivacy();
+      toast(p.hidden ? p.name + " is hidden from friends." : p.name + " is visible to friends again.");
+      return;
+    }
+    if (t.id === "share-toggle") {
+      state.share = !state.share; renderPrivacy();
+      toast(state.share ? "Friends who also share can see your picks." : "Sharing is off. Friends can't see any of your picks.");
+      return;
+    }
+    if (t.id === "why-add") {
+      var id = state.whyFor; closeSheets(); add(id); step(2);
+      toast(DISHES[id].name + " added to cart.");
+      return;
+    }
+    if (t.id === "place-order") return placeOrder();
+    switch (t.getAttribute("data-action")) {
+      case "restart": return restart();
+      case "back": return back();
+      case "close-sheet": return closeSheets();
+      case "reorder": return reorder();
+      case "fav-yes": return favAnswer(true);
+      case "fav-no": return favAnswer(false);
+    }
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeSheets(); });
+
+  restart();
+})();
+</script>
