@@ -33,6 +33,12 @@ REST_ART = {
     "bs": ("1f964", "1f950", "#efe7f6", "#d6c6ea"),
 }
 
+# home category row: id -> codepoint
+CAT_ART = {
+    "all": "1f37d-fe0f", "rolls": "1f32f", "thali": "1f35b", "biryani": "1f958",
+    "dosa": "1f32e", "dessert": "1f9c6", "coffee": "2615",
+}
+
 
 def data_uri(path, mime):
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
@@ -54,6 +60,9 @@ def build():
         css.append(f".a-{k} {{ background: url({img(code)}) center/76% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
     for k, (c1, c2, a, b) in REST_ART.items():
         css.append(f".a-rest-{k} {{ background: url({img(c1)}) 24% 58%/38% no-repeat, url({img(c2)}) 76% 46%/34% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
+
+    for k, code in CAT_ART.items():
+        css.append(f".c-{k} {{ background-image: url({img(code)}); }}")
 
     avatars = {p.stem: data_uri(p, "image/svg+xml") for p in sorted((ASSETS / "avatars").glob("*.svg"))}
     av_js = "const AV = {" + ", ".join(f'{k}: "{v}"' for k, v in avatars.items()) + "};"

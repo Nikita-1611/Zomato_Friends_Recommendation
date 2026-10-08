@@ -1,184 +1,249 @@
 <title>Taste-matched Picks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: a 390px phone app on a quiet stage. Demo controls sit under the phone; a guide sits beside it on wide screens.
-   Look: warm and clean. Curry-leaf green for actions, turmeric for friends, sage for groups, neutral grey for the ratings fallback. */
+/* Layout: a 390px phone app styled like a mainstream Indian food delivery app (red actions, maroon home header,
+   green rating pills, pill bottom nav). A short presenter guide sits beside the phone on wide screens only. */
 :root {
   /* Stage (outside the phone) follows the viewer's theme */
-  --stage-bg: #efeae3;
-  --stage-fg: #2b231e;
-  --stage-muted: #6f645c;
-  --stage-line: #dcd3c8;
+  --stage-bg: #f1eeee;
+  --stage-fg: #2a2324;
+  --stage-muted: #6b5f60;
+  --stage-line: #ddd3d4;
   --stage-chip: #ffffff;
 
   /* App: one fixed light look */
-  --app-bg: #fbf8f4;
+  --app-bg: #f4f5f7;
   --surface: #ffffff;
-  --ink: #2b231e;
-  --muted: #776b62;
-  --line: #ece4da;
-  --green: #1f6b4f;
-  --green-ink: #ffffff;
-  --green-soft: #e7f2ec;
-  --green-line: #c7e0d2;
-  --turmeric: #c98a12;
-  --turmeric-soft: #fff4dc;
-  --turmeric-line: #f1dcaa;
-  --neutral-soft: #f1efec;
-  --neutral-line: #dedad5;
-  --star: #e0a21a;
-  --veg: #2e8b3e;
-  --nonveg: #a5361f;
-
-  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
-  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ink: #1c1c1c;
+  --muted: #696969;
+  --line: #e8e8e8;
+  --brand: #e23744;
+  --brand-ink: #ffffff;
+  --brand-soft: #fdeced;
+  --brand-line: #f6c3c7;
+  --hero-from: #6e1820;
+  --hero-to: #b2414a;
+  --green: #24963f;
+  --green-soft: #eaf6ee;
+  --green-line: #cfe9d7;
+  --friend-soft: #fff6e6;
+  --friend-line: #f5dfb3;
+  --friend-ink: #8a5d05;
+  --neutral-soft: #f1f1f1;
+  --neutral-line: #dddddd;
+  --veg: #3ab757;
+  --nonveg: #c0392b;
+  --font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --stage-bg: #1b1714; --stage-fg: #efe7df; --stage-muted: #a99d93; --stage-line: #3a322c; --stage-chip: #27211d;
+    --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --stage-bg: #1b1714; --stage-fg: #efe7df; --stage-muted: #a99d93; --stage-line: #3a322c; --stage-chip: #27211d;
+  --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
   color-scheme: dark;
 }
 
 html, body { height: 100%; }
 [hidden] { display: none !important; }
-body { background: var(--stage-bg); color: var(--stage-fg); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+body { background: var(--stage-bg); color: var(--stage-fg); font-family: var(--font); -webkit-font-smoothing: antialiased; }
 button { font: inherit; cursor: pointer; color: inherit; }
-button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; }
+button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
 /*@ART_CSS@*/
 
 .stage { min-height: 100%; display: flex; align-items: center; justify-content: center; gap: 44px; padding: 20px 16px; box-sizing: border-box; }
 
-/* ---------- Guide (wide screens) ---------- */
-.guide { width: 300px; display: flex; flex-direction: column; gap: 16px; }
+/* ---------- Presenter guide (wide screens only) ---------- */
+.guide { width: 290px; display: flex; flex-direction: column; gap: 16px; }
 .guide .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--stage-muted); font-weight: 700; margin: 0; }
-.guide h1 { font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
+.guide h1 { font-weight: 800; font-size: 30px; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
 .guide h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 6px; color: var(--stage-muted); }
 .guide ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 13.5px; line-height: 1.45; }
 .guide ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
 .guide ol li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 7px 10px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; color: var(--stage-muted); }
 .guide ol li .n { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--stage-line); display: grid; place-items: center; font-size: 11px; font-weight: 800; box-sizing: border-box; }
 .guide ol li.now { background: var(--stage-chip); color: var(--stage-fg); }
-.guide ol li.now .n { border-color: var(--turmeric); color: var(--turmeric); }
+.guide ol li.now .n { border-color: var(--brand); color: var(--brand); }
 .guide ol li.done .n { background: var(--green); border-color: var(--green); color: #fff; }
 .guide .fine { font-size: 11.5px; color: var(--stage-muted); margin: 0; line-height: 1.5; }
+.restart { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--stage-line); background: var(--stage-chip); color: var(--stage-fg); padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.restart svg { width: 14px; height: 14px; }
 
-/* ---------- Device: phone + demo controls ---------- */
-.device { display: flex; flex-direction: column; align-items: center; gap: 14px; flex-shrink: 0; }
-.phone {
-  position: relative; width: 390px; height: min(800px, calc(100vh - 110px)); min-height: 620px;
-  border-radius: 44px; background: var(--app-bg); color: var(--ink);
-  box-shadow: 0 0 0 10px #171310, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden;
-}
-.demobar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-.demobar .lbl { width: 100%; text-align: center; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--stage-muted); font-weight: 700; }
-.demobtn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--stage-line); background: var(--stage-chip); color: var(--stage-fg); padding: 7px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
-.demobtn svg { width: 13px; height: 13px; flex-shrink: 0; }
-.demobtn .short { display: none; }
-.demobtn[aria-pressed="true"] { background: var(--stage-fg); color: var(--stage-bg); border-color: var(--stage-fg); }
-
-.statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; background: var(--app-bg); font-variant-numeric: tabular-nums; }
+/* ---------- Phone ---------- */
+.phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #141010, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; flex-shrink: 0; }
+.statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); background: var(--app-bg); transition: background .2s, color .2s; }
+.statusbar.dark { background: var(--hero-from); color: #fff; }
 .statusbar .icons { display: flex; gap: 6px; align-items: center; }
-.statusbar .batt { width: 22px; height: 11px; border: 1.5px solid var(--ink); border-radius: 3px; position: relative; }
-.statusbar .batt::after { content: ""; position: absolute; inset: 1.5px 7px 1.5px 1.5px; background: var(--ink); border-radius: 1px; }
+.statusbar .batt { width: 22px; height: 11px; border: 1.5px solid currentColor; border-radius: 3px; position: relative; }
+.statusbar .batt::after { content: ""; position: absolute; inset: 1.5px 7px 1.5px 1.5px; background: currentColor; border-radius: 1px; }
 
 .screens { position: absolute; inset: 44px 0 0 0; }
 .screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--app-bg); opacity: 0; visibility: hidden; transform: translateX(14px); transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
 .screen.active { opacity: 1; visibility: visible; transform: none; transition: opacity .2s ease, transform .2s ease; }
 .scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
-.scroll::-webkit-scrollbar, .rail::-webkit-scrollbar { display: none; }
+.scroll::-webkit-scrollbar, .rail::-webkit-scrollbar, .cats::-webkit-scrollbar, .fchips::-webkit-scrollbar, .following::-webkit-scrollbar { display: none; }
+.with-nav .scroll { padding-bottom: 92px; }
 
 .topbar { display: flex; align-items: center; gap: 10px; padding: 6px 16px 10px; }
 .iconbtn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; flex-shrink: 0; padding: 0; }
 .iconbtn svg { width: 18px; height: 18px; }
-.screen-title { font-family: var(--font-display); font-weight: 800; font-size: 19px; margin: 0; flex: 1; }
+.screen-title { font-weight: 800; font-size: 19px; margin: 0; flex: 1; }
 
 .av { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; display: inline-block; flex-shrink: 0; background: #eee; vertical-align: middle; }
 .av img { width: 100%; height: 100%; display: block; }
 
-/* Veg / non-veg marks */
 .vmark { width: 12px; height: 12px; border: 1.5px solid var(--veg); border-radius: 2px; display: inline-grid; place-items: center; vertical-align: -1px; margin-right: 6px; box-sizing: border-box; flex-shrink: 0; }
 .vmark::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--veg); }
 .vmark.nv { border-color: var(--nonveg); }
 .vmark.nv::after { width: 0; height: 0; border-radius: 0; background: none; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--nonveg); }
-
 .art { border-radius: 14px; flex-shrink: 0; }
 
-/* Reason line: the thing you tap to check a pick */
-.reason { display: inline; border: 0; background: none; padding: 0; text-align: left; font-size: 12.5px; line-height: 1.4; color: var(--ink); text-decoration: underline; text-decoration-style: dotted; text-decoration-color: #b3a597; text-underline-offset: 3px; }
-.reason .q { color: var(--green); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.reason { display: inline; border: 0; background: none; padding: 0; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: #aaa; text-underline-offset: 3px; }
+.reason .q { color: var(--brand); font-weight: 700; white-space: nowrap; }
 
 /* ---------- Home ---------- */
-.home-head { padding: 8px 16px 14px; display: flex; flex-direction: column; gap: 12px; }
-.loc { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.loc .where { min-width: 0; }
-.loc b { display: flex; align-items: center; gap: 4px; font-size: 16px; font-weight: 800; }
-.loc b svg { width: 15px; height: 15px; color: var(--green); }
-.loc span { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.me { width: 42px; height: 42px; border-radius: 50%; padding: 0; overflow: hidden; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); background: #eee; flex-shrink: 0; }
+.hero { background: linear-gradient(180deg, var(--hero-from) 0%, #9b2d36 70%, var(--hero-to) 100%); color: #fff; padding: 6px 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.loc-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.loc { min-width: 0; border: 0; background: none; padding: 0; text-align: left; color: #fff; }
+.loc b { display: flex; align-items: center; gap: 4px; font-size: 19px; font-weight: 800; }
+.loc b svg { width: 16px; height: 16px; flex-shrink: 0; }
+.loc .line { display: block; font-size: 13px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+.me { width: 42px; height: 42px; border-radius: 50%; padding: 0; overflow: hidden; border: 2px solid rgba(255,255,255,.85); background: #f2c6a8; flex-shrink: 0; }
 .me img { width: 100%; height: 100%; display: block; }
-.hello { font-family: var(--font-display); font-weight: 800; font-size: 25px; line-height: 1.1; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
-.hello small { display: block; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 6px; letter-spacing: 0; }
+.search-row { display: flex; align-items: center; gap: 12px; }
+.search { flex: 1; min-width: 0; height: 48px; border-radius: 14px; background: #fff; color: #8a8a8a; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14.5px; box-sizing: border-box; }
+.search > svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; }
+.search .mic { margin-left: auto; padding-left: 12px; border-left: 1px solid var(--line); color: var(--brand); display: flex; }
+.search .mic svg { width: 18px; height: 18px; }
+.vegtog { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 0; background: none; color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .08em; padding: 0; }
+.vegtog .sw { width: 40px; height: 22px; border-radius: 999px; background: rgba(255,255,255,.35); position: relative; transition: background .2s; }
+.vegtog .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.vegtog[aria-pressed="true"] .sw { background: var(--veg); }
+.vegtog[aria-pressed="true"] .sw::after { transform: translateX(18px); }
+.newhere { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 16px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.newhere h2 { font-size: 18px; font-weight: 800; margin: 0; line-height: 1.2; text-wrap: balance; }
+.newhere p { margin: 0; font-size: 12.5px; opacity: .92; line-height: 1.4; grid-column: 1; }
+.newhere .badge { grid-row: 1 / span 2; grid-column: 2; width: 46px; height: 46px; border-radius: 14px; background: #fff; color: var(--brand); display: grid; place-items: center; }
+.newhere .badge svg { width: 24px; height: 24px; }
 
-.section { margin: 6px 0 18px; }
-.sec-head { padding: 0 16px 10px; display: flex; flex-direction: column; gap: 4px; }
+.cats { display: flex; gap: 4px; overflow-x: auto; padding: 16px 10px 0; scrollbar-width: none; background: var(--surface); border-bottom: 1px solid var(--line); }
+.cat { flex-shrink: 0; width: 76px; border: 0; border-bottom: 3px solid transparent; background: none; color: #4f4f4f; padding: 0 0 10px; font-size: 13px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cat .cimg { width: 58px; height: 58px; background-size: 80%; background-position: center; background-repeat: no-repeat; }
+.cat[aria-pressed="true"] { color: var(--ink); font-weight: 800; border-bottom-color: var(--green); }
+.fchips { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 4px; scrollbar-width: none; background: var(--surface); }
+.fchip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 12px; border: 1px solid #e2e2e2; background: var(--surface); font-size: 13px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.fchip svg { width: 14px; height: 14px; }
+.fchip .bolt { color: var(--green); }
+.fchip[aria-pressed="true"] { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand); }
+.chipbar-end { height: 10px; background: var(--surface); border-radius: 0 0 20px 20px; }
+
+.section { margin: 20px 0 4px; }
+.sec-head { padding: 0 16px 12px; display: flex; flex-direction: column; gap: 4px; }
 .sec-head .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.sec-head h2 { font-family: var(--font-display); font-weight: 800; font-size: 18px; margin: 0; letter-spacing: -0.005em; }
+.sec-head h2 { margin: 0; font-size: 13px; letter-spacing: .14em; color: #555; font-weight: 700; text-transform: uppercase; line-height: 1.35; }
 .sec-head p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-.basis { flex-shrink: 0; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; }
-.basis.friends { background: var(--turmeric-soft); color: #8a5d05; }
+.seeall { border: 0; background: none; color: var(--brand); font-weight: 700; font-size: 13px; padding: 0; white-space: nowrap; }
+.basis { flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 6px; }
 .basis.repeat { background: var(--green-soft); color: var(--green); }
-.basis.ratings { background: var(--neutral-soft); color: #5d5750; border: 1px solid var(--neutral-line); }
+.basis.ratings { background: var(--neutral-soft); color: #555; border: 1px solid var(--neutral-line); }
 
 .rail { display: flex; gap: 12px; overflow-x: auto; padding: 2px 16px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-.fcard { flex: 0 0 168px; scroll-snap-align: start; background: var(--surface); border-radius: 18px; border: 1px solid var(--turmeric-line); overflow: hidden; display: flex; flex-direction: column; }
+.fcard { flex: 0 0 160px; scroll-snap-align: start; background: var(--surface); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 12px -5px rgba(0,0,0,.18); }
 .fcard .open { border: 0; background: none; padding: 0; text-align: left; display: flex; flex-direction: column; }
-.fcard .art { width: 100%; height: 104px; border-radius: 0; position: relative; }
-.chip { position: absolute; left: 8px; bottom: -12px; display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border-radius: 999px; padding: 3px 10px 3px 3px; font-size: 12px; font-weight: 800; box-shadow: 0 2px 6px rgba(43,35,30,.18); }
+.fcard .art { width: 100%; height: 108px; border-radius: 0; position: relative; }
+.chip { position: absolute; left: 8px; bottom: -12px; display: inline-flex; align-items: center; gap: 6px; background: #fff; border-radius: 999px; padding: 3px 10px 3px 3px; font-size: 12px; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
 .fcard .info { padding: 18px 12px 0; }
 .fcard .dn { font-weight: 800; font-size: 14px; line-height: 1.25; }
 .fcard .pl { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .fcard .why { padding: 6px 12px 12px; }
+.fcard.more { align-items: center; justify-content: center; gap: 8px; background: var(--brand-soft); box-shadow: none; border: 1px dashed var(--brand-line); color: var(--brand); font-weight: 700; font-size: 13px; padding: 16px; text-align: center; }
+.fcard.more .circle { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
 
-.glist { margin: 0 12px; background: var(--surface); border-radius: 18px; border: 1px solid var(--green-line); overflow: hidden; }
-.glist.ratings { border-color: var(--neutral-line); }
-.grow { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 12px; }
-.grow + .grow { border-top: 1px solid var(--line); }
+.ocard { flex: 0 0 236px; scroll-snap-align: start; background: var(--surface); border-radius: 16px; padding: 10px; display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); box-sizing: border-box; }
+.ocard .art { width: 64px; height: 64px; border-radius: 12px; }
+.ocard .dn { font-weight: 800; font-size: 14px; }
+.ocard .pl { font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+.ocard .re { border: 1px solid var(--brand-line); background: #fff8f8; color: var(--brand); border-radius: 8px; height: 30px; padding: 0 12px; font-weight: 800; font-size: 12.5px; }
+
+.glist { margin: 0 12px; background: var(--surface); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); }
+.grow { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 12px; }
+.grow + .grow { border-top: 1px dashed var(--line); }
 .grow .open { border: 0; background: none; padding: 0; text-align: left; display: contents; }
-.grow .art { width: 76px; height: 76px; }
-.grow .dn { font-weight: 800; font-size: 14.5px; }
+.grow .art { width: 80px; height: 80px; }
+.grow .dn { font-weight: 800; font-size: 15px; }
 .grow .pl { font-size: 12px; color: var(--muted); margin: 2px 0 6px; }
-.grow .stars { font-size: 12.5px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
-.grow .stars svg { width: 12px; height: 12px; color: var(--star); }
 
-.rcard { display: block; width: calc(100% - 24px); margin: 0 12px 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 18px; overflow: hidden; padding: 0; text-align: left; }
-.rcard .art { width: 100%; height: 118px; border-radius: 0; }
-.rcard .body { padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 3px; }
+.rcard { display: block; width: calc(100% - 32px); margin: 0 16px 16px; border: 0; background: var(--surface); border-radius: 18px; overflow: hidden; padding: 0; text-align: left; box-shadow: 0 2px 12px -5px rgba(0,0,0,.18); }
+.rcard .art { width: 100%; height: 138px; border-radius: 0; position: relative; }
+.offer-tag { position: absolute; left: 10px; top: 10px; background: rgba(20,20,20,.72); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+.rcard .body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
 .rcard .row1 { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.rcard b { font-size: 16px; font-weight: 800; }
-.pill { display: inline-flex; align-items: center; gap: 3px; background: var(--green); color: #fff; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.rcard b { font-size: 17px; font-weight: 800; }
+.pill { display: inline-flex; align-items: center; gap: 3px; background: var(--green); color: #fff; font-size: 12px; font-weight: 800; padding: 3px 7px; border-radius: 7px; font-variant-numeric: tabular-nums; }
 .pill svg { width: 10px; height: 10px; }
-.rcard .meta { font-size: 12.5px; color: var(--muted); }
-.home-end { padding: 4px 24px 28px; font-size: 11.5px; color: var(--muted); text-align: center; line-height: 1.5; }
+.rcard .meta { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.home-end { padding: 4px 24px 24px; font-size: 11.5px; color: var(--muted); text-align: center; line-height: 1.6; }
+.home-end button { border: 0; background: none; padding: 0; color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; font-size: 11.5px; }
+
+/* ---------- Bottom nav ---------- */
+.bottomnav { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 6; background: #fff; border-radius: 999px; box-shadow: 0 6px 22px -6px rgba(0,0,0,.3); display: flex; padding: 5px; gap: 2px; }
+.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 50px; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 14px; font-weight: 700; position: relative; }
+.bottomnav button svg { width: 19px; height: 19px; flex-shrink: 0; }
+.bottomnav button.on { background: #262626; color: #fff; }
+.bottomnav button.on .ic-home { color: #6fd18a; }
+.bottomnav .dot { position: absolute; top: 10px; right: 18px; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+
+/* ---------- Friends tab ---------- */
+.fhero { padding: 6px 16px 4px; }
+.fhero h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.fhero p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.following { display: flex; gap: 14px; overflow-x: auto; padding: 12px 16px 6px; scrollbar-width: none; }
+.person { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; font-size: 12px; font-weight: 600; padding: 0; width: 60px; }
+.person .av, .person .all { width: 54px; height: 54px; box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px transparent; transition: box-shadow .15s; }
+.person .all { border-radius: 50%; background: #262626; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+.person[aria-pressed="true"] .av, .person[aria-pressed="true"] .all { box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--brand); }
+.person[aria-pressed="true"] { color: var(--brand); font-weight: 800; }
+.feedcard { margin: 0 12px 12px; background: var(--surface); border-radius: 18px; padding: 14px; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); display: flex; flex-direction: column; gap: 12px; }
+.feedcard .top { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.feedcard .top .av { width: 30px; height: 30px; }
+.feedcard .dish-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; }
+.feedcard .art { width: 64px; height: 64px; }
+.feedcard .dn { font-weight: 800; font-size: 15px; }
+.feedcard .pl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.feedcard .acts { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+.ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; height: 32px; padding: 0 12px; font-weight: 700; font-size: 12.5px; }
+.fempty { margin: 0 12px 12px; padding: 22px 16px; text-align: center; border: 1px dashed #d6d6d6; border-radius: 16px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.sugg { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
+.sugg + .sugg { border-top: 1px solid var(--line); }
+.sugg .av { width: 40px; height: 40px; }
+.sugg b { font-size: 14px; display: block; }
+.sugg small { font-size: 12px; color: var(--muted); }
+.followbtn { border: 1px solid var(--brand); background: var(--brand); color: #fff; border-radius: 10px; height: 34px; min-width: 96px; font-weight: 800; font-size: 13px; }
+.followbtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.linkcard { margin: 4px 12px 12px; width: calc(100% - 24px); display: flex; align-items: center; gap: 12px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.linkcard svg { width: 22px; height: 22px; color: var(--brand); flex-shrink: 0; }
+.linkcard b { display: block; font-size: 14px; }
+.linkcard small { font-size: 12px; color: var(--muted); }
 
 /* ---------- Restaurant ---------- */
-.rest-hero { margin: 0 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; }
-.rest-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.1; margin: 0; }
-.rest-hero .meta { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; }
-.rest-hero .meta span + span::before { content: "·"; margin-right: 10px; color: #bfb3a6; }
+.rest-hero { margin: 0 12px 14px; background: var(--surface); border-radius: 20px; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; box-shadow: 0 2px 10px -4px rgba(0,0,0,.12); }
+.rest-hero h1 { font-weight: 800; font-size: 24px; line-height: 1.15; margin: 0; }
+.rest-hero .meta { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.rest-hero .meta span + span::before { content: "·"; margin-right: 10px; color: #bbb; }
+.rest-hero .time { color: var(--green); background: var(--green-soft); padding: 3px 8px; border-radius: 8px; font-weight: 700; font-size: 12px; }
 .rest-hero .rate { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-.rest-hero .rate small { font-size: 10.5px; color: var(--muted); }
+.rest-hero .rate small { font-size: 10.5px; color: var(--muted); border-bottom: 1px dashed #bbb; }
+.rest-hero .offer { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px; font-weight: 700; color: #256fef; }
+.rest-hero .offer svg { width: 18px; height: 18px; }
 
-.picks { margin: 0 12px 18px; border-radius: 20px; background: linear-gradient(180deg, var(--turmeric-soft), var(--surface) 64px); border: 1px solid var(--turmeric-line); padding: 14px 14px 4px; }
+.picks { margin: 0 12px 18px; border-radius: 20px; background: linear-gradient(180deg, var(--brand-soft), var(--surface) 64px); border: 1px solid var(--brand-line); padding: 14px 14px 4px; }
 .picks-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.picks-head h2 { font-family: var(--font-display); font-weight: 800; font-size: 17px; margin: 0; }
+.picks-head h2 { font-weight: 800; font-size: 17px; margin: 0; color: var(--brand); }
 .picks-head span { font-size: 11px; color: var(--muted); }
 .prow { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
 .prow + .prow { border-top: 1px dashed var(--line); }
@@ -187,29 +252,30 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 .prow .src { display: flex; gap: 6px; align-items: flex-start; }
 .gicon { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; flex-shrink: 0; }
 .gicon.repeat { background: var(--green-soft); color: var(--green); }
-.gicon.ratings { background: var(--neutral-soft); color: #5d5750; }
+.gicon.ratings { background: var(--neutral-soft); color: #555; }
 .gicon svg { width: 13px; height: 13px; }
 
 .menu-head { padding: 0 16px 4px; display: flex; align-items: baseline; justify-content: space-between; }
-.menu-head h3 { font-family: var(--font-display); font-weight: 800; font-size: 17px; margin: 0; }
+.menu-head h3 { font-weight: 800; font-size: 17px; margin: 0; }
 .menu-head span { font-size: 12px; color: var(--muted); }
-.menu { background: var(--surface); border-top: 1px solid var(--line); }
-.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 16px; border-bottom: 1px dashed var(--line); }
+.menu { background: var(--surface); border-radius: 20px 20px 0 0; margin-top: 8px; overflow: hidden; }
+.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 18px 16px; border-bottom: 1px dashed var(--line); }
 .dish .info { min-width: 0; }
-.dish .dn { font-weight: 800; font-size: 15.5px; margin-top: 5px; }
-.dish .price { font-size: 14.5px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.dish .dn { font-weight: 700; font-size: 16px; margin-top: 6px; }
+.dish .price { font-size: 15px; font-weight: 600; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .dish .desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
 .dish .side { display: flex; flex-direction: column; align-items: center; }
-.dish .side .art { width: 104px; height: 96px; }
-.dish .side .add, .dish .side .stepper { margin-top: -16px; position: relative; z-index: 1; box-shadow: 0 4px 10px -4px rgba(43,35,30,.3); }
-.best { display: inline-block; font-size: 10.5px; font-weight: 800; color: #8a5d05; background: var(--turmeric-soft); border: 1px solid var(--turmeric-line); padding: 1px 6px; border-radius: 4px; vertical-align: 1px; }
+.dish .side .art { width: 112px; height: 104px; border-radius: 16px; }
+.dish .side .add, .dish .side .stepper { margin-top: -16px; position: relative; z-index: 1; box-shadow: 0 4px 10px -4px rgba(0,0,0,.25); }
+.best { display: inline-block; font-size: 11px; font-weight: 700; color: #e2a03b; background: #fff6e8; border: 1px solid #f7deb3; padding: 1px 6px; border-radius: 4px; vertical-align: 1px; }
 .menu-end { padding: 18px 16px 110px; font-size: 12px; color: var(--muted); text-align: center; }
 
-.add { min-width: 78px; height: 34px; border-radius: 10px; border: 1px solid var(--green-line); background: #f6fbf8; color: var(--green); font-weight: 800; font-size: 13.5px; letter-spacing: .05em; }
-.stepper { min-width: 78px; height: 34px; border-radius: 10px; background: var(--green); color: var(--green-ink); display: inline-flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
+.add { min-width: 80px; height: 34px; border-radius: 10px; border: 1px solid var(--brand-line); background: #fff8f8; color: var(--brand); font-weight: 800; font-size: 14px; letter-spacing: .04em; position: relative; }
+.add::after { content: "+"; position: absolute; top: 1px; right: 6px; font-size: 13px; font-weight: 800; }
+.stepper { min-width: 80px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--brand-ink); display: inline-flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
 .stepper button { border: 0; background: none; color: inherit; width: 26px; height: 34px; font-size: 17px; font-weight: 800; padding: 0; }
 
-.cartbar { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 14px; border: 0; background: var(--green); color: var(--green-ink); text-align: left; box-shadow: 0 10px 24px -10px rgba(31,107,79,.7); }
+.cartbar { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink); text-align: left; box-shadow: 0 10px 24px -10px rgba(226,55,68,.7); }
 .cartbar small { display: block; font-size: 12px; opacity: .9; font-variant-numeric: tabular-nums; }
 .cartbar b { font-size: 15px; }
 .cartbar .go { font-weight: 800; display: flex; align-items: center; gap: 4px; }
@@ -228,31 +294,34 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 .addr svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
 .empty { text-align: center; padding: 60px 24px; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
 .footer { padding: 12px 12px 16px; background: var(--surface); border-top: 1px solid var(--line); }
-.primary { width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--green); color: var(--green-ink); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.primary { width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .primary.split { justify-content: space-between; padding: 0 16px; text-align: left; }
 .primary.split small { display: block; font-size: 10px; font-weight: 700; opacity: .85; letter-spacing: .08em; }
 .primary:disabled { opacity: .75; cursor: progress; }
 .secondary { width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 800; font-size: 15px; }
-.linkbtn { border: 0; background: none; color: var(--green); font-weight: 700; font-size: 13px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
+.linkbtn { border: 0; background: none; color: var(--brand); font-weight: 700; font-size: 13px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
 .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .done-wrap { padding: 26px 20px 20px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
 .done-badge { width: 84px; height: 84px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: #fff; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
 .done-badge svg { width: 42px; height: 42px; }
 @keyframes pop { from { transform: scale(.5); opacity: 0; } }
-.done-wrap h2 { font-family: var(--font-display); font-weight: 800; font-size: 26px; margin: 0; }
+.done-wrap h2 { font-weight: 800; font-size: 26px; margin: 0; }
 .done-wrap p { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .receipt { width: 100%; text-align: left; box-sizing: border-box; margin: 0; }
 .receipt .line { grid-template-columns: 52px 1fr auto; }
 .receipt .art { width: 52px; height: 52px; border-radius: 12px; }
 .done-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
 
-/* ---------- Privacy ---------- */
+/* ---------- Profile / privacy ---------- */
+.profile { display: flex; align-items: center; gap: 14px; padding: 6px 16px 16px; }
+.profile .av { width: 60px; height: 60px; }
+.profile b { display: block; font-size: 22px; font-weight: 800; }
+.profile small { font-size: 13px; color: var(--muted); }
 .toggle-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 14px 0; }
 .toggle-row b { font-size: 15px; display: block; margin-bottom: 4px; }
 .toggle-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-.switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #cfc6bc; position: relative; transition: background .2s; padding: 0; }
+.switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #c8c8c8; position: relative; transition: background .2s; padding: 0; }
 .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
 .switch[aria-checked="true"] { background: var(--green); }
 .switch[aria-checked="true"]::after { transform: translateX(20px); }
@@ -262,29 +331,29 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 .mypick .name { font-weight: 700; font-size: 14px; }
 .mypick .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .mypick.is-hidden .art, .mypick.is-hidden .name { opacity: .45; }
-.mypick.is-new .name::after { content: "New"; margin-left: 6px; font-size: 10px; font-weight: 800; color: #8a5d05; background: var(--turmeric-soft); padding: 2px 6px; border-radius: 6px; vertical-align: 1px; }
+.mypick.is-new .name::after { content: "New"; margin-left: 6px; font-size: 10px; font-weight: 800; color: var(--brand); background: var(--brand-soft); padding: 2px 6px; border-radius: 6px; vertical-align: 1px; }
 .hidebtn { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 800; }
 .hidebtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 .sharing-off .mypick { opacity: .55; }
-.off-note { font-size: 12.5px; color: #7a5208; background: var(--turmeric-soft); border-radius: 10px; padding: 10px 12px; margin: 10px 0 4px; line-height: 1.45; }
-.seen-as { margin: 0 12px 12px; padding: 12px 14px; border-radius: 14px; background: var(--turmeric-soft); border: 1px solid var(--turmeric-line); font-size: 13px; line-height: 1.55; }
-.seen-as b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #8a5d05; margin-bottom: 4px; }
-.rules { margin: 0 12px 24px; padding: 4px 14px; }
+.off-note { font-size: 12.5px; color: var(--friend-ink); background: var(--friend-soft); border-radius: 10px; padding: 10px 12px; margin: 10px 0 4px; line-height: 1.45; }
+.seen-as { margin: 0 12px 12px; padding: 12px 14px; border-radius: 14px; background: var(--friend-soft); border: 1px solid var(--friend-line); font-size: 13px; line-height: 1.55; }
+.seen-as b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--friend-ink); margin-bottom: 4px; }
+.rules { margin: 0 12px 12px; padding: 4px 14px 4px 30px; }
 .rules li { font-size: 12.5px; line-height: 1.5; color: var(--muted); padding: 4px 0; }
 
 /* ---------- Sheets ---------- */
-.scrim { position: absolute; inset: 0; background: rgba(30,22,16,.45); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
+.scrim { position: absolute; inset: 0; background: rgba(20,14,14,.48); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
 .scrim.open { opacity: 1; visibility: visible; transition: opacity .2s; }
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--surface); border-radius: 24px 24px 0 0; padding: 10px 20px 20px; transform: translateY(105%); transition: transform .28s cubic-bezier(.2,.9,.3,1); display: flex; flex-direction: column; gap: 14px; max-height: 88%; overflow-y: auto; box-sizing: border-box; }
 .sheet.open { transform: none; }
 .sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); align-self: center; flex-shrink: 0; }
-.sheet h2 { font-family: var(--font-display); font-weight: 800; font-size: 21px; margin: 2px 0 0; text-wrap: balance; }
+.sheet h2 { font-weight: 800; font-size: 21px; margin: 2px 0 0; text-wrap: balance; }
 .sheet-dish { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; }
 .sheet-dish .art { width: 72px; height: 72px; }
 .sheet-dish .dn { font-weight: 800; font-size: 16px; }
 .sheet-dish .pl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 .quote { font-size: 13.5px; line-height: 1.45; padding: 10px 12px; border-radius: 12px; display: flex; gap: 8px; align-items: flex-start; }
-.quote.friends { background: var(--turmeric-soft); }
+.quote.friends { background: var(--friend-soft); }
 .quote.repeat { background: var(--green-soft); }
 .quote.ratings { background: var(--neutral-soft); }
 .why-body { display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; line-height: 1.5; }
@@ -295,39 +364,41 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 .places li span { width: 26px; height: 26px; border-radius: 8px; background: var(--green-soft); color: var(--green); display: grid; place-items: center; }
 .places li svg { width: 14px; height: 14px; }
 .gsize { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--green-line); border-radius: 12px; }
-.gsize b { font-size: 20px; font-family: var(--font-display); font-variant-numeric: tabular-nums; color: var(--green); }
+.gsize b { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); }
 .gsize span { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
 .note { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; align-items: flex-start; }
 .note svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
 .sheet-actions { display: flex; flex-direction: column; gap: 6px; align-items: center; }
-.fav-art { width: 64px; height: 64px; border-radius: 50%; background: var(--turmeric-soft); color: var(--turmeric); display: grid; place-items: center; align-self: center; }
+.fav-art { width: 64px; height: 64px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; align-self: center; }
 .fav-art svg { width: 30px; height: 30px; }
 #sheet-fav { text-align: center; }
 #sheet-fav p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
-.preview { text-align: left; border: 1px solid var(--turmeric-line); background: var(--turmeric-soft); border-radius: 14px; padding: 10px 12px; display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; }
+.preview { text-align: left; border: 1px solid var(--friend-line); background: var(--friend-soft); border-radius: 14px; padding: 10px 12px; display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; }
 .preview .art { width: 44px; height: 44px; border-radius: 10px; }
-.preview small { display: block; font-size: 10.5px; color: #8a5d05; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; margin-bottom: 2px; }
+.preview small { display: block; font-size: 10.5px; color: var(--friend-ink); text-transform: uppercase; letter-spacing: .08em; font-weight: 800; margin-bottom: 2px; }
 .preview span { font-size: 13px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.addr-list { display: flex; flex-direction: column; gap: 10px; }
+.addr-opt { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 12px; }
+.addr-opt[aria-pressed="true"] { border-color: var(--brand); background: #fff8f8; }
+.addr-opt .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--neutral-soft); display: grid; place-items: center; }
+.addr-opt .ic svg { width: 20px; height: 20px; }
+.addr-opt b { display: block; font-size: 15px; }
+.addr-opt small { font-size: 12.5px; color: var(--muted); }
+.addr-opt .tick { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; box-sizing: border-box; }
+.addr-opt[aria-pressed="true"] .tick { border: 6px solid var(--brand); }
 
-.toast { position: absolute; left: 14px; right: 14px; top: 54px; z-index: 60; background: var(--ink); color: #fff; border-radius: 12px; padding: 11px 14px; font-size: 13px; line-height: 1.4; transform: translateY(-140%); opacity: 0; transition: transform .25s ease, opacity .25s ease; pointer-events: none; }
+.toast { position: absolute; left: 14px; right: 14px; top: 54px; z-index: 60; background: #1c1c1c; color: #fff; border-radius: 12px; padding: 11px 14px; font-size: 13px; line-height: 1.4; transform: translateY(-140%); opacity: 0; transition: transform .25s ease, opacity .25s ease; pointer-events: none; }
 .toast.show { transform: none; opacity: 1; }
 
-/* ---------- Phone-width viewers: the app fills the screen, demo controls sit underneath ---------- */
+/* ---------- Phone-width viewers: the app fills the screen ---------- */
 @media (max-width: 780px) {
   .guide { display: none; }
   .stage { padding: 0; display: block; height: 100%; min-height: 0; }
-  .device { height: 100%; gap: 0; align-items: stretch; }
-  .phone { width: 100%; flex: 1; height: auto; min-height: 0; border-radius: 0; box-shadow: none; }
+  .phone { width: 100%; height: 100%; min-height: 0; border-radius: 0; box-shadow: none; }
   .statusbar { display: none; }
   .screens { inset: 0; }
   .toast { top: 10px; }
-  .demobar { padding: 8px 10px; gap: 5px; background: var(--stage-bg); border-top: 1px solid var(--stage-line); flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; }
-  .demobar .lbl { display: none; }
-  .demobar { justify-content: center; }
-  .demobtn { flex-shrink: 0; font-size: 12px; padding: 7px 10px; }
-  .demobtn .long { display: none; }
-  .demobtn .short { display: inline; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
@@ -337,7 +408,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 <div class="stage">
   <aside class="guide" aria-label="About this prototype">
     <p class="eyebrow">PM portfolio · feature teardown</p>
-    <h1>Taste-matched picks</h1>
+    <h1>Taste&#8209;matched picks</h1>
     <div>
       <h2>The problem</h2>
       <ul>
@@ -350,162 +421,215 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
       <h2>Run it in 60 seconds</h2>
       <ol id="guide-steps">
         <li data-step="1"><span class="n">1</span><span>On Home, tap the reason under Riya's pick</span></li>
-        <li data-step="2"><span class="n">2</span><span>Add to cart, open the cart, place the order</span></li>
-        <li data-step="3"><span class="n">3</span><span>Tap <b>Simulate 3rd reorder</b>, then <b>Recommend</b></span></li>
-        <li data-step="4"><span class="n">4</span><span>Tap your photo and hide a shared pick</span></li>
-        <li data-step="5"><span class="n">5</span><span>Tap <b>Simulate quiet area</b> to see the ratings fallback</span></li>
+        <li data-step="2"><span class="n">2</span><span>Add to cart and place the order</span></li>
+        <li data-step="3"><span class="n">3</span><span>Under <b>Order again</b>, reorder Ghee roast dosa, then <b>Recommend</b></span></li>
+        <li data-step="4"><span class="n">4</span><span>Open the <b>Friends</b> tab and follow Arjun</span></li>
+        <li data-step="5"><span class="n">5</span><span>Tap <b>Home ▾</b> and switch to Office to see the ratings fallback</span></li>
+        <li data-step="6"><span class="n">6</span><span>Open <b>Profile</b> and hide a shared pick</span></li>
       </ol>
     </div>
-    <p class="fine">Fake data and invented names. Repeat orders are the signal, not stars. Dish art: Fluent Emoji 3D by Microsoft (MIT). Avatars: ToonHead by Johan Melin (CC BY 4.0), via DiceBear.</p>
+    <button class="restart" type="button" data-action="restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Restart demo</button>
+    <p class="fine">Concept prototype styled after a food delivery app. Not affiliated with any company. Invented names and data. Dish art: Fluent Emoji 3D by Microsoft (MIT). Avatars: ToonHead by Johan Melin (CC BY 4.0), via DiceBear.</p>
   </aside>
 
-  <div class="device">
-    <div class="phone" id="phone">
-      <div class="statusbar"><span>9:02</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
+  <div class="phone" id="phone">
+    <div class="statusbar dark" id="statusbar"><span>9:02</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
 
-      <div class="screens">
-        <!-- 1. Home -->
-        <section class="screen active" id="s-home" aria-label="Home">
-          <div class="scroll">
-            <div class="home-head">
-              <div class="loc">
-                <div class="where">
-                  <b><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Home</b>
-                  <span>Flat 4B, Maple Lane, Greenfield Nagar</span>
-                </div>
-                <button class="me" type="button" data-go="s-privacy" aria-label="Your profile and sharing settings" data-avatar="ananya"></button>
-              </div>
-              <h1 class="hello">Hungry, Ananya?<small>9:02 pm · new to Greenfield Nagar · 3 weeks</small></h1>
+    <div class="screens">
+      <!-- Home -->
+      <section class="screen active with-nav" id="s-home" aria-label="Home">
+        <div class="scroll">
+          <header class="hero">
+            <div class="loc-row">
+              <button class="loc" type="button" data-action="addr" aria-label="Change delivery address">
+                <b><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="loc-name">Home</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></b>
+                <span class="line" id="loc-line">Flat 4B, Maple Lane, Greenfield Nagar</span>
+              </button>
+              <button class="me" type="button" data-tab="s-privacy" aria-label="Profile" data-avatar="ananya"></button>
             </div>
-
-            <section class="section" aria-labelledby="sec-a">
-              <div class="sec-head">
-                <div class="row"><h2 id="sec-a">From your friends</h2><span class="basis friends">Opted in</span></div>
-                <p>Friends who chose to share their favourites.</p>
-              </div>
-              <div class="rail" id="rail-friends"></div>
-            </section>
-
-            <section class="section" aria-labelledby="sec-b">
-              <div class="sec-head">
-                <div class="row"><h2 id="sec-b"></h2><span class="basis" id="sec-b-basis"></span></div>
-                <p id="sec-b-sub"></p>
-              </div>
-              <div class="glist" id="group-list"></div>
-            </section>
-
-            <section class="section" aria-labelledby="sec-c">
-              <div class="sec-head"><div class="row"><h2 id="sec-c">Restaurants for you</h2></div></div>
-              <div id="rest-list"></div>
-            </section>
-            <p class="home-end">Every restaurant here is made up for this prototype.</p>
+            <div class="search-row">
+              <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search "paneer roll"<span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></div>
+              <button class="vegtog" type="button" id="veg-toggle" aria-pressed="false">VEG<span class="sw"></span></button>
+            </div>
+            <div class="newhere">
+              <h2 id="new-title">New to Greenfield Nagar?</h2>
+              <p>Picks below come from repeat orders, not star ratings.</p>
+              <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></div>
+            </div>
+          </header>
+          <div class="cats" id="cats">
+            <button class="cat" type="button" aria-pressed="true"><span class="cimg c-all"></span>All</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-rolls"></span>Rolls</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-thali"></span>Thali</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-biryani"></span>Biryani</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-dosa"></span>Dosa</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-dessert"></span>Desserts</button>
+            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-coffee"></span>Coffee</button>
           </div>
-        </section>
-
-        <!-- 2. Restaurant -->
-        <section class="screen" id="s-rest" aria-label="Restaurant">
-          <div class="topbar">
-            <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+          <div class="fchips" id="fchips">
+            <button class="fchip" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters</button>
+            <button class="fchip" type="button" aria-pressed="false"><svg class="bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Near &amp; Fast</button>
+            <button class="fchip" type="button" aria-pressed="false">Rating 4.0+</button>
+            <button class="fchip" type="button" aria-pressed="false">Offers</button>
           </div>
-          <div class="scroll" id="rest-body"></div>
-          <button class="cartbar" type="button" data-go="s-cart" id="cartbar" hidden>
-            <span><b id="cartbar-count">1 item added</b><small id="cartbar-total">₹0</small></span>
-            <span class="go">View cart <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+          <div class="chipbar-end"></div>
+
+          <section class="section" aria-labelledby="sec-a">
+            <div class="sec-head">
+              <div class="row"><h2 id="sec-a">From your friends</h2><button class="seeall" type="button" data-tab="s-friends">See all</button></div>
+              <p>Friends who chose to share their favourites.</p>
+            </div>
+            <div class="rail" id="rail-friends"></div>
+          </section>
+
+          <section class="section" aria-labelledby="sec-b">
+            <div class="sec-head">
+              <div class="row"><h2 id="sec-b"></h2><span class="basis" id="sec-b-basis"></span></div>
+              <p id="sec-b-sub"></p>
+            </div>
+            <div class="glist" id="group-list"></div>
+          </section>
+
+          <section class="section" aria-labelledby="sec-o">
+            <div class="sec-head"><div class="row"><h2 id="sec-o">Order again</h2></div></div>
+            <div class="rail" id="rail-again"></div>
+          </section>
+
+          <section class="section" aria-labelledby="sec-c">
+            <div class="sec-head"><div class="row"><h2 id="sec-c">Restaurants for you</h2></div></div>
+            <div id="rest-list"></div>
+          </section>
+          <p class="home-end">Made-up restaurants, people and prices.<br><button type="button" data-action="restart">Restart demo</button></p>
+        </div>
+      </section>
+
+      <!-- Friends tab -->
+      <section class="screen with-nav" id="s-friends" aria-label="Friends">
+        <div class="scroll">
+          <div class="fhero"><h1>Friends' picks</h1><p>Dishes your friends keep reordering. Only friends who chose to share show up here.</p></div>
+          <div class="following" id="following"></div>
+          <div class="section" style="margin-top:12px">
+            <div class="sec-head"><div class="row"><h2 id="feed-title">From people you follow</h2></div></div>
+            <div id="feed"></div>
+          </div>
+          <div class="section">
+            <div class="sec-head"><div class="row"><h2>Friends who share picks</h2></div><p>From your contacts. Follow or unfollow anytime.</p></div>
+            <div class="block" id="suggest"></div>
+          </div>
+          <button class="linkcard" type="button" data-tab="s-privacy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            <span><b>Your shared picks</b><small>Choose what friends can see</small></span>
           </button>
-        </section>
+        </div>
+      </section>
 
-        <!-- 4. Cart -->
-        <section class="screen" id="s-cart" aria-label="Cart">
-          <div class="topbar">
-            <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
-            <h2 class="screen-title">Your cart</h2>
+      <!-- Restaurant -->
+      <section class="screen" id="s-rest" aria-label="Restaurant">
+        <div class="topbar">
+          <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+        </div>
+        <div class="scroll" id="rest-body"></div>
+        <button class="cartbar" type="button" data-go="s-cart" id="cartbar" hidden>
+          <span><b id="cartbar-count">1 item added</b><small id="cartbar-total">₹0</small></span>
+          <span class="go">View cart <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+        </button>
+      </section>
+
+      <!-- Cart -->
+      <section class="screen" id="s-cart" aria-label="Cart">
+        <div class="topbar">
+          <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+          <h2 class="screen-title">Your cart</h2>
+        </div>
+        <div class="scroll" id="cart-body"></div>
+        <div class="footer" id="cart-footer"><button class="primary split" type="button" id="place-order">Place order</button></div>
+      </section>
+
+      <!-- Order delivered -->
+      <section class="screen" id="s-done" aria-label="Order delivered">
+        <div class="scroll">
+          <div class="done-wrap">
+            <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+            <div><h2>Order delivered</h2><p id="done-from"></p></div>
+            <div class="block receipt" id="done-items"></div>
+            <div class="done-actions">
+              <button class="primary" type="button" data-action="reorder">Order again</button>
+              <button class="secondary" type="button" data-action="home">Back to home</button>
+            </div>
           </div>
-          <div class="scroll" id="cart-body"></div>
-          <div class="footer" id="cart-footer"><button class="primary split" type="button" id="place-order">Place order</button></div>
-        </section>
+        </div>
+      </section>
 
-        <!-- Order delivered -->
-        <section class="screen" id="s-done" aria-label="Order delivered">
-          <div class="scroll">
-            <div class="done-wrap">
-              <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-              <div><h2>Order delivered</h2><p id="done-from"></p></div>
-              <div class="block receipt" id="done-items"></div>
-              <div class="done-actions">
-                <button class="primary" type="button" data-action="reorder">Order again</button>
-                <button class="secondary" type="button" data-action="home">Back to home</button>
+      <!-- Profile / privacy -->
+      <section class="screen with-nav" id="s-privacy" aria-label="Profile">
+        <div class="scroll">
+          <div class="profile"><span class="av" data-avatar="ananya"></span><div><b>Ananya</b><small>Greenfield Nagar · joined 3 weeks ago</small></div></div>
+          <div class="block-title" style="margin-top:0">Sharing &amp; privacy</div>
+          <div class="block">
+            <div class="toggle-row">
+              <div>
+                <b id="share-label">Share my favourites with friends</b>
+                <p>Friends see the dish and a label like "keeps coming back to this". Never how often, when, or what you paid.</p>
               </div>
+              <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="share-label" id="share-toggle"></button>
             </div>
           </div>
-        </section>
+          <div class="block-title">My shared picks</div>
+          <div class="block" id="mypicks-block">
+            <div class="off-note" id="off-note" hidden>Sharing is off, so friends can't see any of these.</div>
+            <div id="mypicks"></div>
+          </div>
+          <div class="seen-as"><b>What friends see</b><span id="seen-as"></span></div>
+          <div class="block-title">How we protect you</div>
+          <ul class="rules">
+            <li>Strangers never see your name. Your orders only count inside groups of 20 or more people.</li>
+            <li>Friends only appear to you if they opted in, and you only appear to friends while this switch is on.</li>
+          </ul>
+          <p class="home-end"><button type="button" data-action="restart">Restart demo</button></p>
+        </div>
+      </section>
+    </div>
 
-        <!-- 6. Privacy -->
-        <section class="screen" id="s-privacy" aria-label="Sharing and privacy">
-          <div class="topbar">
-            <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
-            <h2 class="screen-title">Sharing &amp; privacy</h2>
-          </div>
-          <div class="scroll">
-            <div class="block">
-              <div class="toggle-row">
-                <div>
-                  <b id="share-label">Share my favourites with friends</b>
-                  <p>Friends see the dish and a label like "keeps coming back to this". Never how often, when, or what you paid.</p>
-                </div>
-                <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="share-label" id="share-toggle"></button>
-              </div>
-            </div>
-            <div class="block-title">My shared picks</div>
-            <div class="block" id="mypicks-block">
-              <div class="off-note" id="off-note" hidden>Sharing is off, so friends can't see any of these.</div>
-              <div id="mypicks"></div>
-            </div>
-            <div class="seen-as"><b>What friends see</b><span id="seen-as"></span></div>
-            <div class="block-title">How we protect you</div>
-            <ul class="rules">
-              <li>Strangers never see your name. Your orders only count inside groups of 20 or more people.</li>
-              <li>Friends only appear to you if they opted in, and you only appear to friends while this switch is on.</li>
-            </ul>
-          </div>
-        </section>
+    <nav class="bottomnav" id="bottomnav" aria-label="Main">
+      <button type="button" data-tab="s-home" class="on"><svg class="ic-home" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>Delivery</button>
+      <button type="button" data-tab="s-friends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5M16 14.6c2.6 0 4.6 1.7 5.5 4.9"/></svg>Friends<span class="dot" id="friends-dot"></span></button>
+      <button type="button" data-tab="s-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profile</button>
+    </nav>
+
+    <!-- Sheets -->
+    <div class="scrim" id="scrim" data-action="close-sheet"></div>
+
+    <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
+      <div class="grab"></div>
+      <h2 id="why-title">Why this pick?</h2>
+      <div class="sheet-dish"><div class="art" id="why-art"></div><div><div class="dn" id="why-name"></div><div class="pl" id="why-place"></div></div></div>
+      <div class="quote" id="why-quote"></div>
+      <div class="why-body" id="why-body"></div>
+      <div class="sheet-actions">
+        <button class="primary" type="button" id="why-add">Add to cart</button>
+        <button class="linkbtn" type="button" id="why-rest">View restaurant</button>
       </div>
+    </section>
 
-      <!-- Sheets -->
-      <div class="scrim" id="scrim" data-action="close-sheet"></div>
+    <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
+      <div class="grab"></div>
+      <div class="fav-art"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
+      <h2 id="fav-title">Looks like a favourite. Recommend it to your friends?</h2>
+      <p>Friends will see the dish and a label. They won't see how often you ordered it, when, or what you paid.</p>
+      <div class="preview"><div class="art" id="fav-art"></div><div><small>Friends will see</small><span id="fav-preview"></span></div></div>
+      <div class="row2">
+        <button class="secondary" type="button" data-action="fav-no">Not now</button>
+        <button class="primary" type="button" data-action="fav-yes">Recommend</button>
+      </div>
+    </section>
 
-      <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
-        <div class="grab"></div>
-        <h2 id="why-title">Why this pick?</h2>
-        <div class="sheet-dish"><div class="art" id="why-art"></div><div><div class="dn" id="why-name"></div><div class="pl" id="why-place"></div></div></div>
-        <div class="quote" id="why-quote"></div>
-        <div class="why-body" id="why-body"></div>
-        <div class="sheet-actions">
-          <button class="primary" type="button" id="why-add">Add to cart</button>
-          <button class="linkbtn" type="button" id="why-rest">View restaurant</button>
-        </div>
-      </section>
+    <section class="sheet" id="sheet-addr" role="dialog" aria-modal="true" aria-labelledby="addr-title">
+      <div class="grab"></div>
+      <h2 id="addr-title">Deliver to</h2>
+      <div class="addr-list" id="addr-opts"></div>
+    </section>
 
-      <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
-        <div class="grab"></div>
-        <div class="fav-art"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
-        <h2 id="fav-title">Looks like a favourite. Recommend it to your friends?</h2>
-        <p>Friends will see the dish and a label. They won't see how often you ordered it, when, or what you paid.</p>
-        <div class="preview"><div class="art" id="fav-art"></div><div><small>Friends will see</small><span id="fav-preview"></span></div></div>
-        <div class="row2">
-          <button class="secondary" type="button" data-action="fav-no">Not now</button>
-          <button class="primary" type="button" data-action="fav-yes">Recommend</button>
-        </div>
-      </section>
-
-      <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    </div>
-
-    <div class="demobar" aria-label="Demo controls">
-      <span class="lbl">Demo controls</span>
-      <button class="demobtn" type="button" data-action="restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Restart demo</button>
-      <button class="demobtn" type="button" data-action="quiet" id="quiet-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4"/></svg><span id="quiet-lbl"><span class="long">Simulate quiet area</span><span class="short">Quiet area</span></span></button>
-      <button class="demobtn" type="button" data-action="sim3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg><span><span class="long">Simulate 3rd reorder</span><span class="short">3rd reorder</span></span></button>
-    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
 </div>
 
@@ -515,10 +639,10 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 
   /* ---------------- Data (all invented) ---------------- */
   const RESTS = {
-    sr: { name: "Spice Route Kitchen", cuisine: "North Indian, Rolls", eta: "30–35 mins", km: "1.8 km", rating: "4.3", count: "2.4K", menu: ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"] },
-    uc: { name: "Udupi Corner",        cuisine: "South Indian",        eta: "20–25 mins", km: "1.1 km", rating: "4.2", count: "1.8K", menu: ["gdosa", "mdosa", "vada", "bisi", "filter"] },
-    ll: { name: "Lucknow Lane",        cuisine: "Biryani, Awadhi",     eta: "35–40 mins", km: "2.6 km", rating: "4.4", count: "3.1K", menu: ["vbir", "cbir", "kebab", "sheermal", "raita", "phirni"] },
-    bs: { name: "Bean Street",         cuisine: "Cafe, Bakes",         eta: "15–20 mins", km: "0.8 km", rating: "4.1", count: "960",  menu: ["cold", "cappu", "croissant", "sandwich", "cake"] }
+    sr: { name: "Spice Route Kitchen", cuisine: "North Indian, Rolls", eta: "30–35 mins", km: "1.8 km", rating: "4.3", count: "2.4K", offer: "Flat ₹75 OFF above ₹299", menu: ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"] },
+    uc: { name: "Udupi Corner",        cuisine: "South Indian",        eta: "20–25 mins", km: "1.1 km", rating: "4.2", count: "1.8K", offer: "50% OFF up to ₹100",       menu: ["gdosa", "mdosa", "vada", "bisi", "filter"] },
+    ll: { name: "Lucknow Lane",        cuisine: "Biryani, Awadhi",     eta: "35–40 mins", km: "2.6 km", rating: "4.4", count: "3.1K", offer: "₹140 OFF above ₹399",      menu: ["vbir", "cbir", "kebab", "sheermal", "raita", "phirni"] },
+    bs: { name: "Bean Street",         cuisine: "Cafe, Bakes",         eta: "15–20 mins", km: "0.8 km", rating: "4.1", count: "960",  offer: "Free delivery",            menu: ["cold", "cappu", "croissant", "sandwich", "cake"] }
   };
   const REST_ORDER = ["sr", "ll", "uc", "bs"];
   const DISHES = {
@@ -548,24 +672,34 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     cake:  { r: "bs", name: "Chocolate truffle slice", price: 129, veg: true, desc: "Dark chocolate ganache." }
   };
 
-  // Friends. Only opted-in friends are ever shown. "dev" has not opted in and must never appear.
+  // Friends from contacts. Only opted-in friends are ever shown. "dev" has not opted in and must never appear.
   const FRIENDS = {
     riya:  { name: "Riya",  optIn: true,  share: "Riya chose to share her favourites. She's ordered this more than once." },
     kabir: { name: "Kabir", optIn: true,  share: "Kabir chose to share their favourites. They've ordered this more than once." },
     meera: { name: "Meera", optIn: true,  share: "Meera chose to share their favourites. They've ordered this more than once." },
+    arjun: { name: "Arjun", optIn: true,  share: "Arjun chose to share their favourites. They've ordered this more than once." },
+    sana:  { name: "Sana",  optIn: true,  share: "Sana chose to share their favourites. They've ordered this more than once." },
     dev:   { name: "Dev",   optIn: false, share: "" }
   };
+  const FRIEND_ORDER = ["riya", "kabir", "meera", "arjun", "sana", "dev"];
   // Labels are limited to: liked this / loved this / keeps coming back to this / has this on repeat.
   const FRIEND_PICKS = [
     { f: "riya",  d: "roll",   label: "keeps coming back to this" },
     { f: "kabir", d: "cold",   label: "has this on repeat" },
     { f: "meera", d: "vbir",   label: "loved this" },
+    { f: "riya",  d: "cappu",  label: "liked this" },
     { f: "meera", d: "filter", label: "liked this" },
+    { f: "arjun", d: "chole",  label: "keeps coming back to this" },
+    { f: "sana",  d: "mdosa",  label: "has this on repeat" },
     { f: "dev",   d: "butter", label: "loved this" }
   ];
 
-  // The user's taste group: nearby people who reorder the same places as the user.
-  const GROUP = { normal: 42, quiet: 12, min: 20, loves: "gdosa", places: ["Udupi Corner", "Bean Street", "Chaat Junction"] };
+  // The user's group: nearby people who reorder the same places as the user. Its size depends on the delivery address.
+  const ADDRS = {
+    home:   { name: "Home",   line: "Flat 4B, Maple Lane, Greenfield Nagar", area: "Greenfield Nagar", group: 42 },
+    office: { name: "Office", line: "Tower C, Hillview Tech Park, Old Mill Road", area: "Hillview", group: 12 }
+  };
+  const GROUP = { min: 20, loves: "gdosa", places: ["Udupi Corner", "Bean Street", "Chaat Junction"] };
   const GROUP_PICKS = ["dal", "kebab"];
   const RATED_PICKS = ["butter", "cbir"];
 
@@ -581,7 +715,10 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     repeat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>`,
     star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>`,
     lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
-    clock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="vertical-align:-1px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`
+    clock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="vertical-align:-1px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+    home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z"/></svg>`,
+    office: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>`,
+    plus: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`
   };
 
   /* ---------------- State ---------------- */
@@ -589,7 +726,9 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   function fresh() {
     return {
       cart: {}, cartRest: null, orders: Object.assign({}, SEED_HISTORY), prompted: {}, lastOrder: null,
-      quiet: false, share: true,
+      addr: "home", share: true, vegOnly: false,
+      following: { riya: true, kabir: true, meera: true, arjun: false, sana: false },
+      filter: null, seenFriends: false,
       shared: SEED_SHARED.map(p => Object.assign({}, p)),
       rest: "sr", history: ["s-home"], whyKey: null, favFor: null, steps: {}
     };
@@ -600,22 +739,23 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   const rupees = n => "₹" + n.toLocaleString("en-IN");
   const vmark = d => `<span class="vmark${d.veg ? "" : " nv"}" title="${d.veg ? "Vegetarian" : "Non-vegetarian"}"></span>`;
   const av = id => `<span class="av"><img alt="" src="${AV[id]}"></span>`;
-  const art = (id, cls = "") => `<div class="art a-${id} ${cls}" aria-hidden="true"></div>`;
+  const art = id => `<div class="art a-${id}" aria-hidden="true"></div>`;
   const restOf = d => RESTS[DISHES[d].r];
+  const isActive = id => document.getElementById(id).classList.contains("active");
 
   /* ---------------- Picks logic: the privacy rules live here ---------------- */
-  const groupSize = () => state.quiet ? GROUP.quiet : GROUP.normal;
-  const groupOK = () => groupSize() >= GROUP.min;               // group counts only at 20+
-  const visibleFriendPicks = () => FRIEND_PICKS.filter(p => FRIENDS[p.f].optIn);  // opted-in friends only
+  const groupSize = () => ADDRS[state.addr].group;
+  const groupOK = () => groupSize() >= GROUP.min;                              // group counts only at 20+
+  const vegOK = d => !state.vegOnly || DISHES[d].veg;
+  const sharingFriends = () => FRIEND_ORDER.filter(f => FRIENDS[f].optIn);    // opted-in friends only
+  const friendPicks = () => FRIEND_PICKS.filter(p => FRIENDS[p.f].optIn && state.following[p.f] && vegOK(p.d));
   // Keys: "f:<friend>:<dish>", "g:<dish>" (group, repeat orders), "r:<dish>" (ratings fallback)
-  // Short reason on cards; the full line with the count lives in the subtitle and the Why sheet.
-  const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
-  function groupLine() { return `${groupSize()} people near you who reorder the same places as you keep coming back to this.`; }
-  function anonKeys() { return groupOK() ? GROUP_PICKS.map(d => "g:" + d) : RATED_PICKS.map(d => "r:" + d); }
+  const anonKeys = () => (groupOK() ? GROUP_PICKS.map(d => "g:" + d) : RATED_PICKS.map(d => "r:" + d)).filter(k => vegOK(k.split(":")[1]));
   function parseKey(k) { const p = k.split(":"); return p[0] === "f" ? { kind: "f", f: p[1], d: p[2] } : { kind: p[0], d: p[1] }; }
-  function friendLabel(f, d) { return FRIEND_PICKS.find(p => p.f === f && p.d === d).label; }
+  const friendLabel = (f, d) => FRIEND_PICKS.find(p => p.f === f && p.d === d).label;
+  const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
+  const groupLine = () => `${groupSize()} people near you who reorder the same places as you keep coming back to this.`;
 
-  // The one-line reason a user can tap to check.
   function reasonText(k) {
     const p = parseKey(k);
     if (p.kind === "f") return `${FRIENDS[p.f].name} ${friendLabel(p.f, p.d)}`;
@@ -623,13 +763,18 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     const d = DISHES[p.d];
     return `Highly rated nearby: ${d.stars}★ from ${d.votes} ratings`;
   }
-  function reasonBtn(k, label = "Why?") {
-    return `<button class="reason" type="button" data-why="${k}">${reasonText(k)} <span class="q">${label}</span></button>`;
-  }
+  const reasonBtn = k => `<button class="reason" type="button" data-why="${k}">${reasonText(k)} <span class="q">Why?</span></button>`;
 
   /* ---------------- Rendering ---------------- */
   function renderHome() {
-    $("#rail-friends").innerHTML = visibleFriendPicks().slice(0, 3).map(p => {
+    const a = ADDRS[state.addr];
+    $("#loc-name").textContent = a.name;
+    $("#loc-line").textContent = a.line;
+    $("#new-title").textContent = `New to ${a.area}?`;
+    $("#veg-toggle").setAttribute("aria-pressed", String(state.vegOnly));
+
+    const fp = friendPicks().slice(0, 3);
+    $("#rail-friends").innerHTML = fp.map(p => {
       const d = DISHES[p.d], k = `f:${p.f}:${p.d}`;
       return `<div class="fcard">
         <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${restOf(p.d).name}">
@@ -638,7 +783,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
         </button>
         <div class="why">${reasonBtn(k)}</div>
       </div>`;
-    }).join("");
+    }).join("") + `<button class="fcard more" type="button" data-tab="s-friends"><span class="circle">${ICON.plus}</span>${fp.length ? "See all friends' picks" : "Follow friends to see their picks"}</button>`;
 
     const ok = groupOK();
     $("#sec-b").textContent = ok ? `Because you love ${DISHES[GROUP.loves].name}` : "Highly rated nearby";
@@ -648,22 +793,47 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     $("#sec-b-sub").textContent = ok
       ? `${groupSize()} people near you who reorder the same places as you`
       : "Not enough people near you reorder the same places yet, so these picks use star ratings.";
-    const gl = $("#group-list");
-    gl.classList.toggle("ratings", !ok);
-    gl.innerHTML = anonKeys().map(k => {
+    $("#group-list").innerHTML = anonKeys().map(k => {
       const p = parseKey(k), d = DISHES[p.d], r = restOf(p.d);
       return `<div class="grow">
         <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${art(p.d)}</button>
-        <div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${r.name} · ${ICON.clock} ${r.eta}</div>
-        ${reasonBtn(k)}</div>
+        <div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${r.name} · ${ICON.clock} ${r.eta}</div>${reasonBtn(k)}</div>
       </div>`;
+    }).join("");
+
+    $("#rail-again").innerHTML = Object.keys(SEED_HISTORY).filter(vegOK).map(id => {
+      const d = DISHES[id];
+      return `<div class="ocard">${art(id)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(id).name}</div>
+        <button class="re" type="button" data-reorder-dish="${id}">Reorder</button></div></div>`;
     }).join("");
 
     $("#rest-list").innerHTML = REST_ORDER.map(id => {
       const r = RESTS[id];
-      return `<button class="rcard" type="button" data-rest="${id}">${art("rest-" + id)}
+      return `<button class="rcard" type="button" data-rest="${id}"><div class="art a-rest-${id}"><span class="offer-tag">${r.offer}</span></div>
         <div class="body"><div class="row1"><b>${r.name}</b><span class="pill">${r.rating} ${ICON.star}</span></div>
-        <div class="meta">${r.cuisine} · ${r.eta} · ${r.km}</div></div></button>`;
+        <div class="meta">${ICON.clock} ${r.eta} · ${r.km} · ${r.cuisine}</div></div></button>`;
+    }).join("");
+    $("#friends-dot").hidden = state.seenFriends;
+  }
+
+  function renderFriends() {
+    const followed = sharingFriends().filter(f => state.following[f]);
+    if (state.filter && !state.following[state.filter]) state.filter = null;
+    $("#following").innerHTML =
+      `<button class="person" type="button" data-filter="" aria-pressed="${!state.filter}"><span class="all">All</span>All</button>` +
+      followed.map(f => `<button class="person" type="button" data-filter="${f}" aria-pressed="${state.filter === f}">${av(f)}${FRIENDS[f].name}</button>`).join("");
+    $("#feed-title").textContent = state.filter ? `${FRIENDS[state.filter].name}'s picks` : "From people you follow";
+    const items = friendPicks().filter(p => !state.filter || p.f === state.filter);
+    $("#feed").innerHTML = items.length ? items.map(p => {
+      const d = DISHES[p.d], k = `f:${p.f}:${p.d}`;
+      return `<div class="feedcard"><div class="top">${av(p.f)}<span><b>${FRIENDS[p.f].name}</b> ${p.label}</span></div>
+        <div class="dish-row">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
+        <div class="acts"><button class="ghost" type="button" data-why="${k}">Why?</button><button class="add" type="button" data-quickadd="${p.d}">ADD</button></div></div></div>`;
+    }).join("") : `<div class="fempty">You aren't following anyone yet. Follow a friend below to see the dishes they keep coming back to.</div>`;
+    $("#suggest").innerHTML = sharingFriends().map(f => {
+      const on = state.following[f];
+      return `<div class="sugg">${av(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares picks</small></div>
+        <button class="followbtn" type="button" data-follow="${f}" aria-pressed="${on}">${on ? "Following" : "Follow"}</button></div>`;
     }).join("");
   }
 
@@ -672,15 +842,12 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (!q) return `<button class="add" type="button" data-add="${id}" aria-label="Add ${DISHES[id].name}">ADD</button>`;
     return `<span class="stepper"><button type="button" data-dec="${id}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-add="${id}" aria-label="Add one">+</button></span>`;
   }
-
   function restPicks(rid) {
-    const keys = visibleFriendPicks().filter(p => DISHES[p.d].r === rid).map(p => `f:${p.f}:${p.d}`);
+    const keys = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => `f:${p.f}:${p.d}`);
     return keys.concat(anonKeys().filter(k => DISHES[parseKey(k).d].r === rid)).slice(0, 3);
   }
-
   function renderRest() {
-    const rid = state.rest, r = RESTS[rid];
-    const picks = restPicks(rid);
+    const rid = state.rest, r = RESTS[rid], picks = restPicks(rid);
     const picksHtml = picks.length ? `<section class="picks" aria-labelledby="picks-title">
         <div class="picks-head"><h2 id="picks-title">Picks for you</h2><span>Tap a reason to check it</span></div>
         ${picks.map(k => {
@@ -693,17 +860,18 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
       <div class="rest-hero">
         <div><h1>${r.name}</h1></div>
         <div class="rate"><span class="pill">${r.rating} ${ICON.star}</span><small>${r.count} ratings</small></div>
-        <div class="meta"><span>${r.cuisine}</span><span>${r.eta}</span><span>${r.km}</span></div>
+        <div class="meta"><span class="time">${ICON.clock} ${r.eta}</span><span>${r.km}</span><span>${r.cuisine}</span></div>
+        <div class="offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>${r.offer}</div>
       </div>
       ${picksHtml}
       <div class="menu-head"><h3>Menu</h3><span>${r.menu.length} dishes</span></div>
-      <div class="menu">${r.menu.map(id => {
+      <div class="menu">${r.menu.filter(vegOK).map(id => {
         const d = DISHES[id];
         return `<div class="dish"><div class="info"><div>${vmark(d)}${d.best ? '<span class="best">Bestseller</span>' : ""}</div>
           <div class="dn">${d.name}</div><div class="price">${rupees(d.price)}</div><div class="desc">${d.desc}</div></div>
           <div class="side">${art(id)}${ctl(id)}</div></div>`;
-      }).join("")}</div>
-      <div class="menu-end">${r.name} is a made-up restaurant.</div>`;
+      }).join("")}
+      <div class="menu-end">${r.name} is a made-up restaurant.</div></div>`;
     renderCartBar();
   }
 
@@ -720,7 +888,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     $("#cartbar-total").textContent = rupees(t.sub);
   }
   function renderCart() {
-    const ids = Object.keys(state.cart), t = totals();
+    const ids = Object.keys(state.cart), t = totals(), a = ADDRS[state.addr];
     $("#cart-footer").hidden = !ids.length;
     if (!ids.length) {
       $("#cart-body").innerHTML = `<div class="empty"><b style="color:var(--ink);font-size:16px">Your cart is empty</b>Pick something from Home.<button class="secondary" type="button" data-action="home" style="max-width:220px">Back to home</button></div>`;
@@ -735,13 +903,12 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
         <div class="bill"><span>Delivery</span><span>${rupees(t.delivery)}</span></div>
         <div class="bill"><span>Taxes</span><span>${rupees(t.taxes)}</span></div>
         <div class="bill total"><span>To pay</span><span>${rupees(t.total)}</span></div></div>
-      <div class="block-title">Deliver to</div><div class="block"><div class="addr">${ICON.pin}<div><b>Home · Flat 4B</b>Maple Lane, Greenfield Nagar</div></div></div>
+      <div class="block-title">Deliver to</div><div class="block"><div class="addr">${ICON.pin}<div><b>${a.name}</b>${a.line}</div></div></div>
       <div style="height:8px"></div>`;
     if (!placing) $("#place-order").innerHTML = `<span>${rupees(t.total)}<small>TOTAL</small></span><span>Place order ›</span>`;
   }
   function renderDone() {
-    const o = state.lastOrder || {};
-    const first = Object.keys(o)[0];
+    const o = state.lastOrder || {}, first = Object.keys(o)[0];
     $("#done-from").textContent = first ? `From ${restOf(first).name}. Enjoy your dinner.` : "";
     $("#done-items").innerHTML = Object.keys(o).map(id => `<div class="line">${art(id)}<span class="name">${DISHES[id].name}</span><span class="amt">× ${o[id]}</span></div>`).join("");
   }
@@ -749,28 +916,30 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     $("#share-toggle").setAttribute("aria-checked", String(state.share));
     $("#off-note").hidden = state.share;
     $("#mypicks-block").classList.toggle("sharing-off", !state.share);
-    $("#mypicks").innerHTML = state.shared.length ? state.shared.map((p, i) => {
+    $("#mypicks").innerHTML = state.shared.map((p, i) => {
       const d = DISHES[p.d];
       return `<div class="mypick${p.hidden ? " is-hidden" : ""}${p.isNew ? " is-new" : ""}">${art(p.d)}<div><div class="name">${d.name}</div>
         <div class="sub">${restOf(p.d).name}${p.hidden ? " · Hidden from friends" : ""}</div></div>
         <button class="hidebtn" type="button" data-hide="${i}" aria-pressed="${p.hidden}">${p.hidden ? "Unhide" : "Hide"}</button></div>`;
-    }).join("") : `<p style="font-size:13px;color:var(--muted)">No shared picks yet.</p>`;
+    }).join("");
     const vis = state.shared.filter(p => !p.hidden);
     $("#seen-as").innerHTML = !state.share || !vis.length ? "Nothing. Your favourites are private right now."
       : vis.map(p => `"${DISHES[p.d].name}: Ananya ${p.label}"`).join("<br>");
   }
-  function renderAvatars() { $$("[data-avatar]").forEach(el => { el.innerHTML = `<img alt="" src="${AV[el.dataset.avatar]}">`; }); }
-  function renderAll() { renderHome(); renderRest(); renderCart(); renderPrivacy(); renderAvatars(); renderDemo(); }
-  function renderDemo() {
-    const b = $("#quiet-btn");
-    b.setAttribute("aria-pressed", String(state.quiet));
-    $("#quiet-lbl").innerHTML = state.quiet ? "Quiet area: on" : `<span class="long">Simulate quiet area</span><span class="short">Quiet area</span>`;
+  function renderAddr() {
+    $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => {
+      const a = ADDRS[k];
+      return `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}"><span class="ic">${ICON[k]}</span>
+        <span><b>${a.name}</b><small>${a.line}</small></span><span class="tick"></span></button>`;
+    }).join("");
   }
+  function renderAvatars() { $$("[data-avatar]").forEach(el => { el.innerHTML = `<img alt="" src="${AV[el.dataset.avatar]}">`; }); }
+  function renderAll() { renderHome(); renderFriends(); renderRest(); renderCart(); renderPrivacy(); renderAvatars(); }
 
   /* ---------------- Guide ---------------- */
   function step(n) {
     if (n) state.steps[n] = true;
-    let cur = 1; while (state.steps[cur] && cur <= 5) cur++;
+    let cur = 1; while (state.steps[cur] && cur <= 6) cur++;
     $$("#guide-steps li").forEach(li => {
       const s = +li.dataset.step;
       li.classList.toggle("done", !!state.steps[s]);
@@ -779,6 +948,7 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
   }
 
   /* ---------------- Navigation & sheets ---------------- */
+  const TABS = ["s-home", "s-friends", "s-privacy"];
   function go(id, opts = {}) {
     closeSheets();
     $$(".screen").forEach(s => s.classList.toggle("active", s.id === id));
@@ -787,6 +957,10 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (id === "s-home") renderHome();
     if (id === "s-rest") renderRest();
     if (id === "s-privacy") renderPrivacy();
+    if (id === "s-friends") { state.seenFriends = true; renderFriends(); renderHome(); }
+    $("#bottomnav").hidden = !TABS.includes(id);
+    $$("#bottomnav [data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === id));
+    $("#statusbar").classList.toggle("dark", id === "s-home");
     const sc = document.querySelector(`#${id} .scroll`);
     if (sc && !opts.keepScroll) sc.scrollTop = 0;
   }
@@ -796,7 +970,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (prev === "s-done") prev = "s-home";
     go(prev, { keepScroll: true });
   }
-  function home() { state.history = []; go("s-home"); }
+  function tab(id) { state.history = []; go(id); }
+  const home = () => tab("s-home");
   function openRest(rid) { state.rest = rid; go("s-rest"); }
 
   function openSheet(el) { $("#scrim").classList.add("open"); el.classList.add("open"); }
@@ -832,14 +1007,12 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     openSheet($("#sheet-why"));
     step(1);
   }
-
   function openFav(id) {
     state.favFor = id;
     $("#fav-art").className = `art a-${id}`;
     $("#fav-preview").innerHTML = `<b>${DISHES[id].name}</b>: Ananya keeps coming back to this`;
     openSheet($("#sheet-fav"));
   }
-
   let toastTimer;
   function toast(msg) {
     const t = $("#toast"); t.innerHTML = msg; t.classList.add("show");
@@ -848,8 +1021,8 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
 
   /* ---------------- Actions ---------------- */
   function refreshCartViews() {
-    if ($("#s-rest").classList.contains("active")) renderRest();
-    if ($("#s-cart").classList.contains("active")) renderCart();
+    if (isActive("s-rest")) renderRest();
+    if (isActive("s-cart")) renderCart();
   }
   function add(id) {
     const rid = DISHES[id].r;
@@ -867,6 +1040,11 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (!Object.keys(state.cart).length) state.cartRest = null;
     refreshCartViews();
   }
+  function quickAdd(id) {
+    closeSheets(); add(id); state.rest = DISHES[id].r;
+    if (!isActive("s-rest")) go("s-rest"); else renderRest();
+    toast(`${DISHES[id].name} added to cart.`);
+  }
 
   let placing = false;
   function placeOrder() {
@@ -882,43 +1060,36 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
       renderDone(); step(2);
       state.history = ["s-home"]; go("s-done");
       const fav = Object.keys(state.lastOrder).find(id => state.orders[id] >= FAV_AT && !state.prompted[id]);
-      if (fav) { state.prompted[fav] = true; setTimeout(() => { if ($("#s-done").classList.contains("active")) openFav(fav); }, 650); }
+      if (fav) { state.prompted[fav] = true; setTimeout(() => { if (isActive("s-done")) openFav(fav); }, 650); }
     }, 900);
   }
-  function reorder() {
+  function reorderLast() {
     if (!state.lastOrder) return home();
     state.cart = Object.assign({}, state.lastOrder);
     state.cartRest = DISHES[Object.keys(state.cart)[0]].r;
     go("s-cart");
   }
-  // Demo control: jump to the moment the same dish lands for the 3rd time.
-  function simulateThird() {
-    const id = state.lastOrder ? Object.keys(state.lastOrder)[0] : "roll";
-    state.orders[id] = Math.max(state.orders[id] || 0, FAV_AT);
-    state.lastOrder = { [id]: 1 };
-    state.prompted[id] = true;
-    renderDone();
-    state.history = ["s-home"]; go("s-done");
-    setTimeout(() => openFav(id), 450);
+  function reorderDish(id) {
+    state.cart = { [id]: 1 }; state.cartRest = DISHES[id].r;
+    go("s-cart");
   }
   function favAnswer(yes) {
     const id = state.favFor; closeSheets(); step(3);
     if (!yes) { toast(`No problem. We won't ask about ${DISHES[id].name} again.`); return; }
     const ex = state.shared.find(p => p.d === id);
-    if (ex) ex.hidden = false; else state.shared.unshift({ d: id, label: "keeps coming back to this", hidden: false, isNew: true });
+    if (ex) { ex.hidden = false; ex.label = "keeps coming back to this"; }
+    else state.shared.unshift({ d: id, label: "keeps coming back to this", hidden: false, isNew: true });
     renderPrivacy();
     toast(state.share
       ? `Shared. Friends will see "Ananya keeps coming back to this", nothing else.`
       : `Added to your picks. Sharing is off, so friends won't see it until you turn it on.`);
   }
-  function toggleQuiet() {
-    state.quiet = !state.quiet;
-    renderDemo(); renderHome(); renderRest();
-    if (state.quiet) step(5);
-    if (!$("#s-home").classList.contains("active") && !$("#s-rest").classList.contains("active")) home();
-    toast(state.quiet
-      ? `Quiet area: fewer than ${GROUP.min} people near you reorder the same places, so you see "Highly rated nearby" instead.`
-      : `Back to normal: ${GROUP.normal} people near you reorder the same places as you.`);
+  function setAddr(k) {
+    state.addr = k; closeSheets(); renderAll();
+    if (!groupOK()) step(5);
+    toast(groupOK()
+      ? `Delivering to ${ADDRS[k].name}. ${groupSize()} people near you reorder the same places as you.`
+      : `Delivering to ${ADDRS[k].name}. Fewer than ${GROUP.min} people here reorder the same places as you, so you see "Highly rated nearby".`);
   }
   function restart() {
     state = fresh(); placing = false;
@@ -926,8 +1097,11 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     closeSheets(); $("#toast").classList.remove("show");
     renderAll();
     $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-home"));
+    $("#bottomnav").hidden = false;
+    $$("#bottomnav [data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === "s-home"));
+    $("#statusbar").classList.add("dark");
     $$(".scroll").forEach(s => { s.scrollTop = 0; });
-    $$(".rail").forEach(s => { s.scrollLeft = 0; });
+    $$(".rail, .cats, .fchips, .following").forEach(s => { s.scrollLeft = 0; });
     step(0);
   }
 
@@ -938,32 +1112,43 @@ button:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; 
     if (ds.why) return openWhy(ds.why);
     if (ds.add) return add(ds.add);
     if (ds.dec) return dec(ds.dec);
+    if (ds.quickadd) return quickAdd(ds.quickadd);
+    if (ds.reorderDish) return reorderDish(ds.reorderDish);
     if (ds.rest) return openRest(ds.rest);
+    if (ds.tab) return tab(ds.tab);
     if (ds.go) return go(ds.go);
+    if (ds.addr) return setAddr(ds.addr);
+    if (ds.filter !== undefined) { state.filter = ds.filter || null; return renderFriends(); }
+    if (ds.follow) {
+      const f = ds.follow; state.following[f] = !state.following[f];
+      renderFriends(); renderHome();
+      if (state.following[f]) step(4);
+      return toast(state.following[f] ? `Following ${FRIENDS[f].name}. Their picks now show on Home.` : `Unfollowed ${FRIENDS[f].name}.`);
+    }
     if (ds.hide !== undefined) {
-      const p = state.shared[+ds.hide]; p.hidden = !p.hidden; renderPrivacy(); step(4);
+      const p = state.shared[+ds.hide]; p.hidden = !p.hidden; renderPrivacy(); step(6);
       return toast(p.hidden ? `${DISHES[p.d].name} is hidden from friends.` : `${DISHES[p.d].name} is visible to friends again.`);
     }
     if (t.id === "share-toggle") {
       state.share = !state.share; renderPrivacy();
       return toast(state.share ? "Friends can see your shared picks." : "Sharing is off. Friends can't see any of your picks.");
     }
-    if (t.id === "why-add") {
-      const d = parseKey(state.whyKey).d;
-      closeSheets(); add(d); state.rest = DISHES[d].r;
-      if (!$("#s-rest").classList.contains("active")) go("s-rest"); else renderRest();
-      return toast(`${DISHES[d].name} added to cart.`);
+    if (t.id === "veg-toggle") {
+      state.vegOnly = !state.vegOnly; renderHome(); renderFriends();
+      return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes.");
     }
+    if (t.classList.contains("cat")) { $$("#cats .cat").forEach(c => c.setAttribute("aria-pressed", String(c === t))); return; }
+    if (t.classList.contains("fchip")) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
+    if (t.id === "why-add") return quickAdd(parseKey(state.whyKey).d);
     if (t.id === "why-rest") return openRest(DISHES[parseKey(state.whyKey).d].r);
     if (t.id === "place-order") return placeOrder();
     switch (ds.action) {
       case "restart": return restart();
-      case "quiet": return toggleQuiet();
-      case "sim3": return simulateThird();
+      case "addr": renderAddr(); return openSheet($("#sheet-addr"));
       case "back": return back();
       case "home": return home();
       case "close-sheet": return closeSheets();
-      case "reorder": return reorder();
+      case "reorder": return reorderLast();
       case "fav-yes": return favAnswer(true);
       case "fav-no": return favAnswer(false);
     }

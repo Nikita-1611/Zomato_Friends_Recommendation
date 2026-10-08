@@ -2,16 +2,17 @@
 
 A PM portfolio prototype for a food delivery feature: use **repeat orders**, not star ratings, as the taste signal, and show 1–3 dish picks with a one-line reason you can check. Fake data only, no backend.
 
-Open `index.html` in a browser. On a laptop it shows a phone with a short guide beside it; on a phone it fills the screen. Demo controls sit under the app: **Restart demo**, **Simulate quiet area**, **Simulate 3rd reorder**.
+Open `index.html` in a browser. On a laptop it shows a phone with a short presenter guide beside it; on a phone it fills the screen. There are no demo controls inside the app: every moment is reached through normal app actions.
 
 ## 60-second run
 1. Home: tap the reason under Riya's pick → "Why this pick?"
 2. Add to cart → View cart → Place order → "Order delivered"
-3. Simulate 3rd reorder → "Looks like a favourite. Recommend it to your friends?" → Recommend
-4. Tap your photo → Sharing & privacy → Hide a shared pick
-5. Simulate quiet area → "Highly rated nearby" replaces the group section, labelled as ratings-based
+3. Home → Order again → Reorder Ghee roast dosa → Place order. It's the user's 3rd order of that dish, so "Looks like a favourite. Recommend it to your friends?" appears → Recommend
+4. Friends tab: follow Arjun, filter by person, tap Why? on any pick
+5. Tap "Home ▾" and switch the address to Office: fewer than 20 people there reorder the same places, so "Highly rated nearby" (labelled as ratings) replaces the group section
+6. Profile: toggle sharing, hide a shared pick
 
-Ordering Ghee roast dosa from Udupi Corner also triggers the prompt naturally, because the user has ordered it twice before.
+"Restart demo" sits in the presenter guide and at the bottom of Home and Profile.
 
 ## Privacy rules the prototype enforces
 - No order counts, dates, times or prices next to a friend's name.
