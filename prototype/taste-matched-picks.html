@@ -77,14 +77,6 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .stage { min-height: 100%; display: flex; align-items: center; justify-content: center; gap: 44px; padding: 20px 16px; box-sizing: border-box; }
 
 /* ---------- Presenter note (wide screens only) ---------- */
-.guide { width: 280px; display: flex; flex-direction: column; gap: 14px; }
-.guide .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--stage-muted); font-weight: 700; margin: 0; }
-.guide h1 { font-weight: 800; font-size: 28px; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
-.guide p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--stage-muted); }
-.guide ol { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--stage-muted); }
-.guide ol li.done { color: var(--stage-fg); }
-.guide ol li.done::marker { color: var(--green); }
-.guide .fine { font-size: 11.5px; }
 
 /* ---------- Phone ---------- */
 .phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #121417, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; overflow: clip; flex-shrink: 0; }
@@ -528,8 +520,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .toast.show { transform: none; opacity: 1; }
 
 @media (max-width: 780px) {
-  .guide { display: none; }
-  .stage { padding: 0; display: block; height: 100%; min-height: 0; }
+    .stage { padding: 0; display: block; height: 100%; min-height: 0; }
   .phone { width: 100%; height: 100%; min-height: 0; border-radius: 0; box-shadow: none; }
   .statusbar { display: none; }
   .screens { inset: 0; }
@@ -541,21 +532,6 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 </style>
 
 <div class="stage">
-  <aside class="guide" aria-label="About this prototype">
-    <p class="eyebrow">PM portfolio · feature teardown</p>
-    <h1>Taste&#8209;matched picks</h1>
-    <p>Dish picks from repeat orders, not star ratings: from friends you choose, and from groups of 20+ nearby people who reorder the same places as you.</p>
-    <ol id="build-steps">
-      <li class="done">Home</li>
-      <li class="done">Friends tab</li>
-      <li class="done">Search</li>
-      <li class="done">Restaurant menu</li>
-      <li class="done">Why this pick?, cart, order, recommend prompt</li>
-      <li class="done">Profile settings</li>
-      <li class="done">Demo controls</li>
-    </ol>
-    <p class="fine">Concept prototype. Not affiliated with any company. Invented restaurants, people and prices. Some dishes show real food photos; the rest use plain stand-in tiles.</p>
-  </aside>
 
   <div class="phone" id="phone">
     <div class="statusbar" id="statusbar"><span>21:45</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
