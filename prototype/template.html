@@ -687,7 +687,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
     <section class="sheet" id="sheet-cmt" role="dialog" aria-modal="true" aria-labelledby="cmt-title">
       <div class="grab"></div><h2 id="cmt-title">Comments</h2><div class="wdish" id="cmt-dish"></div><div id="cmt-list"></div>
-      <div class="wnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Only comments from your contacts and public-profile locals. No dates or order counts.</span></div>
+      <div class="wnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="cmt-note">Only comments from your contacts and public-profile locals. No dates or order counts.</span></div>
     </section>
     <section class="sheet" id="sheet-story" role="dialog" aria-modal="true" aria-labelledby="story-title">
       <div class="grab"></div><h2 id="story-title">Add to your story</h2>
@@ -1092,22 +1092,24 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     renderProfile(); showScreen("s-profile");
   }
 
-  const commentsFor = d => (COMMENTS[d] || []).filter(c => canShow(c.by));
+  // Local picks show only locals' comments; everywhere else shows contacts and locals.
+  const commentsFor = (d, localOnly) => (COMMENTS[d] || []).filter(c => canShow(c.by) && (!localOnly || LOCALS[c.by]));
   // Comments stay tucked away: a small bubble with a count that opens the comments sheet.
   const BUBBLE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
-  function cmtIcon(d, round) {
-    const n = commentsFor(d).length;
+  function cmtIcon(d, round, localOnly) {
+    const n = commentsFor(d, localOnly).length;
+    const lo = localOnly ? ' data-local="1"' : "";
     if (!n) return "";
     return round
-      ? `<button class="rbtn cbub" type="button" data-comments="${d}" aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}<span class="cnt">${n}</span></button>`
-      : `<button class="cicon" type="button" data-comments="${d}" aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}${n}</button>`;
+      ? `<button class="rbtn cbub" type="button" data-comments="${d}"${lo} aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}<span class="cnt">${n}</span></button>`
+      : `<button class="cicon" type="button" data-comments="${d}"${lo} aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}${n}</button>`;
   }
   function feedRow(p, kind) {
     const d = DISHES[p.d], r = restOf(p.d), k = `${kind}:${p.f}:${p.d}`;
     return `<div class="drow"><div class="info">
         <span class="by">${ini(p.f)}<span>${whoLine(p.f)}<br>${p.label}</span></span>
         <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.name} · ${r.eta}</span>
-        <span class="lnrow"><button class="reason" type="button" data-why="${k}">Why this pick?</button>${cmtIcon(p.d)}</span>
+        <span class="lnrow"><button class="reason" type="button" data-why="${k}">Why this pick?</button>${cmtIcon(p.d, false, kind === "l")}</span>
         <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
       </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
   }
@@ -1542,7 +1544,8 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     if (ds.comments) {
       const d = ds.comments, dish = DISHES[d];
       $("#cmt-dish").innerHTML = `${dishPhoto(d)}</div><div><b>${vmark(dish)}${dish.name}</b><small>${restOf(d).name}</small></div>`;
-      $("#cmt-list").innerHTML = commentsFor(d).map(c => `<div class="citem">${ini(c.by)}<div><div>${whoLine(c.by)}</div><p>${c.text}</p></div></div>`).join("");
+      $("#cmt-list").innerHTML = commentsFor(d, !!ds.local).map(c => `<div class="citem">${ini(c.by)}<div><div>${whoLine(c.by)}</div><p>${c.text}</p></div></div>`).join("");
+      $("#cmt-note").textContent = ds.local ? "Only comments from public-profile locals. No dates or order counts." : "Only comments from your contacts and public-profile locals. No dates or order counts.";
       return openSheet($("#sheet-cmt"));
     }
     if (ds.story !== undefined) return openStory(+ds.story);
