@@ -293,6 +293,76 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .info-row { font-size: 14.5px; line-height: 1.5; padding: 6px 0; display: flex; gap: 10px; }
 .info-row b { min-width: 90px; color: var(--muted); font-weight: 600; }
 
+/* ---------- Why this pick? ---------- */
+.wdish { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; }
+.wdish .ph { width: 72px; height: 72px; border-radius: 14px; }
+.wdish b { font-size: 17px; display: flex; gap: 6px; align-items: center; }
+.wdish small { display: block; font-size: 13px; color: var(--muted); margin-top: 3px; }
+.wquote { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 14px; background: var(--green-soft); font-size: 15px; line-height: 1.45; font-weight: 600; }
+.wquote.friend { background: #fff6e8; }
+.wquote.rate { background: #f3f3f3; }
+.wquote .ini { width: 28px; height: 28px; font-size: 13px; }
+.wquote .gico { width: 28px; height: 28px; }
+.wk { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #8a8a8a; }
+.favs { display: flex; flex-wrap: wrap; gap: 8px; }
+.favchip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border-radius: 999px; border: 1px solid var(--green-line); background: #fff; font-size: 13.5px; font-weight: 600; }
+.favchip .ph { width: 28px; height: 28px; border-radius: 50%; }
+.favchip .ph.stand-in::after { content: none; }
+.gsize { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border: 1px solid var(--line); border-radius: 14px; font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+.gsize b { font-size: 24px; color: var(--green-dark); font-weight: 800; font-variant-numeric: tabular-nums; }
+.wnote { display: flex; gap: 8px; font-size: 13.5px; color: #555; line-height: 1.45; }
+.wnote svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--muted); }
+.wbody p { margin: 0; font-size: 14.5px; line-height: 1.5; }
+.wbody { display: flex; flex-direction: column; gap: 12px; }
+.primary { width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--green); color: #fff; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.primary:disabled { opacity: .75; cursor: progress; }
+.primary.split { justify-content: space-between; padding: 0 16px; text-align: left; }
+.primary.split small { display: block; font-size: 10.5px; font-weight: 700; opacity: .85; letter-spacing: .08em; }
+.secondary { width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid #dcdcdc; background: #fff; font-weight: 800; font-size: 15px; }
+.linkbtn { border: 0; background: none; color: var(--green-dark); font-weight: 700; font-size: 14px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; align-self: center; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.favheart { width: 64px; height: 64px; border-radius: 50%; background: #fff1f2; color: #e23744; display: grid; place-items: center; align-self: center; }
+.favheart svg { width: 30px; height: 30px; }
+#sheet-fav { text-align: center; }
+#sheet-fav p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
+.preview { text-align: left; display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 14px; background: #fff6e8; border: 1px solid #f3dfb6; }
+.preview .ph { width: 48px; height: 48px; border-radius: 10px; }
+.preview .ph.stand-in::after { content: none; }
+.preview small { display: block; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8a5d05; margin-bottom: 2px; }
+
+/* ---------- Cart & delivered ---------- */
+.ctop { display: flex; align-items: center; gap: 12px; padding: 8px 16px 10px; border-bottom: 1px solid var(--line); }
+.ctop h2 { margin: 0; font-size: 19px; font-weight: 800; }
+.ctop small { display: block; font-size: 13px; color: var(--muted); font-weight: 500; }
+.cbox { margin: 14px 16px 0; border: 1px solid var(--line); border-radius: 16px; padding: 4px 14px; }
+.ctitle { margin: 18px 16px 0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #8a8a8a; }
+.cline { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 0; }
+.cline + .cline { border-top: 1px solid var(--line); }
+.cline .nm { font-size: 15px; font-weight: 600; display: flex; gap: 8px; align-items: center; }
+.cline .amt { font-size: 15px; min-width: 52px; text-align: right; font-variant-numeric: tabular-nums; }
+.cline .stepper { margin: 0; width: 96px; height: 36px; font-size: 15px; box-shadow: none; }
+.cline .stepper button { height: 36px; width: 30px; font-size: 18px; }
+.bill { display: flex; justify-content: space-between; padding: 7px 0; font-size: 14.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bill.total { color: var(--ink); font-weight: 800; border-top: 1px dashed #ddd; margin-top: 4px; padding-top: 12px; }
+.addr { display: flex; gap: 12px; padding: 12px 0; font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+.addr b { display: block; color: var(--ink); font-size: 15px; }
+.addr svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
+.cfoot { padding: 12px 16px 18px; border-top: 1px solid var(--line); background: #fff; }
+.spin { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.done { padding: 30px 20px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
+.tick { width: 88px; height: 88px; border-radius: 50%; background: var(--green-dark); color: #fff; display: grid; place-items: center; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
+.tick svg { width: 44px; height: 44px; }
+@keyframes pop { from { transform: scale(.5); opacity: 0; } }
+.done h2 { margin: 0; font-size: 26px; font-weight: 800; }
+.done p { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+.done .cbox { margin: 0; width: 100%; box-sizing: border-box; text-align: left; }
+.done .cline { grid-template-columns: 48px 1fr auto; }
+.done .cline .ph { width: 48px; height: 48px; border-radius: 10px; }
+.done .cline .ph.stand-in::after { content: none; }
+.done .acts { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.emptycart { padding: 60px 24px; text-align: center; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
+
 /* ---------- Friends tab ---------- */
 .fhead { padding: 10px 16px 4px; }
 .fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
@@ -357,7 +427,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <li class="done">Friends tab</li>
       <li class="done">Search</li>
       <li class="done">Restaurant menu</li>
-      <li>Why this pick? and other sheets</li>
+      <li class="done">Why this pick?, cart, order, recommend prompt</li>
       <li>Profile settings</li>
       <li>Demo controls</li>
     </ol>
@@ -455,6 +525,23 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
         <button class="cartbar" type="button" data-action="view-cart" id="cartbar" hidden><span><b id="cart-count"></b><small id="cart-total"></small></span><span class="go">View cart ›</span></button>
       </section>
 
+      <!-- ================= CART ================= -->
+      <section class="screen" id="s-cart" aria-label="Cart">
+        <div class="ctop"><button class="circ" type="button" data-action="cart-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button><h2 id="cart-title">Cart</h2></div>
+        <div class="scroll" id="cart-body"></div>
+        <div class="cfoot" id="cart-foot"><button class="primary split" type="button" id="place-order">Place order</button></div>
+      </section>
+
+      <!-- ================= ORDER DELIVERED ================= -->
+      <section class="screen" id="s-done" aria-label="Order delivered">
+        <div class="scroll"><div class="done">
+          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <div><h2>Order delivered</h2><p id="done-from"></p></div>
+          <div class="cbox" id="done-items"></div>
+          <div class="acts"><button class="primary" type="button" data-action="order-again">Order again</button><button class="secondary" type="button" data-action="go-home">Back to home</button></div>
+        </div></div>
+      </section>
+
       <!-- ================= FRIENDS ================= -->
       <section class="screen" id="s-friends" aria-label="Friends">
         <div class="scroll">
@@ -475,6 +562,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     </nav>
 
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
+    <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
+      <div class="grab"></div><h2 id="why-title">Why this pick?</h2>
+      <div class="wdish" id="why-dish"></div>
+      <div class="wquote" id="why-quote"></div>
+      <div class="wbody" id="why-body"></div>
+      <button class="primary" type="button" id="why-add">Add to cart</button>
+      <button class="linkbtn" type="button" id="why-rest">View restaurant</button>
+    </section>
+    <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
+      <div class="grab"></div>
+      <div class="favheart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
+      <h2 id="fav-title">Looks like a favourite. Recommend it to your friends?</h2>
+      <p>Friends who see your picks get the dish and a label. Never how often you ordered, when, or what you paid.</p>
+      <div class="preview" id="fav-preview"></div>
+      <div class="row2"><button class="secondary" type="button" data-action="fav-no">Not now</button><button class="primary" type="button" data-action="fav-yes">Recommend</button></div>
+    </section>
     <section class="sheet" id="sheet-menu" role="dialog" aria-modal="true" aria-labelledby="menu-title"><div class="grab"></div><h2 id="menu-title">Menu</h2><div id="menu-opts"></div></section>
     <section class="sheet" id="sheet-offers" role="dialog" aria-modal="true" aria-labelledby="offers-title"><div class="grab"></div><h2 id="offers-title">Offers</h2><div id="offers-list"></div></section>
     <section class="sheet" id="sheet-info" role="dialog" aria-modal="true" aria-labelledby="info-title"><div class="grab"></div><h2 id="info-title"></h2><div id="info-body"></div></section>
@@ -626,6 +729,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   // The user's three favourites (dishes they reorder). The group = nearby people who reorder the same places.
   const FAVS = ["hyd", "smomo", "hakka"];
+  // The user's past orders (dish -> times ordered). Ordering Hyderabadi dum biryani once more is its 3rd order.
+  const SEED_ORDERS = { hyd: 2, smomo: 4, hakka: 3, cold: 1 };
+  const SEED_SHARED = [{ d: "smomo", label: "has this on repeat", hidden: false }, { d: "hakka", label: "keeps coming back to this", hidden: false }];
+  const FAV_AT = 3;
   const GROUP = { min: 20 };
   // Group picks in priority order; the first ones from restaurants that deliver here are shown.
   const GROUP_PICKS = [
@@ -643,7 +750,8 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     chosen: { riya: true, kabir: true, meera: true, arjun: false },
     dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {},
     rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
-    cart: {}, cartRest: null
+    cart: {}, cartRest: null, orders: Object.assign({}, SEED_ORDERS), prompted: { smomo: true, hakka: true },
+    shared: SEED_SHARED.map(x => Object.assign({}, x)), lastOrder: null, whyKey: null, favFor: null
   });
 
   const $ = s => document.querySelector(s);
@@ -891,18 +999,115 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     $("#cart-total").textContent = `₹${total}`;
   }
   function openRest(rid) {
+    closeSheets();
     const cur = $(".screen.active").id.replace("s-", "");
-    if (cur !== "rest") state.restFrom = cur;
+    if (["home", "friends", "search"].includes(cur)) state.restFrom = cur;
     state.rest = rid; state.restVeg = state.vegOnly; state.restHigh = false; state.collapsed = {};
     $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-rest"));
     $("#bottomnav").hidden = true; $("#statusbar").classList.add("light");
     renderRest(); $("#rest-scroll").scrollTop = 0;
   }
+  /* ---------------- Why this pick? ---------------- */
+  const LOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+  const favChips = () => `<div class="favs">${FAVS.map(id => `<span class="favchip">${photo(id, "", "", restOf(id).tone)}</div>${DISHES[id].name}</span>`).join("")}</div>`;
+  function openWhy(key) {
+    const [kind, a, b] = key.split(":"), d = kind === "f" ? b : a, dish = DISHES[d], r = restOf(d);
+    state.whyKey = key; state.whyDish = d;
+    $("#why-dish").innerHTML = `${dishPhoto(d)}</div><div><b>${vmark(dish)}${dish.name}</b><small>${r.name} · ${r.eta}</small></div>`;
+    const q = $("#why-quote"), body = $("#why-body");
+    if (kind === "f") {
+      const p = FRIEND_PICKS.find(x => x.f === a && x.d === d);
+      q.className = "wquote friend";
+      q.innerHTML = `${ini(a)}<span>${FRIENDS[a].name} ${p.label}</span>`;
+      body.innerHTML = `<p>${FRIENDS[a].share}</p>
+        <div class="wnote">${LOCK}<span>You see this because you chose ${FRIENDS[a].name} in "Choose whose picks you see". No order counts, dates, times or prices are ever shown for friends.</span></div>`;
+    } else if (kind === "r") {
+      q.className = "wquote rate";
+      q.innerHTML = `<span class="gico rate">${ICON.star}</span><span>Highly rated nearby (based on ratings)</span>`;
+      body.innerHTML = `<p>Not enough people near you reorder the same places yet. Until a group reaches ${GROUP.min} people, picks here use star ratings instead of repeat orders.</p>
+        <div class="wnote">${LOCK}<span>We never show a group smaller than ${GROUP.min}, so nobody's orders can be worked out.</span></div>`;
+    } else {
+      q.className = "wquote";
+      q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>${kind === "n" ? newReason(d) : GROUP_REASON}</span>`;
+      body.innerHTML = `${kind === "n" ? `<p>You've never ordered this. People who share your favourites recently started reordering it, so it's something new to try.</p>` : ""}
+        <span class="wk">Your 3 favourites they share</span>${favChips()}
+        <div class="gsize"><b>${groupSize()}</b><span>people near you who reorder the same places as you. We only show groups of ${GROUP.min} or more.</span></div>
+        <div class="wnote">${LOCK}<span>Based on repeat orders, not star ratings. Nobody's individual orders are shown.</span></div>`;
+    }
+    $("#why-add").textContent = state.cart[d] ? "Add another" : "Add to cart";
+    $("#why-rest").textContent = `View ${r.name}`;
+    openSheet($("#sheet-why"));
+  }
+
+  /* ---------------- Cart, order, delivered ---------------- */
+  const SPIN = ms => new Promise(res => setTimeout(res, ms));
+  let placing = false;
+  function cartTotals() {
+    let items = 0, sub = 0;
+    Object.keys(state.cart).forEach(id => { items += state.cart[id]; sub += state.cart[id] * DISHES[id].price; });
+    const delivery = sub ? 30 : 0, taxes = Math.round(sub * 0.05);
+    return { items, sub, delivery, taxes, total: sub + delivery + taxes };
+  }
+  function renderCart() {
+    const ids = Object.keys(state.cart), t = cartTotals(), a = ADDRS[state.addr];
+    $("#cart-foot").hidden = !ids.length;
+    if (!ids.length) {
+      $("#cart-title").innerHTML = "Cart";
+      $("#cart-body").innerHTML = `<div class="emptycart"><b style="color:var(--ink);font-size:17px">Your cart is empty</b>Add something from a restaurant.<button class="secondary" type="button" data-action="go-home" style="max-width:220px">Back to home</button></div>`;
+      return;
+    }
+    const r = RESTS[state.cartRest];
+    $("#cart-title").innerHTML = `${r.name}<small>${r.eta} to ${a.name}</small>`;
+    $("#cart-body").innerHTML = `<div class="cbox">${ids.map(id => `<div class="cline"><span class="nm">${vmark(DISHES[id])}${DISHES[id].name}</span>${ctl(id)}<span class="amt">₹${DISHES[id].price * state.cart[id]}</span></div>`).join("")}</div>
+      <div class="ctitle">Bill details</div><div class="cbox" style="padding-block:8px">
+        <div class="bill"><span>Item total</span><span>₹${t.sub}</span></div><div class="bill"><span>Delivery fee</span><span>₹${t.delivery}</span></div>
+        <div class="bill"><span>Taxes</span><span>₹${t.taxes}</span></div><div class="bill total"><span>To pay</span><span>₹${t.total}</span></div></div>
+      <div class="ctitle">Deliver to</div><div class="cbox"><div class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span><b>${a.name}</b>${a.line}</span></div></div>
+      <div style="height:24px"></div>`;
+    if (!placing) $("#place-order").innerHTML = `<span>₹${t.total}<small>TOTAL</small></span><span>Place order ›</span>`;
+  }
+  function showScreen(id, light = true) {
+    $$(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+    $("#bottomnav").hidden = true; $("#statusbar").classList.toggle("light", light);
+    const sc = document.querySelector(`#${id} .scroll`); if (sc) sc.scrollTop = 0;
+  }
+  function openCart() { renderCart(); showScreen("s-cart"); }
+  async function placeOrder() {
+    if (placing || !Object.keys(state.cart).length) return;
+    placing = true;
+    const btn = $("#place-order"); btn.disabled = true;
+    btn.innerHTML = `<span style="margin:auto;display:flex;gap:8px;align-items:center"><span class="spin"></span> Placing order…</span>`;
+    await SPIN(900);
+    placing = false; btn.disabled = false;
+    state.lastOrder = Object.assign({}, state.cart); state.lastRest = state.cartRest;
+    Object.keys(state.cart).forEach(id => { state.orders[id] = (state.orders[id] || 0) + 1; });
+    state.cart = {}; state.cartRest = null;
+    const r = RESTS[state.lastRest];
+    $("#done-from").textContent = `From ${r.name}. Enjoy your dinner.`;
+    $("#done-items").innerHTML = Object.keys(state.lastOrder).map(id => `<div class="cline">${dishPhoto(id)}</div><span class="nm">${DISHES[id].name}</span><span class="amt">× ${state.lastOrder[id]}</span></div>`).join("");
+    showScreen("s-done");
+    // Recommend prompt on the 3rd order of the same dish
+    const fav = Object.keys(state.lastOrder).find(id => state.orders[id] >= FAV_AT && !state.prompted[id]);
+    if (fav) { state.prompted[fav] = true; setTimeout(() => { if ($("#s-done").classList.contains("active")) openFav(fav); }, 650); }
+  }
+  function openFav(id) {
+    state.favFor = id;
+    $("#fav-preview").innerHTML = `${dishPhoto(id)}</div><span><small>Friends will see</small><b>${DISHES[id].name}</b>: Ananya keeps coming back to this</span>`;
+    openSheet($("#sheet-fav"));
+  }
+  function favAnswer(yes) {
+    const id = state.favFor; closeSheets();
+    if (!yes) return toast(`No problem. We won't ask about ${DISHES[id].name} again.`);
+    const ex = state.shared.find(x => x.d === id);
+    if (ex) ex.hidden = false; else state.shared.unshift({ d: id, label: "keeps coming back to this", hidden: false, isNew: true });
+    toast(`Shared. Friends who chose you will see "${DISHES[id].name}: Ananya keeps coming back to this".`);
+  }
+
   function addDish(id) {
     const rid = DISHES[id].r;
     if (state.cartRest && state.cartRest !== rid && Object.keys(state.cart).length) { state.cart = {}; toast(`Started a new cart for ${RESTS[rid].name}.`); }
     state.cartRest = rid; state.cart[id] = (state.cart[id] || 0) + 1;
-    renderRest();
+    if ($("#s-cart").classList.contains("active")) renderCart(); else renderRest();
   }
 
   const TABS = ["home", "friends"];
@@ -968,10 +1173,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       state.addr = ds.addr; closeSheets(); renderHome(); renderFriends();
       return toast(`Delivering to ${ADDRS[ds.addr].name}. Picks only come from restaurants that deliver here.`);
     }
-    if (ds.why) return toast(`"${LATER.why}" sheet is built in step 4.`);
+    if (ds.why) return openWhy(ds.why);
     if (ds.rest) return openRest(ds.rest);
     if (ds.add) return addDish(ds.add);
-    if (ds.dec) { state.cart[ds.dec]--; if (state.cart[ds.dec] <= 0) delete state.cart[ds.dec]; if (!Object.keys(state.cart).length) state.cartRest = null; return renderRest(); }
+    if (ds.dec) {
+      state.cart[ds.dec]--; if (state.cart[ds.dec] <= 0) delete state.cart[ds.dec]; if (!Object.keys(state.cart).length) state.cartRest = null;
+      return $("#s-cart").classList.contains("active") ? renderCart() : renderRest();
+    }
     if (ds.more) { state.expanded[ds.more] = true; return renderRest(); }
     if (ds.collapse) { state.collapsed[ds.collapse] = !state.collapsed[ds.collapse]; return renderRest(); }
     if (ds.savedish) {
@@ -998,6 +1206,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       const f = ds.choose; state.chosen[f] = !state.chosen[f]; renderFriends(); renderHome();
       return toast(state.chosen[f] ? `You'll see ${FRIENDS[f].name}'s picks.` : `${FRIENDS[f].name}'s picks are hidden.`);
     }
+    if (t.id === "place-order") return placeOrder();
+    if (t.id === "why-add") {
+      const d = state.whyDish; closeSheets();
+      if (!$("#s-rest").classList.contains("active") || state.rest !== DISHES[d].r) openRest(DISHES[d].r);
+      addDish(d); return toast(`${DISHES[d].name} added to cart.`);
+    }
+    if (t.id === "why-rest") return openRest(DISHES[state.whyDish].r);
     if (t.id === "veg-toggle") { state.vegOnly = !state.vegOnly; renderHome(); return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes."); }
     if (t.id === "chip-fast") { state.fast = !state.fast; return renderHome(); }
     if (t.classList.contains("chip") && !ds.action && !ds.q) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
@@ -1010,7 +1225,12 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       case "rest-veg": state.restVeg = !state.restVeg; return renderRest();
       case "rest-high": state.restHigh = !state.restHigh; return renderRest();
       case "filters": state.restVeg = false; state.restHigh = false; renderRest(); return toast("Filters cleared.");
-      case "view-cart": return toast("Cart and checkout are built in step 4.");
+      case "view-cart": return openCart();
+      case "cart-back": return state.cartRest ? openRest(state.cartRest) : showTab("home");
+      case "go-home": return showTab("home");
+      case "order-again": state.cart = Object.assign({}, state.lastOrder); state.cartRest = state.lastRest; return openCart();
+      case "fav-yes": return favAnswer(true);
+      case "fav-no": return favAnswer(false);
       case "menu-sheet": {
         const secs = restSections(state.rest);
         $("#menu-opts").innerHTML = secs.map(sc => `<button class="opt" type="button" data-jump="${sc.key}">${sc.title}<small>${sc.rows.length}</small></button>`).join("");
