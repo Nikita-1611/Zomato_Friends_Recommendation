@@ -1,50 +1,42 @@
 <title>Taste-matched Picks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap">
 <style>
-/* Layout: a 390px phone app styled like a mainstream Indian food delivery app (green actions, promo-banner home header,
-   grid restaurant cards with offer strips, green rating pills, pill bottom nav). A short presenter guide sits beside the phone on wide screens only. */
+/* Layout: a 390px phone app that follows a mainstream Indian food delivery app's screens (home, search, menu).
+   Green actions, blue deals banner, 3-up restaurant cards with offer strips and green rating pills, floating pill nav.
+   A slim presenter note sits beside the phone on wide screens only. */
 :root {
-  /* Stage (outside the phone) follows the viewer's theme */
-  --stage-bg: #f1eeee;
-  --stage-fg: #2a2324;
-  --stage-muted: #6b5f60;
-  --stage-line: #ddd3d4;
+  --stage-bg: #eef0f3;
+  --stage-fg: #23262b;
+  --stage-muted: #5f6670;
+  --stage-line: #d7dbe1;
   --stage-chip: #ffffff;
 
-  /* App: one fixed light look */
-  --app-bg: #f4f5f7;
+  --app-bg: #ffffff;
   --surface: #ffffff;
   --ink: #1c1c1c;
-  --muted: #696969;
-  --line: #e8e8e8;
-  --brand: #1f8a4c;
-  --brand-ink: #ffffff;
-  --brand-soft: #edf8f1;
-  --brand-line: #a9d9b8;
-  --hero-from: #4a5ed6;
-  --hero-to: #7c8cec;
-  --green: #267e3e;
-  --green-soft: #eaf6ee;
-  --green-line: #cfe9d7;
-  --friend-soft: #fff6e6;
-  --friend-line: #f5dfb3;
-  --friend-ink: #8a5d05;
-  --neutral-soft: #f1f1f1;
-  --neutral-line: #dddddd;
-  --veg: #3ab757;
+  --muted: #6b6b6b;
+  --faint: #9a9a9a;
+  --line: #ececec;
+  --green: #1f8a4c;
+  --green-dark: #267e3e;
+  --green-soft: #eefaf2;
+  --green-line: #b9e2c6;
+  --banner-1: #3f55d1;
+  --banner-2: #6f82ea;
+  --veg: #2e9e4f;
   --nonveg: #c0392b;
   --font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
+    --stage-bg: #15181c; --stage-fg: #e8eaee; --stage-muted: #9aa1ab; --stage-line: #2b3037; --stage-chip: #1f2328;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --stage-bg: #1a1516; --stage-fg: #ede4e5; --stage-muted: #a8999a; --stage-line: #362c2d; --stage-chip: #261f20;
+  --stage-bg: #15181c; --stage-fg: #e8eaee; --stage-muted: #9aa1ab; --stage-line: #2b3037; --stage-chip: #1f2328;
   color-scheme: dark;
 }
 
@@ -52,420 +44,168 @@ html, body { height: 100%; }
 [hidden] { display: none !important; }
 body { background: var(--stage-bg); color: var(--stage-fg); font-family: var(--font); -webkit-font-smoothing: antialiased; }
 button { font: inherit; cursor: pointer; color: inherit; }
-button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
-/*@ART_CSS@*/
+/* ---------- Photos: real photo when present, neutral stand-in otherwise ---------- */
+.ph { background-color: #e9e4dc; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; }
+.ph.stand-in { background-image: linear-gradient(135deg, var(--t1, #efe6d8), var(--t2, #d9c6a8)); }
+.ph.stand-in::after { content: attr(data-label); position: absolute; left: 8px; right: 8px; top: 50%; transform: translateY(-20%); font-size: 10px; font-weight: 600; color: rgba(60,40,20,.55); text-align: center; line-height: 1.2; }
+/*@PHOTO_CSS@*/
 
 .stage { min-height: 100%; display: flex; align-items: center; justify-content: center; gap: 44px; padding: 20px 16px; box-sizing: border-box; }
 
-/* ---------- Presenter guide (wide screens only) ---------- */
-.guide { width: 290px; display: flex; flex-direction: column; gap: 16px; }
+/* ---------- Presenter note (wide screens only) ---------- */
+.guide { width: 280px; display: flex; flex-direction: column; gap: 14px; }
 .guide .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--stage-muted); font-weight: 700; margin: 0; }
-.guide h1 { font-weight: 800; font-size: 30px; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
-.guide h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 6px; color: var(--stage-muted); }
-.guide ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 13.5px; line-height: 1.45; }
-.guide ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
-.guide ol li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 7px 10px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; color: var(--stage-muted); }
-.guide ol li .n { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--stage-line); display: grid; place-items: center; font-size: 11px; font-weight: 800; box-sizing: border-box; }
-.guide ol li.now { background: var(--stage-chip); color: var(--stage-fg); }
-.guide ol li.now .n { border-color: var(--brand); color: var(--brand); }
-.guide ol li.done .n { background: var(--green); border-color: var(--green); color: #fff; }
-.guide .fine { font-size: 11.5px; color: var(--stage-muted); margin: 0; line-height: 1.5; }
-.restart { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--stage-line); background: var(--stage-chip); color: var(--stage-fg); padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
-.restart svg { width: 14px; height: 14px; }
+.guide h1 { font-weight: 800; font-size: 28px; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
+.guide p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--stage-muted); }
+.guide ol { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--stage-muted); }
+.guide ol li.done { color: var(--stage-fg); }
+.guide ol li.done::marker { color: var(--green); }
+.guide .fine { font-size: 11.5px; }
 
 /* ---------- Phone ---------- */
-.phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #141010, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; flex-shrink: 0; }
-.statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); background: var(--app-bg); transition: background .2s, color .2s; }
-.statusbar.dark { background: var(--hero-from); color: #fff; }
+.phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #121417, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; flex-shrink: 0; }
+.statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: #fff; background: var(--banner-1); }
+.statusbar.light { background: #fff; color: var(--ink); }
 .statusbar .icons { display: flex; gap: 6px; align-items: center; }
 .statusbar .batt { width: 22px; height: 11px; border: 1.5px solid currentColor; border-radius: 3px; position: relative; }
 .statusbar .batt::after { content: ""; position: absolute; inset: 1.5px 7px 1.5px 1.5px; background: currentColor; border-radius: 1px; }
 
 .screens { position: absolute; inset: 44px 0 0 0; }
-.screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--app-bg); opacity: 0; visibility: hidden; transform: translateX(14px); transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
-.screen.active { opacity: 1; visibility: visible; transform: none; transition: opacity .2s ease, transform .2s ease; }
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--app-bg); opacity: 0; visibility: hidden; transition: opacity .18s ease, visibility 0s linear .18s; }
+.screen.active { opacity: 1; visibility: visible; transition: opacity .18s ease; }
 .scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
-.scroll::-webkit-scrollbar, .rail::-webkit-scrollbar, .cats::-webkit-scrollbar, .fchips::-webkit-scrollbar, .following::-webkit-scrollbar { display: none; }
-.with-nav .scroll { padding-bottom: 92px; }
+.scroll::-webkit-scrollbar, .hrow::-webkit-scrollbar { display: none; }
 
-.topbar { display: flex; align-items: center; gap: 10px; padding: 6px 16px 10px; }
-.iconbtn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; flex-shrink: 0; padding: 0; }
-.iconbtn svg { width: 18px; height: 18px; }
-.screen-title { font-weight: 800; font-size: 19px; margin: 0; flex: 1; }
-
-.av { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; display: inline-block; flex-shrink: 0; background: #eee; vertical-align: middle; }
-.av img { width: 100%; height: 100%; display: block; }
-
-.vmark { width: 12px; height: 12px; border: 1.5px solid var(--veg); border-radius: 2px; display: inline-grid; place-items: center; vertical-align: -1px; margin-right: 6px; box-sizing: border-box; flex-shrink: 0; }
+/* ---------- Shared bits ---------- */
+.vmark { width: 13px; height: 13px; border: 1.6px solid var(--veg); border-radius: 3px; display: inline-grid; place-items: center; vertical-align: -1px; box-sizing: border-box; flex-shrink: 0; background: #fff; }
 .vmark::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--veg); }
 .vmark.nv { border-color: var(--nonveg); }
-.vmark.nv::after { width: 0; height: 0; border-radius: 0; background: none; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 5px solid var(--nonveg); }
-.art { border-radius: 14px; flex-shrink: 0; }
+.vmark.nv::after { width: 0; height: 0; border-radius: 0; background: none; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-bottom: 6px solid var(--nonveg); }
+.ini { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; color: #fff; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+.pill { display: inline-flex; align-items: center; gap: 3px; background: var(--green-dark); color: #fff; font-size: 12.5px; font-weight: 800; padding: 3px 8px; border-radius: 8px; font-variant-numeric: tabular-nums; }
+.pill svg { width: 11px; height: 11px; }
+.sec { margin: 26px 0 0; }
+.sec-h { padding: 0 16px 14px; }
+.sec-h h2 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: .2em; color: #707070; text-transform: uppercase; line-height: 1.4; }
+.sec-h p { margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
+.sec-h .basis { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; color: #555; background: #f2f2f2; border: 1px solid #e0e0e0; border-radius: 6px; padding: 2px 7px; }
+.hrow { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none; scroll-snap-type: x mandatory; }
 
-.reason { display: inline; border: 0; background: none; padding: 0; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: #aaa; text-underline-offset: 3px; }
-.reason .q { color: var(--brand); font-weight: 700; white-space: nowrap; }
-
-/* ---------- Home ---------- */
-.hero { position: relative; overflow: hidden; background: radial-gradient(circle at 15% 70%, rgba(255,255,255,.18) 0 2px, transparent 3px) 0 0/46px 46px, radial-gradient(circle at 80% 30%, rgba(255,255,255,.12) 0 1.5px, transparent 2.5px) 0 0/38px 38px, linear-gradient(180deg, var(--hero-from) 0%, #5b6fdd 55%, var(--hero-to) 100%); color: #fff; padding: 6px 16px 14px; display: flex; flex-direction: column; gap: 14px; }
-.promo { position: relative; height: 196px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
-.promo .kicker { font-size: 11px; font-weight: 800; letter-spacing: .14em; background: #1c1c1c; color: #fff; padding: 4px 10px; border-radius: 6px; transform: rotate(-2deg); }
-.promo strong { font-size: 40px; line-height: .95; font-weight: 800; font-style: italic; letter-spacing: -0.02em; text-transform: uppercase; color: #fff; text-shadow: 3px 3px 0 #1c1c1c, -1px -1px 0 #1c1c1c, 1px -1px 0 #1c1c1c, -1px 1px 0 #1c1c1c; }
-.promo .pillnote { background: #ffd54a; color: #1c1c1c; font-weight: 800; font-size: 12.5px; padding: 6px 14px; border-radius: 999px; border: 2px solid #1c1c1c; font-style: italic; }
-.promo .deco { position: absolute; width: 74px; height: 74px; }
-.promo .deco.d1 { left: -8px; top: 18px; transform: rotate(-18deg); }
-.promo .deco.d2 { right: -6px; top: 6px; transform: rotate(14deg); }
-.promo .deco.d3 { right: 4px; bottom: 6px; width: 58px; height: 58px; transform: rotate(-10deg); }
-.promo .deco.d4 { left: 10px; bottom: 0; width: 56px; height: 56px; transform: rotate(12deg); }
-.dots { display: flex; gap: 5px; justify-content: center; }
-.dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.5); }
-.dots i.on { width: 18px; border-radius: 4px; background: #fff; }
-.gold { margin: 12px 12px 0; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: linear-gradient(90deg, #fff7e6, #fffdf6); border: 1px solid #f3e2b8; font-size: 13px; line-height: 1.4; color: #5b4a20; }
-.gold .crown { width: 36px; height: 36px; border-radius: 50%; background: #2b2b2b; color: #f4c95d; display: grid; place-items: center; flex-shrink: 0; }
-.gold .crown svg { width: 18px; height: 18px; }
-.gold b { color: #2b2b2b; }
+/* ---------- Home: address, search, VEG ---------- */
+.top { background: linear-gradient(180deg, var(--banner-1), #4d63db); color: #fff; padding: 4px 16px 0; }
 .loc-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .loc { min-width: 0; border: 0; background: none; padding: 0; text-align: left; color: #fff; }
-.loc b { display: flex; align-items: center; gap: 4px; font-size: 19px; font-weight: 800; }
+.loc b { display: flex; align-items: center; gap: 4px; font-size: 18px; font-weight: 800; }
 .loc b svg { width: 16px; height: 16px; flex-shrink: 0; }
-.loc .line { display: block; font-size: 13px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
-.me { width: 42px; height: 42px; border-radius: 50%; padding: 0; overflow: hidden; border: 2px solid rgba(255,255,255,.85); background: #f2c6a8; flex-shrink: 0; }
-.me img { width: 100%; height: 100%; display: block; }
-.search-row { display: flex; align-items: center; gap: 12px; }
-.search { flex: 1; min-width: 0; height: 48px; border-radius: 14px; background: #fff; color: #8a8a8a; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14.5px; box-sizing: border-box; }
-.search > svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; }
-.search { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-.search .mic { margin-left: auto; padding-left: 12px; border-left: 1px solid var(--line); color: var(--brand); display: flex; }
-.search .mic svg { width: 18px; height: 18px; }
-.vegtog { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 0; background: none; color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .08em; padding: 0; }
-.vegtog .sw { width: 40px; height: 22px; border-radius: 999px; background: rgba(255,255,255,.35); position: relative; transition: background .2s; }
-.vegtog .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.loc .line { display: block; font-size: 13px; opacity: .88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 270px; margin-top: 1px; }
+.me { width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0; background: #ffd6a5; color: #6b3d0a; font-weight: 800; font-size: 16px; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+.search-row { display: flex; align-items: center; gap: 12px; padding: 14px 0 0; }
+.search { flex: 1; min-width: 0; height: 50px; border-radius: 16px; background: #fff; color: #8a8a8a; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 15px; box-sizing: border-box; border: 0; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.search > svg { width: 22px; height: 22px; color: var(--green); flex-shrink: 0; }
+.search .mic { margin-left: auto; padding-left: 12px; border-left: 1px solid #e5e5e5; color: var(--green); display: flex; }
+.search .mic svg { width: 20px; height: 20px; }
+.vegtog { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 0; background: none; color: #fff; font-size: 13px; font-weight: 800; letter-spacing: .1em; padding: 0; }
+.vegtog .sw { width: 42px; height: 24px; border-radius: 999px; background: rgba(255,255,255,.4); position: relative; transition: background .2s; }
+.vegtog .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; }
 .vegtog[aria-pressed="true"] .sw { background: #1ba672; }
 .vegtog[aria-pressed="true"] .sw::after { transform: translateX(18px); }
 
-.cats { display: flex; gap: 4px; overflow-x: auto; padding: 16px 10px 0; scrollbar-width: none; background: var(--surface); border-bottom: 1px solid var(--line); }
-.cat { flex-shrink: 0; width: 76px; border: 0; border-bottom: 3px solid transparent; background: none; color: #4f4f4f; padding: 0 0 10px; font-size: 13px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.cat .cimg { width: 58px; height: 58px; background-size: 80%; background-position: center; background-repeat: no-repeat; }
-.cat[aria-pressed="true"] { color: var(--ink); font-weight: 800; border-bottom-color: var(--green); }
-.fchips { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 4px; scrollbar-width: none; background: var(--surface); }
-.fchip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 12px; border: 1px solid #e2e2e2; background: var(--surface); font-size: 13px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-.fchip svg { width: 14px; height: 14px; }
-.fchip .bolt { color: var(--green); }
-.fchip[aria-pressed="true"] { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand); }
-.chipbar-end { height: 10px; background: var(--surface); border-radius: 0 0 20px 20px; }
+/* ---------- Home: deals carousel ---------- */
+.deals { position: relative; height: 230px; overflow: hidden; background: radial-gradient(circle at 12% 30%, rgba(255,255,255,.9) 0 1.2px, transparent 2px) 0 0/60px 60px, radial-gradient(circle at 70% 70%, rgba(255,255,255,.6) 0 1px, transparent 2px) 0 0/44px 44px, linear-gradient(180deg, #4d63db, var(--banner-2)); }
+.slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; opacity: 0; transition: opacity .4s; }
+.slide.on { opacity: 1; }
+.plaque { position: relative; background: #e23744; border: 3px solid #1c1c1c; border-radius: 16px; padding: 10px 22px 22px; transform: perspective(300px) rotateX(8deg); box-shadow: 0 6px 0 #1c1c1c; text-align: center; }
+.plaque .l1 { font-size: 30px; font-weight: 900; font-style: italic; color: #fff; text-shadow: 2px 2px 0 #1c1c1c; letter-spacing: -0.01em; line-height: 1; }
+.plaque .l2 { font-size: 46px; font-weight: 900; color: #fff; text-shadow: 3px 3px 0 #1c1c1c; line-height: 1.05; }
+.plaque.teal { background: #11a59a; }
+.plaque.violet { background: #8b5cf6; }
+.ribbon { margin-top: -16px; position: relative; z-index: 1; background: #ffc83d; color: #1c1c1c; border: 2.5px solid #1c1c1c; border-radius: 10px; padding: 4px 14px; font-size: 14px; font-weight: 900; font-style: italic; letter-spacing: .02em; }
+.ufo { width: 76px; height: 24px; margin-bottom: 6px; border-radius: 50%; background: #e23744; border: 3px solid #1c1c1c; position: relative; }
+.ufo::before { content: ""; position: absolute; left: 22px; top: -14px; width: 26px; height: 16px; border-radius: 14px 14px 0 0; background: #3fd3c6; border: 3px solid #1c1c1c; border-bottom: 0; }
+.dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 6px; }
+.dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.55); }
+.dots button[aria-current="true"] { background: #fff; width: 9px; height: 9px; margin-top: -1px; }
 
-.section { margin: 20px 0 4px; }
-.sec-head { padding: 0 16px 12px; display: flex; flex-direction: column; gap: 4px; }
-.sec-head .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.sec-head h2 { margin: 0; font-size: 13px; letter-spacing: .14em; color: #555; font-weight: 700; text-transform: uppercase; line-height: 1.35; }
-.sec-head p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-.seeall { border: 0; background: none; color: var(--brand); font-weight: 700; font-size: 13px; padding: 0; white-space: nowrap; }
-.basis { flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 6px; }
-.basis.repeat { background: var(--green-soft); color: var(--green); }
-.basis.ratings { background: var(--neutral-soft); color: #555; border: 1px solid var(--neutral-line); }
+/* ---------- Home: membership strip ---------- */
+.member { margin: 14px 16px 4px; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: linear-gradient(90deg, #fff8e8, #fffdf7); border: 1px solid #f3e5c2; font-size: 13.5px; line-height: 1.35; color: #5b4a20; }
+.member .crown { width: 38px; height: 38px; border-radius: 50%; background: #2b2b2b; display: grid; place-items: center; flex-shrink: 0; }
+.member .crown svg { width: 20px; height: 20px; color: #f4c95d; }
+.member b { color: #2b2b2b; }
+.member s { opacity: .7; }
 
-.rail { display: flex; gap: 12px; overflow-x: auto; padding: 2px 16px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-.fcard { flex: 0 0 150px; scroll-snap-align: start; display: flex; flex-direction: column; }
-.fcard .open { border: 0; background: none; padding: 0; text-align: left; display: flex; flex-direction: column; }
-.fcard .art { width: 150px; height: 140px; border-radius: 16px; position: relative; border: 1px solid #ececec; box-sizing: border-box; }
-.chip { position: absolute; left: 8px; bottom: -12px; display: inline-flex; align-items: center; gap: 6px; background: #fff; border-radius: 999px; padding: 3px 10px 3px 3px; font-size: 12px; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
-.fcard .info { padding: 18px 2px 0; }
-.un { font-size: 11.5px; color: var(--muted); font-weight: 500; }
-.fcard .un { display: block; margin-bottom: 4px; }
-.ptag { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #256fef; background: #eaf1ff; border-radius: 5px; padding: 1px 5px; vertical-align: 1px; }
-.pubs { display: flex; flex-direction: column; gap: 6px; }
-.pubs div { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13.5px; }
-.pubs .av { width: 26px; height: 26px; }
-.fcard .dn { font-weight: 800; font-size: 14px; line-height: 1.25; }
-.fcard .pl { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.fcard .why { padding: 4px 2px 4px; }
-.fcard.more { align-items: center; justify-content: center; gap: 8px; height: 140px; background: var(--brand-soft); border-radius: 16px; border: 1px dashed var(--brand-line); color: var(--brand); font-weight: 700; font-size: 13px; padding: 16px; text-align: center; box-sizing: border-box; }
-.fcard.more .circle { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+/* ---------- Home: categories ---------- */
+.cats { display: flex; gap: 6px; overflow-x: auto; padding: 14px 12px 0; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.cats::-webkit-scrollbar { display: none; }
+.meals { flex-shrink: 0; width: 96px; height: 104px; margin-bottom: 12px; border: 0; padding: 0; border-radius: 14px; background: linear-gradient(180deg, #fff, #f3f6ff); box-shadow: 0 0 0 1px #dfe5f7, 0 4px 10px -6px rgba(40,60,140,.35); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.meals .t { font-size: 10px; font-weight: 900; color: #fff; background: #e23744; padding: 2px 6px; border-radius: 4px; letter-spacing: .04em; }
+.meals .p { font-size: 26px; font-weight: 900; color: #2346a8; letter-spacing: -0.02em; }
+.meals .e { font-size: 11px; font-weight: 700; color: #fff; background: #3f55d1; padding: 2px 8px; border-radius: 999px; }
+.cat { flex-shrink: 0; width: 82px; border: 0; border-bottom: 4px solid transparent; background: none; color: #3d3d3d; padding: 0 0 10px; font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cat .ph { width: 70px; height: 70px; border-radius: 50%; }
+.cat[aria-pressed="true"] { color: var(--ink); font-weight: 700; border-bottom-color: var(--green); }
 
-.ocard { flex: 0 0 236px; scroll-snap-align: start; background: var(--surface); border-radius: 16px; padding: 10px; display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); box-sizing: border-box; }
-.ocard .art { width: 64px; height: 64px; border-radius: 12px; }
-.ocard .dn { font-weight: 800; font-size: 14px; }
-.ocard .pl { font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
-.ocard .re { border: 1px solid var(--brand); background: #eefaf2; color: var(--brand); border-radius: 8px; height: 30px; padding: 0 12px; font-weight: 800; font-size: 12.5px; }
+/* ---------- Chips ---------- */
+.chips { display: flex; gap: 10px; overflow-x: auto; padding: 14px 16px 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 16px; border-radius: 12px; border: 1px solid #e3e3e3; background: #fff; font-size: 14.5px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.chip svg { width: 16px; height: 16px; }
+.chip .g { color: var(--green); }
+.chip[aria-pressed="true"] { border-color: var(--green-line); background: var(--green-soft); }
 
-.glist { margin: 0 12px; background: var(--surface); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); }
-.grow { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 12px; }
-.grow + .grow { border-top: 1px dashed var(--line); }
-.grow .open { border: 0; background: none; padding: 0; text-align: left; display: contents; }
-.grow .art { width: 80px; height: 80px; }
-.grow .dn { font-weight: 800; font-size: 15px; }
-.grow .pl { font-size: 12px; color: var(--muted); margin: 2px 0 6px; }
+/* ---------- Restaurant cards, 3 per row ---------- */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 12px; padding: 0 16px; }
+.rc { border: 0; background: none; padding: 0; text-align: left; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.rc .ph { width: 100%; aspect-ratio: 1; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.strip { position: absolute; left: 6px; right: 6px; top: 6px; padding: 3px 6px; border-radius: 6px; background: rgba(20,20,20,.74); color: #fff; font-size: 11.5px; font-weight: 700; line-height: 1.25; }
+.rc .pill { position: absolute; left: 4px; bottom: -10px; border: 3px solid #fff; }
+.rc b { font-size: 15px; font-weight: 700; margin-top: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eta { font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.eta svg { width: 15px; height: 15px; flex-shrink: 0; }
+.eta.fast { color: var(--green); font-weight: 600; }
 
-.gcard { flex: 0 0 116px; scroll-snap-align: start; border: 0; background: none; padding: 0; text-align: left; display: flex; flex-direction: column; gap: 3px; }
-.gcard .art { width: 116px; height: 116px; border-radius: 16px; position: relative; border: 1px solid #ececec; box-sizing: border-box; overflow: hidden; }
-.gcard .strip { position: absolute; left: 0; right: 0; top: 0; margin: 6px; padding: 3px 6px; border-radius: 6px; background: rgba(20,20,20,.72); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.25; }
-.gcard .pill { position: absolute; left: 6px; bottom: -1px; border-radius: 8px 8px 8px 0; box-shadow: 0 0 0 3px var(--app-bg); }
-.gcard b { font-size: 14.5px; font-weight: 800; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gcard .eta { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-.gcard .eta svg { width: 14px; height: 14px; }
-.featured-label { padding: 0 16px 10px; font-size: 14px; color: #8a8a8a; font-weight: 600; }
-.dishpill { position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 6px; background: rgba(20,20,20,.72); color: #fff; font-size: 12.5px; font-weight: 700; padding: 5px 9px; border-radius: 8px; max-width: calc(100% - 70px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dishpill s { opacity: .7; font-weight: 500; }
-.dishpill .vmark { background: #fff; margin-right: 0; }
-.bmk { position: absolute; right: 12px; top: 10px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(20,20,20,.35); color: #fff; display: grid; place-items: center; padding: 0; }
-.bmk svg { width: 20px; height: 20px; }
-.bmk[aria-pressed="true"] svg { fill: currentColor; }
-.rwrap { position: relative; margin: 0 16px 16px; }
-.rwrap .rcard { width: 100%; margin: 0; }
-.rcard { display: block; width: calc(100% - 32px); margin: 0 16px 16px; border: 0; background: var(--surface); border-radius: 18px; overflow: hidden; padding: 0; text-align: left; box-shadow: 0 2px 12px -5px rgba(0,0,0,.18); }
-.rcard .art { width: 100%; height: 170px; border-radius: 0; position: relative; }
-.offer-tag { position: absolute; left: 10px; top: 10px; background: rgba(20,20,20,.72); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
-.rcard .body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
-.rcard .row1 { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.rcard b { font-size: 17px; font-weight: 800; }
-.pill { display: inline-flex; align-items: center; gap: 3px; background: var(--green); color: #fff; font-size: 12px; font-weight: 800; padding: 3px 7px; border-radius: 7px; font-variant-numeric: tabular-nums; }
-.pill svg { width: 10px; height: 10px; }
-.rcard .meta { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.home-end { padding: 4px 24px 24px; font-size: 11.5px; color: var(--muted); text-align: center; line-height: 1.6; }
-.home-end button { border: 0; background: none; padding: 0; color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; font-size: 11.5px; }
+/* ---------- Pick cards (same card language, with a reason line) ---------- */
+.pc { flex: 0 0 156px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pc .open { border: 0; background: none; padding: 0; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+.pc .ph { width: 156px; height: 150px; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.pc .who { position: absolute; left: 4px; bottom: -10px; display: inline-flex; align-items: center; gap: 5px; background: #fff; border-radius: 999px; padding: 2px 9px 2px 2px; font-size: 12.5px; font-weight: 800; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+.pc .who.grp { padding-left: 8px; color: var(--green-dark); }
+.pc .who.grp svg { width: 13px; height: 13px; }
+.newtag { position: absolute; right: 6px; top: 34px; background: #ffc83d; color: #1c1c1c; font-size: 10.5px; font-weight: 900; letter-spacing: .05em; padding: 3px 7px; border-radius: 6px; }
+.pc b { font-size: 15px; font-weight: 700; margin-top: 12px; line-height: 1.25; display: flex; gap: 6px; align-items: baseline; }
+.pc .rn { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reason { border: 0; background: none; padding: 0; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; text-decoration: underline dotted #a8a8a8; text-underline-offset: 3px; margin-top: 2px; }
+.notforme { align-self: flex-start; border: 0; background: none; padding: 2px 0; font-size: 12px; color: var(--faint); font-weight: 600; }
+.empty-row { margin: 0 16px; padding: 16px; border: 1px dashed #d8d8d8; border-radius: 14px; font-size: 13px; color: var(--muted); line-height: 1.45; }
 
 /* ---------- Bottom nav ---------- */
-.bottomnav { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 6; background: #fff; border-radius: 999px; box-shadow: 0 6px 22px -6px rgba(0,0,0,.3); display: flex; padding: 5px; gap: 2px; }
-.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 50px; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 14px; font-weight: 700; position: relative; }
-.bottomnav button svg { width: 19px; height: 19px; flex-shrink: 0; }
-.bottomnav button.on { background: #262626; color: #fff; }
-.bottomnav button.on .ic-home { color: #4cd07a; }
-.bottomnav .ic-friends { color: #8b5cf6; }
-.bottomnav .dot { position: absolute; top: 10px; right: 18px; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+.bottomnav { position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 6; background: #fff; border-radius: 999px; box-shadow: 0 6px 24px -6px rgba(0,0,0,.3); display: flex; padding: 6px; gap: 2px; }
+.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 54px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600; }
+.bottomnav button svg { width: 22px; height: 22px; flex-shrink: 0; }
+.bottomnav button.on { background: #2b2b2b; color: #fff; flex: 1.25; }
+.bottomnav .ic-home { color: #4cc46e; }
+.bottomnav .ic-dine { color: #8b5cf6; }
+.home-end { height: 110px; }
 
-/* ---------- Friends tab ---------- */
-.fhero { padding: 6px 16px 4px; }
-.fhero h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
-.fhero p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
-.following { display: flex; gap: 14px; overflow-x: auto; padding: 12px 16px 6px; scrollbar-width: none; }
-.person { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; font-size: 12px; font-weight: 600; padding: 0; width: 64px; }
-.person .nm { max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.person .av, .person .all { width: 54px; height: 54px; box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px transparent; transition: box-shadow .15s; }
-.person .all { border-radius: 50%; background: #262626; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
-.person[aria-pressed="true"] .av, .person[aria-pressed="true"] .all { box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--brand); }
-.person[aria-pressed="true"] { color: var(--brand); font-weight: 800; }
-.feedcard { margin: 0 12px 12px; background: var(--surface); border-radius: 18px; padding: 14px; box-shadow: 0 2px 12px -6px rgba(0,0,0,.18); display: flex; flex-direction: column; gap: 12px; }
-.feedcard .top { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
-.feedcard .top .av { width: 30px; height: 30px; }
-.feedcard .dish-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; }
-.feedcard .art { width: 64px; height: 64px; }
-.feedcard .dn { font-weight: 800; font-size: 15px; }
-.feedcard .pl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-.feedcard .acts { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
-.ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; height: 32px; padding: 0 12px; font-weight: 700; font-size: 12.5px; }
-.fempty { margin: 0 12px 12px; padding: 22px 16px; text-align: center; border: 1px dashed #d6d6d6; border-radius: 16px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-.sugg { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
-.sugg + .sugg { border-top: 1px solid var(--line); }
-.sugg .av { width: 40px; height: 40px; }
-.sugg b { font-size: 14px; display: block; }
-.sugg small { font-size: 12px; color: var(--muted); }
-.followbtn { border: 1px solid var(--brand); background: var(--brand); color: #fff; border-radius: 10px; height: 34px; min-width: 96px; font-weight: 800; font-size: 13px; }
-.followbtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); border-color: var(--line); }
-.linkcard { margin: 4px 12px 12px; width: calc(100% - 24px); display: flex; align-items: center; gap: 12px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
-.linkcard svg { width: 22px; height: 22px; color: var(--brand); flex-shrink: 0; }
-.linkcard b { display: block; font-size: 14px; }
-.linkcard small { font-size: 12px; color: var(--muted); }
-
-/* ---------- Restaurant ---------- */
-.rest-hero { margin: 0 12px 14px; background: var(--surface); border-radius: 20px; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; box-shadow: 0 2px 10px -4px rgba(0,0,0,.12); }
-.rest-hero h1 { font-weight: 800; font-size: 24px; line-height: 1.15; margin: 0; }
-.rest-hero .meta { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
-.rest-hero .meta span + span::before { content: "·"; margin-right: 10px; color: #bbb; }
-.rest-hero .time { color: var(--green); background: var(--green-soft); padding: 3px 8px; border-radius: 8px; font-weight: 700; font-size: 12px; }
-.rest-hero .rate { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-.rest-hero .rate small { font-size: 10.5px; color: var(--muted); border-bottom: 1px dashed #bbb; }
-.rest-hero .offer { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px; font-weight: 700; color: #256fef; }
-.rest-hero .offer svg { width: 18px; height: 18px; }
-
-.picks { margin: 0 12px 18px; border-radius: 20px; background: linear-gradient(180deg, var(--brand-soft), var(--surface) 64px); border: 1px solid var(--brand-line); padding: 14px 14px 4px; }
-.picks-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.picks-head h2 { font-weight: 800; font-size: 17px; margin: 0; color: var(--brand); }
-.picks-head span { font-size: 11px; color: var(--muted); }
-.prow { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
-.prow + .prow { border-top: 1px dashed var(--line); }
-.prow .art { width: 52px; height: 52px; border-radius: 12px; }
-.prow .dn { font-weight: 800; font-size: 14.5px; margin-bottom: 3px; }
-.prow .src { display: flex; gap: 6px; align-items: flex-start; }
-.gicon { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; flex-shrink: 0; }
-.gicon.repeat { background: var(--green-soft); color: var(--green); }
-.gicon.ratings { background: var(--neutral-soft); color: #555; }
-.gicon svg { width: 13px; height: 13px; }
-
-.rsearch { flex: 1; min-width: 0; height: 44px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); display: flex; align-items: center; gap: 10px; padding: 0 16px; color: #8a8a8a; font-size: 14.5px; box-sizing: border-box; }
-.rsearch svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; }
-.rchips { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 14px; scrollbar-width: none; }
-.rchips::-webkit-scrollbar { display: none; }
-.rchip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 12px; border: 1px solid #e2e2e2; background: var(--surface); font-size: 13px; font-weight: 600; }
-.rchip svg { width: 15px; height: 15px; }
-.rchip .g { color: var(--brand); }
-.rchip[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand-line); }
-.reo { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-top: 6px; }
-.reo .bar { width: 46px; height: 6px; border-radius: 4px; background: #e6e6e6; overflow: hidden; }
-.reo .bar i { display: block; height: 100%; background: var(--green); border-radius: 4px; }
-.dish .tools { display: flex; gap: 10px; margin-top: 12px; }
-.circ { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #dcdcdc; background: var(--surface); display: grid; place-items: center; padding: 0; color: #555; }
-.circ svg { width: 17px; height: 17px; }
-.circ[aria-pressed="true"] { color: var(--brand); border-color: var(--brand-line); }
-.circ[aria-pressed="true"] svg { fill: currentColor; }
-.cmt { display: flex; gap: 8px; align-items: flex-start; width: 100%; margin-top: 10px; padding: 8px 10px; border: 1px solid #ececec; border-radius: 12px; background: #fafafa; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; }
-.cmt .av { width: 22px; height: 22px; }
-.cmt q { font-style: italic; }
-.cmt q::before { content: "“"; } .cmt q::after { content: "”"; }
-.cmt .more { display: block; color: var(--brand); font-weight: 700; margin-top: 3px; font-style: normal; }
-.feedcard .say { font-size: 13px; font-style: italic; color: #3f3f3f; background: #fafafa; border-left: 3px solid var(--brand-line); padding: 6px 10px; border-radius: 0 8px 8px 0; }
-.clist { display: flex; flex-direction: column; }
-.citem { display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding: 12px 0; }
-.citem + .citem { border-top: 1px dashed var(--line); }
-.citem .av { width: 36px; height: 36px; }
-.citem .who { font-size: 13.5px; }
-.citem p { margin: 4px 0 0; font-size: 14px; line-height: 1.45; }
-.custom { font-size: 11.5px; color: #9a9a9a; margin-top: 6px; }
-.menufab { position: absolute; right: 14px; bottom: 82px; z-index: 6; display: inline-flex; align-items: center; gap: 8px; background: #262626; color: #fff; border: 0; border-radius: 16px; padding: 12px 18px; font-weight: 700; font-size: 15px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
-.menufab svg { width: 18px; height: 18px; }
-.offerbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 14px 16px 18px; background: linear-gradient(180deg, #f2f5ff, #e9eeff); border-top: 1px solid #dfe5fb; font-size: 13.5px; font-weight: 700; }
-.offerbar .pct { width: 28px; height: 28px; border-radius: 8px; background: #2f6cf5; color: #fff; display: grid; place-items: center; font-size: 15px; font-weight: 800; transform: rotate(-8deg); flex-shrink: 0; }
-.offerbar .t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.offerbar .see { color: #8a8a8a; font-weight: 600; font-size: 13px; white-space: nowrap; }
-.menu-head { padding: 0 16px 4px; display: flex; align-items: baseline; justify-content: space-between; }
-.menu-head h3 { font-weight: 800; font-size: 17px; margin: 0; }
-.menu-head span { font-size: 12px; color: var(--muted); }
-.menu { background: var(--surface); border-radius: 20px 20px 0 0; margin-top: 8px; overflow: hidden; }
-.dish { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 18px 16px; border-bottom: 1px dashed var(--line); }
-.dish .info { min-width: 0; }
-.dish .dn { font-weight: 700; font-size: 16px; margin-top: 6px; }
-.dish .price { font-size: 15px; font-weight: 600; margin-top: 6px; font-variant-numeric: tabular-nums; }
-.dish .desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
-.dish .side { display: flex; flex-direction: column; align-items: center; }
-.dish .side .art { width: 112px; height: 104px; border-radius: 16px; }
-.dish .side .add, .dish .side .stepper { margin-top: -18px; position: relative; z-index: 1; box-shadow: 0 4px 10px -4px rgba(0,0,0,.18); min-width: 104px; height: 40px; font-size: 16px; }
-.dish .side .stepper button { height: 40px; width: 32px; }
-.best { display: inline-block; font-size: 11px; font-weight: 700; color: #e2a03b; background: #fff6e8; border: 1px solid #f7deb3; padding: 1px 6px; border-radius: 4px; vertical-align: 1px; }
-.menu-end { padding: 18px 16px 150px; font-size: 12px; color: var(--muted); text-align: center; }
-
-.add { min-width: 80px; height: 34px; border-radius: 10px; border: 1px solid #1f8a4c; background: #eefaf2; color: #1f7a43; font-weight: 800; font-size: 14px; letter-spacing: .04em; position: relative; }
-.add::after { content: "+"; position: absolute; top: 1px; right: 6px; font-size: 13px; font-weight: 800; }
-.stepper { min-width: 80px; height: 34px; border-radius: 10px; background: var(--brand); color: var(--brand-ink); display: inline-flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
-.stepper button { border: 0; background: none; color: inherit; width: 26px; height: 34px; font-size: 17px; font-weight: 800; padding: 0; }
-
-.cartbar { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 7; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink); text-align: left; box-shadow: 0 10px 24px -10px rgba(31,138,76,.7); }
-.cartbar small { display: block; font-size: 12px; opacity: .9; font-variant-numeric: tabular-nums; }
-.cartbar b { font-size: 15px; }
-.cartbar .go { font-weight: 800; display: flex; align-items: center; gap: 4px; }
-
-/* ---------- Cart / delivered ---------- */
-.block { background: var(--surface); margin: 0 12px 12px; border-radius: 16px; padding: 4px 14px; border: 1px solid var(--line); }
-.block-title { font-size: 11.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 800; margin: 14px 16px 8px; }
-.line { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 0; }
-.line + .line { border-top: 1px solid var(--line); }
-.line .name { font-weight: 700; font-size: 14px; }
-.line .amt { font-variant-numeric: tabular-nums; font-size: 14px; min-width: 52px; text-align: right; }
-.bill { display: flex; justify-content: space-between; font-size: 14px; padding: 7px 0; font-variant-numeric: tabular-nums; color: var(--muted); }
-.bill.total { color: var(--ink); font-weight: 800; border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 4px; }
-.addr { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
-.addr b { color: var(--ink); display: block; font-size: 14px; }
-.addr svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
-.empty { text-align: center; padding: 60px 24px; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
-.footer { padding: 12px 12px 16px; background: var(--surface); border-top: 1px solid var(--line); }
-.primary { width: 100%; height: 50px; border-radius: 14px; border: 0; background: var(--brand); color: var(--brand-ink); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.primary.split { justify-content: space-between; padding: 0 16px; text-align: left; }
-.primary.split small { display: block; font-size: 10px; font-weight: 700; opacity: .85; letter-spacing: .08em; }
-.primary:disabled { opacity: .75; cursor: progress; }
-.secondary { width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 800; font-size: 15px; }
-.linkbtn { border: 0; background: none; color: var(--brand); font-weight: 700; font-size: 13px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
-.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.done-wrap { padding: 26px 20px 20px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
-.done-badge { width: 84px; height: 84px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: #fff; animation: pop .4s cubic-bezier(.3,1.5,.6,1); }
-.done-badge svg { width: 42px; height: 42px; }
-@keyframes pop { from { transform: scale(.5); opacity: 0; } }
-.done-wrap h2 { font-weight: 800; font-size: 26px; margin: 0; }
-.done-wrap p { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.receipt { width: 100%; text-align: left; box-sizing: border-box; margin: 0; }
-.receipt .line { grid-template-columns: 52px 1fr auto; }
-.receipt .art { width: 52px; height: 52px; border-radius: 12px; }
-.done-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-
-/* ---------- Profile / privacy ---------- */
-.profile { display: flex; align-items: center; gap: 14px; padding: 6px 16px 16px; }
-.profile .av { width: 60px; height: 60px; }
-.profile b { display: block; font-size: 22px; font-weight: 800; }
-.profile small { font-size: 13px; color: var(--muted); display: block; }
-.profile .handle { font-size: 13.5px; font-weight: 700; color: var(--ink); }
-.toggle-row + .toggle-row { border-top: 1px solid var(--line); }
-.toggle-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 14px 0; }
-.toggle-row b { font-size: 15px; display: block; margin-bottom: 4px; }
-.toggle-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-.switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #c8c8c8; position: relative; transition: background .2s; padding: 0; }
-.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
-.switch[aria-checked="true"] { background: var(--green); }
-.switch[aria-checked="true"]::after { transform: translateX(20px); }
-.mypick { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
-.mypick + .mypick { border-top: 1px solid var(--line); }
-.mypick .art { width: 44px; height: 44px; border-radius: 10px; }
-.mypick .name { font-weight: 700; font-size: 14px; }
-.mypick .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.mypick.is-hidden .art, .mypick.is-hidden .name { opacity: .45; }
-.mypick.is-new .name::after { content: "New"; margin-left: 6px; font-size: 10px; font-weight: 800; color: var(--brand); background: var(--brand-soft); padding: 2px 6px; border-radius: 6px; vertical-align: 1px; }
-.hidebtn { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 800; }
-.hidebtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.sharing-off .mypick { opacity: .55; }
-.off-note { font-size: 12.5px; color: var(--friend-ink); background: var(--friend-soft); border-radius: 10px; padding: 10px 12px; margin: 10px 0 4px; line-height: 1.45; }
-.seen-as { margin: 0 12px 12px; padding: 12px 14px; border-radius: 14px; background: var(--friend-soft); border: 1px solid var(--friend-line); font-size: 13px; line-height: 1.55; }
-.seen-as b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--friend-ink); margin-bottom: 4px; }
-.rules { margin: 0 12px 12px; padding: 4px 14px 4px 30px; }
-.rules li { font-size: 12.5px; line-height: 1.5; color: var(--muted); padding: 4px 0; }
-
-/* ---------- Sheets ---------- */
-.scrim { position: absolute; inset: 0; background: rgba(20,14,14,.48); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
+/* ---------- Sheets & toast ---------- */
+.scrim { position: absolute; inset: 0; background: rgba(20,20,20,.48); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
 .scrim.open { opacity: 1; visibility: visible; transition: opacity .2s; }
-.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--surface); border-radius: 24px 24px 0 0; padding: 10px 20px 20px; transform: translateY(105%); transition: transform .28s cubic-bezier(.2,.9,.3,1); display: flex; flex-direction: column; gap: 14px; max-height: 88%; overflow-y: auto; box-sizing: border-box; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; border-radius: 24px 24px 0 0; padding: 10px 20px 22px; transform: translateY(105%); transition: transform .28s cubic-bezier(.2,.9,.3,1); display: flex; flex-direction: column; gap: 14px; max-height: 88%; overflow-y: auto; box-sizing: border-box; }
 .sheet.open { transform: none; }
-.sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); align-self: center; flex-shrink: 0; }
-.sheet h2 { font-weight: 800; font-size: 21px; margin: 2px 0 0; text-wrap: balance; }
-.sheet-dish { display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; }
-.sheet-dish .art { width: 72px; height: 72px; }
-.sheet-dish .dn { font-weight: 800; font-size: 16px; }
-.sheet-dish .pl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-.quote { font-size: 13.5px; line-height: 1.45; padding: 10px 12px; border-radius: 12px; display: flex; gap: 8px; align-items: flex-start; }
-.quote.friends { background: var(--friend-soft); }
-.quote.repeat { background: var(--green-soft); }
-.quote.ratings { background: var(--neutral-soft); }
-.why-body { display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; line-height: 1.5; }
-.why-body p { margin: 0; }
-.why-body .k { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: var(--muted); }
-.places { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.places li { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; }
-.places li span { width: 26px; height: 26px; border-radius: 8px; background: var(--green-soft); color: var(--green); display: grid; place-items: center; }
-.places li svg { width: 14px; height: 14px; }
-.gsize { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--green-line); border-radius: 12px; }
-.gsize b { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); }
-.gsize span { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
-.note { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; align-items: flex-start; }
-.note svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
-.sheet-actions { display: flex; flex-direction: column; gap: 6px; align-items: center; }
-.fav-art { width: 64px; height: 64px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; align-self: center; }
-.fav-art svg { width: 30px; height: 30px; }
-#sheet-fav { text-align: center; }
-#sheet-fav p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
-.preview { text-align: left; border: 1px solid var(--friend-line); background: var(--friend-soft); border-radius: 14px; padding: 10px 12px; display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; }
-.preview .art { width: 44px; height: 44px; border-radius: 10px; }
-.preview small { display: block; font-size: 10.5px; color: var(--friend-ink); text-transform: uppercase; letter-spacing: .08em; font-weight: 800; margin-bottom: 2px; }
-.preview span { font-size: 13px; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-.addr-list { display: flex; flex-direction: column; gap: 10px; }
-.addr-opt { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 12px; }
-.addr-opt[aria-pressed="true"] { border-color: var(--brand); background: #fff8f8; }
-.addr-opt .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--neutral-soft); display: grid; place-items: center; }
+.sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: #e2e2e2; align-self: center; flex-shrink: 0; }
+.sheet h2 { font-weight: 800; font-size: 21px; margin: 2px 0 0; }
+.addr-opt { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 12px; }
+.addr-opt[aria-pressed="true"] { border-color: var(--green); background: var(--green-soft); }
+.addr-opt .ic { width: 40px; height: 40px; border-radius: 12px; background: #f2f2f2; display: grid; place-items: center; }
 .addr-opt .ic svg { width: 20px; height: 20px; }
 .addr-opt b { display: block; font-size: 15px; }
 .addr-opt small { font-size: 12.5px; color: var(--muted); }
 .addr-opt .tick { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; box-sizing: border-box; }
-.addr-opt[aria-pressed="true"] .tick { border: 6px solid var(--brand); }
-
+.addr-opt[aria-pressed="true"] .tick { border: 6px solid var(--green); }
 .toast { position: absolute; left: 14px; right: 14px; top: 54px; z-index: 60; background: #1c1c1c; color: #fff; border-radius: 12px; padding: 11px 14px; font-size: 13px; line-height: 1.4; transform: translateY(-140%); opacity: 0; transition: transform .25s ease, opacity .25s ease; pointer-events: none; }
 .toast.show { transform: none; opacity: 1; }
 
-/* ---------- Phone-width viewers: the app fills the screen ---------- */
 @media (max-width: 780px) {
   .guide { display: none; }
   .stage { padding: 0; display: block; height: 100%; min-height: 0; }
@@ -483,909 +223,335 @@ button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   <aside class="guide" aria-label="About this prototype">
     <p class="eyebrow">PM portfolio · feature teardown</p>
     <h1>Taste&#8209;matched picks</h1>
-    <div>
-      <h2>The problem</h2>
-      <ul>
-        <li>Ratings bunch between 4.1 and 4.5, so stars don't help you choose.</li>
-        <li>Friends' food tips get lost in WhatsApp and memory.</li>
-        <li>Worst moment: new to the area, hungry at 9 pm, no usual place yet.</li>
-      </ul>
-    </div>
-    <div>
-      <h2>Run it in 60 seconds</h2>
-      <ol id="guide-steps">
-        <li data-step="1"><span class="n">1</span><span>On Home, tap the reason under Riya's pick</span></li>
-        <li data-step="2"><span class="n">2</span><span>Add to cart and place the order</span></li>
-        <li data-step="3"><span class="n">3</span><span>Under <b>Order again</b>, reorder Ghee roast dosa, then <b>Recommend</b></span></li>
-        <li data-step="4"><span class="n">4</span><span>Open the <b>Friends</b> tab and follow Arjun</span></li>
-        <li data-step="5"><span class="n">5</span><span>Tap <b>Home ▾</b> and switch to Office to see the ratings fallback</span></li>
-        <li data-step="6"><span class="n">6</span><span>Open <b>Profile</b> and hide a shared pick</span></li>
-      </ol>
-    </div>
-    <button class="restart" type="button" data-action="restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Restart demo</button>
-    <p class="fine">Concept prototype styled after a food delivery app. Not affiliated with any company. Invented names and data. Dish art: Fluent Emoji 3D by Microsoft (MIT). Avatars: ToonHead by Johan Melin (CC BY 4.0), via DiceBear.</p>
+    <p>Dish picks from repeat orders, not star ratings: from friends you choose, and from groups of 20+ nearby people who reorder the same places as you.</p>
+    <ol id="build-steps">
+      <li class="done">Home</li>
+      <li>Search</li>
+      <li>Restaurant menu</li>
+      <li>Why this pick? and other sheets</li>
+      <li>Profile settings</li>
+      <li>Demo controls</li>
+    </ol>
+    <p class="fine">Concept prototype. Not affiliated with any company. Invented restaurants, people and prices. Photo tiles are stand-ins until real, credited stock photos are added.</p>
   </aside>
 
   <div class="phone" id="phone">
-    <div class="statusbar dark" id="statusbar"><span>9:02</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
+    <div class="statusbar" id="statusbar"><span>21:45</span><span class="icons"><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg><span class="batt"></span></span></div>
 
     <div class="screens">
-      <!-- Home -->
-      <section class="screen active with-nav" id="s-home" aria-label="Home">
-        <div class="scroll">
-          <header class="hero">
+      <!-- ================= HOME ================= -->
+      <section class="screen active" id="s-home" aria-label="Home">
+        <div class="scroll" id="home-scroll">
+          <div class="top">
             <div class="loc-row">
               <button class="loc" type="button" data-action="addr" aria-label="Change delivery address">
                 <b><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="loc-name">Home</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></b>
-                <span class="line" id="loc-line">Flat 4B, Maple Lane, Greenfield Nagar</span>
+                <span class="line" id="loc-line"></span>
               </button>
-              <button class="me" type="button" data-tab="s-privacy" aria-label="Profile" data-avatar="ananya"></button>
+              <button class="me" type="button" data-action="profile" aria-label="Profile">A</button>
             </div>
             <div class="search-row">
-              <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search "paneer roll"<span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></div>
+              <button class="search" type="button" data-action="search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search "biryani"<span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></button>
               <button class="vegtog" type="button" id="veg-toggle" aria-pressed="false">VEG<span class="sw"></span></button>
             </div>
-            <div class="promo" aria-label="Promotion">
-              <div class="deco d1 i-roll"></div><div class="deco d2 i-cold"></div><div class="deco d3 i-jamun"></div><div class="deco d4 i-gdosa"></div>
-              <span class="kicker">NEW IN TOWN?</span>
-              <strong>Picks you<br>can trust</strong>
-              <span class="pillnote">Repeat orders, not stars</span>
-            </div>
-            <div class="dots" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i></div>
-          </header>
-          <div class="gold-wrap" style="background:var(--surface);padding-bottom:2px">
-            <div class="gold"><span class="crown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></span>
-              <span><b id="new-title">New to Greenfield Nagar?</b> Picks below come from what people reorder, not star ratings.</span></div>
           </div>
+          <div class="deals" aria-label="Deals">
+            <div class="slide on"><div class="ufo"></div><div class="plaque"><div class="l1">ITEMS UNDER</div><div class="l2">₹149</div></div><div class="ribbon">EXPLORE CRAZY DEALS</div></div>
+            <div class="slide"><div class="plaque teal"><div class="l1">FLAT</div><div class="l2">50% OFF</div></div><div class="ribbon">ON YOUR FIRST 3 ORDERS</div></div>
+            <div class="slide"><div class="plaque violet"><div class="l1">FREE DESSERT</div><div class="l2">₹299+</div></div><div class="ribbon">TONIGHT ONLY</div></div>
+            <div class="dots" id="deal-dots"><button type="button" data-slide="0" aria-label="Deal 1" aria-current="true"></button><button type="button" data-slide="1" aria-label="Deal 2"></button><button type="button" data-slide="2" aria-label="Deal 3"></button></div>
+          </div>
+          <div class="member"><span class="crown"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 11H5z"/></svg></span><span><b>FREE delivery</b> with membership above <b>₹49</b> <s>₹99</s> at your current location.</span></div>
+
           <div class="cats" id="cats">
-            <button class="cat" type="button" aria-pressed="true"><span class="cimg c-all"></span>All</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-rolls"></span>Rolls</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-thali"></span>Thali</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-biryani"></span>Biryani</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-dosa"></span>Dosa</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-dessert"></span>Desserts</button>
-            <button class="cat" type="button" aria-pressed="false"><span class="cimg c-coffee"></span>Coffee</button>
+            <button class="meals" type="button" data-action="meals"><span class="t">MEALS UNDER</span><span class="p">₹250</span><span class="e">Explore ›</span></button>
           </div>
-          <div class="fchips" id="fchips">
-            <button class="fchip" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters<svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px"><path d="M6 9h12l-6 7z"/></svg></button>
-            <button class="fchip" type="button" aria-pressed="false"><svg class="bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Near &amp; Fast</button>
-            <button class="fchip" type="button" aria-pressed="false"><svg class="bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Highly reordered</button>
-            <button class="fchip" type="button" aria-pressed="false">Rating 4.0+</button>
+          <div class="chips">
+            <button class="chip" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters<svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px"><path d="M6 9h12l-6 7z"/></svg></button>
+            <button class="chip" type="button" id="chip-fast" aria-pressed="false"><svg class="g" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Near &amp; Fast</button>
+            <button class="chip" type="button" aria-pressed="false">No packaging charges</button>
           </div>
-          <div class="chipbar-end"></div>
 
-          <section class="section" aria-labelledby="sec-a">
-            <div class="sec-head">
-              <div class="row"><h2 id="sec-a">From your friends</h2><button class="seeall" type="button" data-tab="s-friends">See all</button></div>
-              <p>Friends who chose to share their favourites.</p>
-            </div>
-            <div class="rail" id="rail-friends"></div>
+          <section class="sec" id="sec-friends" aria-labelledby="h-friends">
+            <div class="sec-h"><h2 id="h-friends">From your friends</h2></div>
+            <div class="hrow" id="row-friends"></div>
           </section>
 
-          <section class="section" aria-labelledby="sec-b">
-            <div class="sec-head">
-              <div class="row"><h2 id="sec-b"></h2><span class="basis" id="sec-b-basis"></span></div>
-              <p id="sec-b-sub"></p>
-            </div>
-            <div class="glist" id="group-list"></div>
+          <section class="sec" id="sec-group" aria-labelledby="h-group">
+            <div class="sec-h"><h2 id="h-group"></h2><p id="sub-group"></p><span class="basis" id="basis-group" hidden>Based on ratings</span></div>
+            <div class="hrow" id="row-group"></div>
           </section>
 
-          <section class="section" aria-labelledby="sec-o">
-            <div class="sec-head"><div class="row"><h2 id="sec-o">Order again</h2></div></div>
-            <div class="rail" id="rail-again"></div>
+          <section class="sec" aria-labelledby="h-rec">
+            <div class="sec-h"><h2 id="h-rec">Recommended for you</h2></div>
+            <div class="grid3" id="grid-rec"></div>
           </section>
-
-          <section class="section" aria-labelledby="sec-c">
-            <div class="sec-head"><div class="row"><h2 id="sec-c">Restaurants for you</h2></div></div>
-            <div class="rail" id="rest-grid"></div>
-          </section>
-
-          <section class="section" aria-labelledby="sec-all">
-            <div class="sec-head" style="padding-bottom:4px"><div class="row"><h2 id="sec-all">All restaurants</h2></div></div>
-            <div class="featured-label">Featured</div>
-            <div id="rest-list"></div>
-          </section>
-          <p class="home-end">Made-up restaurants, people and prices.<br><button type="button" data-action="restart">Restart demo</button></p>
-        </div>
-      </section>
-
-      <!-- Friends tab -->
-      <section class="screen with-nav" id="s-friends" aria-label="Friends">
-        <div class="scroll">
-          <div class="fhero"><h1>Friends' picks</h1><p>Dishes people you follow keep reordering. Friends who chose to share, plus public profiles you follow.</p></div>
-          <div class="following" id="following"></div>
-          <div class="section" style="margin-top:12px">
-            <div class="sec-head"><div class="row"><h2 id="feed-title">From people you follow</h2></div></div>
-            <div id="feed"></div>
-          </div>
-          <div class="section">
-            <div class="sec-head"><div class="row"><h2>Friends who share picks</h2></div><p>From your contacts, so you see their name and username.</p></div>
-            <div class="block" id="suggest"></div>
-          </div>
-          <div class="section">
-            <div class="sec-head"><div class="row"><h2>Public profiles near you</h2></div><p>People who turned on a public profile. You only see their username.</p></div>
-            <div class="block" id="suggest-public"></div>
-          </div>
-          <button class="linkcard" type="button" data-tab="s-privacy">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-            <span><b>Your shared picks</b><small>Choose what friends can see</small></span>
-          </button>
-        </div>
-      </section>
-
-      <!-- Restaurant -->
-      <section class="screen" id="s-rest" aria-label="Restaurant">
-        <div class="topbar">
-          <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
-          <div class="rsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="rsearch-text">Search "roll"</span></div>
-        </div>
-        <div class="scroll" id="rest-body"></div>
-        <button class="menufab" type="button" data-action="jump-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 0-3 2-3 5s1 4 3 4v9"/></svg>Menu</button>
-        <div class="offerbar" id="offerbar"><span class="pct">%</span><span class="t" id="offerbar-text"></span><span class="see">See all offers</span></div>
-        <button class="cartbar" type="button" data-go="s-cart" id="cartbar" hidden>
-          <span><b id="cartbar-count">1 item added</b><small id="cartbar-total">₹0</small></span>
-          <span class="go">View cart <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
-        </button>
-      </section>
-
-      <!-- Cart -->
-      <section class="screen" id="s-cart" aria-label="Cart">
-        <div class="topbar">
-          <button class="iconbtn" type="button" data-action="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
-          <h2 class="screen-title">Your cart</h2>
-        </div>
-        <div class="scroll" id="cart-body"></div>
-        <div class="footer" id="cart-footer"><button class="primary split" type="button" id="place-order">Place order</button></div>
-      </section>
-
-      <!-- Order delivered -->
-      <section class="screen" id="s-done" aria-label="Order delivered">
-        <div class="scroll">
-          <div class="done-wrap">
-            <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-            <div><h2>Order delivered</h2><p id="done-from"></p></div>
-            <div class="block receipt" id="done-items"></div>
-            <div class="done-actions">
-              <button class="primary" type="button" data-action="reorder">Order again</button>
-              <button class="secondary" type="button" data-action="home">Back to home</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Profile / privacy -->
-      <section class="screen with-nav" id="s-privacy" aria-label="Profile">
-        <div class="scroll">
-          <div class="profile"><span class="av" data-avatar="ananya"></span><div><b>Ananya</b><small class="handle">@ananya_newintown</small><small>Greenfield Nagar · joined 3 weeks ago</small></div></div>
-          <div class="block-title" style="margin-top:0">Sharing &amp; privacy</div>
-          <div class="block">
-            <div class="toggle-row">
-              <div>
-                <b id="share-label">Share my favourites with friends</b>
-                <p>Friends see the dish and a label like "keeps coming back to this". Never how often, when, or what you paid.</p>
-              </div>
-              <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="share-label" id="share-toggle"></button>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <b id="public-label">Public profile</b>
-                <p>Let people who aren't in your contacts see your username and shared picks. They never see your real name.</p>
-              </div>
-              <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="public-label" id="public-toggle"></button>
-            </div>
-          </div>
-          <div class="block-title">My shared picks</div>
-          <div class="block" id="mypicks-block">
-            <div class="off-note" id="off-note" hidden>Sharing is off, so friends can't see any of these.</div>
-            <div id="mypicks"></div>
-          </div>
-          <div class="seen-as"><b>What your contacts see</b><span id="seen-as"></span></div>
-          <div class="seen-as"><b>What everyone else sees</b><span id="seen-public"></span></div>
-          <div class="block-title">How we protect you</div>
-          <ul class="rules">
-            <li>Strangers never see your real name. They only see your username if you turn on a public profile.</li>
-            <li>Otherwise your orders only count inside groups of 20 or more people, with no names or usernames.</li>
-            <li>Friends only appear to you if they opted in, and you only appear to friends while this switch is on.</li>
-          </ul>
-          <p class="home-end"><button type="button" data-action="restart">Restart demo</button></p>
+          <div class="home-end"></div>
         </div>
       </section>
     </div>
 
     <nav class="bottomnav" id="bottomnav" aria-label="Main">
-      <button type="button" data-tab="s-home" class="on"><svg class="ic-home" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>Home</button>
-      <button type="button" data-tab="s-friends"><svg class="ic-friends" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5M16 14.6c2.6 0 4.6 1.7 5.5 4.9"/></svg>Friends<span class="dot" id="friends-dot"></span></button>
-      <button type="button" data-tab="s-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profile</button>
+      <button type="button" class="on" data-nav="home"><svg class="ic-home" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>Home</button>
+      <button type="button" data-nav="healthy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9-9c-1.3-3 .6-6.5 4-6.5 2 0 3.4 1 5 2.8 1.6-1.8 3-2.8 5-2.8 3.4 0 5.3 3.5 4 6.5-2 4.6-9 9-9 9z"/><path d="M14 9l1 2 2 .5-2 .5-1 2-1-2-2-.5 2-.5z" fill="currentColor"/></svg>Healthy</button>
+      <button type="button" data-nav="dining"><svg class="ic-dine" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17h18v2H3zM12 6a8 8 0 0 0-8 8v1h16v-1a8 8 0 0 0-8-8zm-1-3h2v2h-2z"/></svg>Dining</button>
     </nav>
 
-    <!-- Sheets -->
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
-
-    <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
-      <div class="grab"></div>
-      <h2 id="why-title">Why this pick?</h2>
-      <div class="sheet-dish"><div class="art" id="why-art"></div><div><div class="dn" id="why-name"></div><div class="pl" id="why-place"></div></div></div>
-      <div class="quote" id="why-quote"></div>
-      <div class="why-body" id="why-body"></div>
-      <div class="sheet-actions">
-        <button class="primary" type="button" id="why-add">Add to cart</button>
-        <button class="linkbtn" type="button" id="why-rest">View restaurant</button>
-      </div>
-    </section>
-
-    <section class="sheet" id="sheet-cmt" role="dialog" aria-modal="true" aria-labelledby="cmt-title">
-      <div class="grab"></div>
-      <h2 id="cmt-title">What people say</h2>
-      <div class="sheet-dish"><div class="art" id="cmt-art"></div><div><div class="dn" id="cmt-name"></div><div class="pl" id="cmt-place"></div></div></div>
-      <div class="clist" id="cmt-list"></div>
-      <p class="note" id="cmt-note"></p>
-      <div class="sheet-actions"><button class="primary" type="button" id="cmt-add">Add to cart</button></div>
-    </section>
-
-    <section class="sheet" id="sheet-fav" role="dialog" aria-modal="true" aria-labelledby="fav-title">
-      <div class="grab"></div>
-      <div class="fav-art"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></div>
-      <h2 id="fav-title">Looks like a favourite. Recommend it to your friends?</h2>
-      <p>Friends will see the dish and a label. They won't see how often you ordered it, when, or what you paid.</p>
-      <div class="preview"><div class="art" id="fav-art"></div><div><small>Friends will see</small><span id="fav-preview"></span></div></div>
-      <div class="row2">
-        <button class="secondary" type="button" data-action="fav-no">Not now</button>
-        <button class="primary" type="button" data-action="fav-yes">Recommend</button>
-      </div>
-    </section>
-
     <section class="sheet" id="sheet-addr" role="dialog" aria-modal="true" aria-labelledby="addr-title">
       <div class="grab"></div>
       <h2 id="addr-title">Deliver to</h2>
-      <div class="addr-list" id="addr-opts"></div>
+      <div id="addr-opts" style="display:flex;flex-direction:column;gap:10px"></div>
     </section>
-
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 <script>
 (function () {
-  /*@AVATARS@*/
+  /* Photo ids the page uses. build.py embeds assets/photos/<id>.jpg for each one it finds. */
+  const PHOTO_IDS = /*@PHOTO_IDS*/["hyd","c65","vhyd","dkm","mirchi","kolk","kosha","luchi","mishti","fishfry","lko","galouti","sheermal","phirni","nihari","vlko","butter","roll","dal","naan","chole","jamun","smomo","vmomo","fmomo","thukpa","lasagna","pizza","pasta","tiramisu","vfr","hakka","chilli","manch","cfr","cold","sandwich","croissant","brownie","mdosa","idli","filter","cat-all"];
+  const HAS_PHOTO = new Set(/*@HAS_PHOTO@*/[]);
 
   /* ---------------- Data (all invented) ---------------- */
+  // delivers: which saved addresses this restaurant delivers to
   const RESTS = {
-    sr: { name: "Spice Route Kitchen", cuisine: "North Indian, Rolls", eta: "30–35 mins", km: "1.8 km", rating: "4.3", count: "2.4K", offer: "Flat ₹75 OFF above ₹299", menu: ["roll", "dal", "chroll", "butter", "chole", "rice", "naan", "jamun"] },
-    uc: { name: "Udupi Corner",        cuisine: "South Indian",        eta: "20–25 mins", km: "1.1 km", rating: "4.2", count: "1.8K", offer: "50% OFF up to ₹100",       menu: ["gdosa", "mdosa", "vada", "bisi", "filter"] },
-    ll: { name: "Lucknow Lane",        cuisine: "Biryani, Awadhi",     eta: "35–40 mins", km: "2.6 km", rating: "4.4", count: "3.1K", offer: "₹140 OFF above ₹399",      menu: ["vbir", "cbir", "kebab", "sheermal", "raita", "phirni"] },
-    bs: { name: "Bean Street",         cuisine: "Cafe, Bakes",         eta: "15–20 mins", km: "0.8 km", rating: "4.1", count: "960",  offer: "Free delivery",            menu: ["cold", "cappu", "croissant", "sandwich", "cake"] }
+    nizam: { name: "Nizam's Pot",        cuisine: "Biryani, Hyderabadi", eta: "30-35 mins", rating: "4.3", offer: "50% OFF select items", fast: false, cover: "hyd",     tone: ["#f3e2c4","#c99b5b"], delivers: ["home", "office"] },
+    park:  { name: "Park Street Pantry", cuisine: "Bengali",             eta: "35-40 mins", rating: "4.2", offer: "₹75 OFF above ₹199",   fast: false, cover: "kosha",   tone: ["#f1d9c4","#b8714a"], delivers: ["home"] },
+    awadh: { name: "Awadh Handi",        cuisine: "Lucknowi, Kebabs",    eta: "40-45 mins", rating: "4.4", offer: "60% OFF select items", fast: false, cover: "lko",     tone: ["#f2e4cc","#b88d4f"], delivers: ["office"] },
+    spice: { name: "Spice Route Kitchen",cuisine: "North Indian",        eta: "25-30 mins", rating: "4.1", offer: "Flat ₹100 OFF",       fast: true,  cover: "butter",  tone: ["#f4d9c8","#c66a3e"], delivers: ["home", "office"] },
+    momo:  { name: "Momo Mountain",      cuisine: "Momos, Tibetan",      eta: "20-25 mins", rating: "4.0", offer: "Items at ₹99",        fast: true,  cover: "smomo",   tone: ["#eef0f2","#b7bcc4"], delivers: ["home", "office"] },
+    nonna: { name: "Trattoria Nonna",    cuisine: "Italian",             eta: "35-40 mins", rating: "4.4", offer: "₹150 OFF above ₹599",  fast: false, cover: "lasagna", tone: ["#f3dcc6","#c0603b"], delivers: ["home", "office"] },
+    wok:   { name: "Wok Republic",       cuisine: "Chinese",             eta: "30-35 mins", rating: "3.9", offer: "70% OFF up to ₹140",   fast: false, cover: "vfr",     tone: ["#f3ead2","#c9a45e"], delivers: ["home"] },
+    bean:  { name: "Bean Street",        cuisine: "Cafe, Bakes",         eta: "15-20 mins", rating: "3.8", offer: "10% OFF up to ₹40",    fast: true,  cover: "cold",    tone: ["#efe2d6","#9c7656"], delivers: ["home", "office"] },
+    udupi: { name: "Udupi Corner",       cuisine: "South Indian",        eta: "20-25 mins", rating: "3.6", offer: "Items starting at ₹49", fast: true, cover: "mdosa",   tone: ["#f5ecd0","#caa651"], delivers: ["home"] }
   };
-  const REST_ORDER = ["sr", "ll", "uc", "bs"];
+  const REC_ORDER = ["nizam", "spice", "nonna", "wok", "momo", "bean"];
   const DISHES = {
-    roll:  { reo: 0.9, custom: true, r: "sr", name: "Paneer kathi roll",   price: 189, veg: true,  best: true, desc: "Charred paneer tikka, pickled onion and mint chutney in a flaky paratha." },
-    dal:   { reo: 0.85, r: "sr", name: "Dal makhani",         price: 229, veg: true,  best: true, desc: "Black lentils slow-cooked overnight with butter and cream." },
-    chroll:{ reo: 0.55, custom: true, r: "sr", name: "Chicken tikka roll",  price: 219, veg: false, desc: "Smoky chicken tikka, egg-washed paratha, green chutney." },
-    butter:{ reo: 0.6, custom: true, r: "sr", name: "Butter chicken",      price: 319, veg: false, desc: "Tandoori chicken in a mild tomato and fenugreek gravy.", stars: "4.5", votes: "1.2K" },
-    chole: { reo: 0.5, r: "sr", name: "Chole bhature",       price: 199, veg: true,  desc: "Spiced chickpeas, two puffed bhature, onion salad." },
-    rice:  { reo: 0.3, r: "sr", name: "Jeera rice",          price: 149, veg: true,  desc: "Basmati tempered with cumin and ghee." },
-    naan:  { reo: 0.8, r: "sr", name: "Garlic naan",         price: 69,  veg: true,  desc: "Tandoor-baked, brushed with garlic butter." },
-    jamun: { reo: 0.4, r: "sr", name: "Gulab jamun (2 pcs)", price: 99,  veg: true,  desc: "Warm, soaked in cardamom syrup." },
-    gdosa: { reo: 0.9, r: "uc", name: "Ghee roast dosa",     price: 129, veg: true,  best: true, desc: "Crisp dosa roasted in ghee, with sambar and two chutneys." },
-    mdosa: { reo: 0.7, r: "uc", name: "Masala dosa",         price: 119, veg: true,  desc: "Spiced potato filling, coconut chutney." },
-    vada:  { reo: 0.5, r: "uc", name: "Medu vada (2 pcs)",   price: 99,  veg: true,  desc: "Crisp lentil doughnuts with sambar." },
-    bisi:  { reo: 0.4, r: "uc", name: "Bisi bele bath",      price: 139, veg: true,  desc: "Rice, lentils and vegetables in a tangy spice mix." },
-    filter:{ reo: 0.85, r: "uc", name: "Filter coffee",       price: 49,  veg: true,  desc: "Strong decoction, frothed with hot milk." },
-    vbir:  { reo: 0.8, custom: true, r: "ll", name: "Veg dum biryani",     price: 249, veg: true,  best: true, desc: "Basmati and vegetables sealed and slow-cooked with saffron." },
-    cbir:  { reo: 0.75, custom: true, r: "ll", name: "Chicken dum biryani", price: 299, veg: false, desc: "Awadhi-style, mildly spiced, with burani raita.", stars: "4.4", votes: "860" },
-    kebab: { reo: 0.7, r: "ll", name: "Galouti kebab",       price: 279, veg: false, desc: "Melt-in-the-mouth minced kebabs on mini paratha." },
-    sheermal:{ reo: 0.4, r: "ll", name: "Sheermal",          price: 59,  veg: true,  desc: "Saffron-tinted sweet flatbread." },
-    raita: { reo: 0.3, r: "ll", name: "Burani raita",        price: 69,  veg: true,  desc: "Yoghurt with roasted garlic." },
-    phirni:{ reo: 0.5, r: "ll", name: "Phirni",              price: 99,  veg: true,  desc: "Ground rice pudding, set in a clay bowl." },
-    cold:  { reo: 0.9, custom: true, r: "bs", name: "Cold coffee",         price: 159, veg: true,  best: true, desc: "Blended with ice cream, not too sweet." },
-    cappu: { reo: 0.6, custom: true, r: "bs", name: "Cappuccino",          price: 139, veg: true,  desc: "Double shot, house blend." },
-    croissant:{ reo: 0.5, r: "bs", name: "Butter croissant", price: 119, veg: true,  desc: "Baked every morning." },
-    sandwich:{ reo: 0.7, custom: true, r: "bs", name: "Grilled veg sandwich", price: 179, veg: true, desc: "Pesto, peppers and cheese on sourdough." },
-    cake:  { reo: 0.45, r: "bs", name: "Chocolate truffle slice", price: 129, veg: true, desc: "Dark chocolate ganache." }
+    hyd:     { r: "nizam", name: "Hyderabadi dum biryani", price: 299, veg: false },
+    c65:     { r: "nizam", name: "Chicken 65",             price: 249, veg: false },
+    vhyd:    { r: "nizam", name: "Veg Hyderabadi biryani", price: 239, veg: true },
+    dkm:     { r: "nizam", name: "Double ka meetha",       price: 99,  veg: true },
+    kolk:    { r: "park",  name: "Kolkata biryani",        price: 289, veg: false },
+    kosha:   { r: "park",  name: "Kosha mangsho",          price: 349, veg: false },
+    lko:     { r: "awadh", name: "Lucknowi biryani",       price: 319, veg: false },
+    galouti: { r: "awadh", name: "Galouti kebab",          price: 279, veg: false },
+    butter:  { r: "spice", name: "Butter chicken",         price: 319, veg: false },
+    roll:    { r: "spice", name: "Paneer kathi roll",      price: 189, veg: true },
+    dal:     { r: "spice", name: "Dal makhani",            price: 229, veg: true },
+    smomo:   { r: "momo",  name: "Steamed chicken momos",  price: 179, veg: false },
+    vmomo:   { r: "momo",  name: "Veg momos",              price: 149, veg: true },
+    lasagna: { r: "nonna", name: "Spinach & ricotta lasagna", price: 429, veg: true },
+    vfr:     { r: "wok",   name: "Veg Chinese fried rice", price: 189, veg: true },
+    hakka:   { r: "wok",   name: "Hakka noodles",          price: 179, veg: true },
+    chilli:  { r: "wok",   name: "Chilli chicken",         price: 249, veg: false },
+    cold:    { r: "bean",  name: "Cold coffee",            price: 159, veg: true },
+    mdosa:   { r: "udupi", name: "Masala dosa",            price: 119, veg: true }
   };
-
-  // Friends from contacts. Only opted-in friends are ever shown. "dev" has not opted in and must never appear.
-  const FRIENDS = {
-    riya:  { name: "Riya",  user: "riya.eats",      optIn: true,  share: "Riya chose to share her favourites. She's ordered this more than once." },
-    kabir: { name: "Kabir", user: "kabirbrews",     optIn: true,  share: "Kabir chose to share their favourites. They've ordered this more than once." },
-    meera: { name: "Meera", user: "meeramunches",   optIn: true,  share: "Meera chose to share their favourites. They've ordered this more than once." },
-    arjun: { name: "Arjun", user: "arjun_tadka",    optIn: true,  share: "Arjun chose to share their favourites. They've ordered this more than once." },
-    sana:  { name: "Sana",  user: "sana.dosa",      optIn: true,  share: "Sana chose to share their favourites. They've ordered this more than once." },
-    dev:   { name: "Dev",   user: "devdines",       optIn: false, share: "" }
-  };
-  // Strangers who turned on a public profile: shown by username only, never a real name.
-  // Strangers without a public profile never appear individually; they only count inside groups of 20+.
-  const PUBLIC = {
-    dosadiaries:    { user: "dosadiaries",    inGroup: true },
-    spicyfork:      { user: "spicyfork_42",   inGroup: true },
-    midnightmasala: { user: "midnightmasala", inGroup: false }
-  };
-  const PUBLIC_ORDER = ["dosadiaries", "spicyfork", "midnightmasala"];
-  const PUBLIC_PICKS = [
-    { f: "dosadiaries",    d: "mdosa", label: "has this on repeat" },
-    { f: "spicyfork",      d: "dal",   label: "keeps coming back to this" },
-    { f: "midnightmasala", d: "kebab", label: "loved this" }
-  ];
-  const ME = { name: "Ananya", user: "ananya_newintown" };
-  const FRIEND_ORDER = ["riya", "kabir", "meera", "arjun", "sana", "dev"];
-  // Labels are limited to: liked this / loved this / keeps coming back to this / has this on repeat.
-  const FRIEND_PICKS = [
-    { f: "riya",  d: "roll",   label: "keeps coming back to this" },
-    { f: "kabir", d: "cold",   label: "has this on repeat" },
-    { f: "meera", d: "vbir",   label: "loved this" },
-    { f: "riya",  d: "cappu",  label: "liked this" },
-    { f: "meera", d: "filter", label: "liked this" },
-    { f: "arjun", d: "chole",  label: "keeps coming back to this" },
-    { f: "sana",  d: "mdosa",  label: "has this on repeat" },
-    { f: "dev",   d: "butter", label: "loved this" }
+  const CATS = [
+    { label: "All", photo: "cat-all" }, { label: "Biryani", photo: "hyd" }, { label: "Chinese", photo: "hakka" },
+    { label: "Fried Rice", photo: "vfr" }, { label: "Momos", photo: "smomo" }, { label: "Bengali", photo: "kosha" }
   ];
 
-  // The user's group: nearby people who reorder the same places as the user. Its size depends on the delivery address.
   const ADDRS = {
-    home:   { name: "Home",   line: "Flat 4B, Maple Lane, Greenfield Nagar", area: "Greenfield Nagar", group: 42 },
-    office: { name: "Office", line: "Tower C, Hillview Tech Park, Old Mill Road", area: "Hillview", group: 12 }
+    home:   { name: "Home",   line: "Flat 4B, Maple Lane, Greenfield Nagar",   group: 42 },
+    office: { name: "Office", line: "Tower C, Hillview Tech Park, Old Mill Rd", group: 42 }
   };
-  const GROUP = { min: 20, loves: "gdosa", places: ["Udupi Corner", "Bean Street", "Chaat Junction"] };
-  const GROUP_PICKS = ["dal", "kebab"];
-  const RATED_PICKS = ["butter", "cbir"];
 
-  const SEED_HISTORY = { gdosa: 2, cold: 1 };
-  const SEED_SHARED = [
-    { d: "gdosa", label: "keeps coming back to this", hidden: false },
-    { d: "cold",  label: "has this on repeat", hidden: false }
+  // Friends from contacts. Shown only if they opted in AND the user chose them.
+  const FRIENDS = {
+    riya:  { name: "Riya",  optIn: true,  color: "#d9480f", share: "Riya chose to share her favourites. She's ordered this more than once." },
+    kabir: { name: "Kabir", optIn: true,  color: "#1971c2", share: "Kabir chose to share their favourites. They've ordered this more than once." },
+    meera: { name: "Meera", optIn: true,  color: "#7048e8", share: "Meera chose to share their favourites. They've ordered this more than once." },
+    arjun: { name: "Arjun", optIn: true,  color: "#2b8a3e", share: "Arjun chose to share their favourites. They've ordered this more than once." },
+    dev:   { name: "Dev",   optIn: false, color: "#868e96", share: "" }
+  };
+  // Labels only: liked this / loved this / keeps coming back to this / has this on repeat
+  const FRIEND_PICKS = [
+    { f: "riya",  d: "kosha",  label: "keeps coming back to this" },
+    { f: "kabir", d: "lko",    label: "has this on repeat" },
+    { f: "meera", d: "butter", label: "loved this" },
+    { f: "arjun", d: "c65",    label: "liked this" },
+    { f: "dev",   d: "dal",    label: "loved this" }
   ];
-  // Dish comments. Only from opted-in contacts (name + username) and public profiles (username only).
-  // Strangers without a public profile never comment visibly. No dates or order counts are shown with a comment.
-  const COMMENTS = {
-    roll:  [{ by: "riya", text: "The paratha stays flaky even after the ride home. Ask for extra mint chutney." },
-            { by: "dosadiaries", text: "Paneer is properly charred, not rubbery. Best roll around here." },
-            { by: "arjun", text: "Medium spicy, so it's safe if you're ordering for a group." }],
-    dal:   [{ by: "spicyfork", text: "Tastes like it really cooked overnight. Get two garlic naans with it." },
-            { by: "meera", text: "Rich but not too heavy for a weeknight." }],
-    butter:[{ by: "kabir", text: "Gravy is on the sweeter side. Great with garlic naan." }],
-    chole: [{ by: "arjun", text: "Bhature arrive puffy, not oily. Chole has a good tang." }],
-    naan:  [{ by: "spicyfork", text: "Lots of garlic. Arrives soft, eat it quickly." }],
-    gdosa: [{ by: "sana", text: "Crisp till the last bite and the sambar is excellent." },
-            { by: "dosadiaries", text: "Ask for extra podi. You won't regret it." }],
-    mdosa: [{ by: "sana", text: "The potato filling is lightly spiced, just right." }],
-    filter:[{ by: "meera", text: "Strong, the way filter coffee should be." }],
-    vbir:  [{ by: "meera", text: "You can taste real saffron. Don't skip the raita." }],
-    kebab: [{ by: "midnightmasala", text: "Melts in the mouth. Worth every rupee." }],
-    cold:  [{ by: "kabir", text: "Thick, not watery, and not too sweet." }]
-  };
-  const FAV_AT = 3;
-  const HIGH_REO = 0.7;   // share of all buyers who reorder a dish: shown as the "Highly reordered" bar
 
-  const ICON = {
-    pin: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>`,
-    repeat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>`,
-    star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>`,
-    lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
-    clock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="vertical-align:-1px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
-    home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z"/></svg>`,
-    office: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>`,
-    timer: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="vertical-align:-2px"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>`,
-    bookmark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>`,
-    caret: `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 15h12l-6-7z"/></svg>`,
-    plus: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`
-  };
+  // The user's three favourites (dishes they reorder). The group = nearby people who reorder the same places.
+  const FAVS = ["hyd", "smomo", "hakka"];
+  const GROUP = { min: 20 };
+  // Group picks in priority order; the first ones from restaurants that deliver here are shown.
+  const GROUP_PICKS = [
+    { d: "kolk", kind: "group" },
+    { d: "lko", kind: "group" },
+    { d: "chilli", kind: "group" },
+    { d: "galouti", kind: "group" },
+    { d: "lasagna", kind: "new" }    // a dish the user never ordered that their taste matches recently started reordering
+  ];
 
   /* ---------------- State ---------------- */
   let state;
-  function fresh() {
-    return {
-      cart: {}, cartRest: null, orders: Object.assign({}, SEED_HISTORY), prompted: {}, lastOrder: null,
-      addr: "home", share: true, vegOnly: false,
-      following: { riya: true, kabir: true, meera: true, arjun: false, sana: false,
-                   dosadiaries: false, spicyfork: false, midnightmasala: false },
-      publicProfile: false, savedRest: {}, savedDish: {}, hiOnly: false,
-      filter: null, seenFriends: false,
-      shared: SEED_SHARED.map(p => Object.assign({}, p)),
-      rest: "sr", history: ["s-home"], whyKey: null, favFor: null, steps: {}
-    };
-  }
+  const fresh = () => ({
+    addr: "home", vegOnly: false, fast: false,
+    chosen: { riya: true, kabir: true, meera: true, arjun: false },
+    dismissed: {}, cat: 0, slide: 0
+  });
 
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
-  const rupees = n => "₹" + n.toLocaleString("en-IN");
+  const ICON = {
+    star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>`,
+    timer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2 1.5M9.5 3h5"/></svg>`,
+    bolt: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>`,
+    repeat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>`,
+    home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z"/></svg>`,
+    office: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>`
+  };
   const vmark = d => `<span class="vmark${d.veg ? "" : " nv"}" title="${d.veg ? "Vegetarian" : "Non-vegetarian"}"></span>`;
-  const av = id => `<span class="av"><img alt="" src="${AV[id]}"></span>`;
-  const art = id => `<div class="art a-${id}" aria-hidden="true"></div>`;
+  const ini = f => `<span class="ini" style="background:${FRIENDS[f].color}">${FRIENDS[f].name[0]}</span>`;
   const restOf = d => RESTS[DISHES[d].r];
-  const isActive = id => document.getElementById(id).classList.contains("active");
+  // Real photo if the build found one, otherwise a neutral stand-in tinted for the restaurant.
+  function photo(id, extra = "", label = "", tone) {
+    if (HAS_PHOTO.has(id)) return `<div class="ph p-${id} ${extra}">`;
+    const t = tone || ["#efe6d8", "#d9c6a8"];
+    return `<div class="ph stand-in ${extra}" style="--t1:${t[0]};--t2:${t[1]}" data-label="${label}">`;
+  }
+  const dishPhoto = (d, extra = "") => photo(d, extra, DISHES[d] ? DISHES[d].name : "", restOf(d).tone);
 
-  /* ---------------- Picks logic: the privacy rules live here ---------------- */
-  const groupSize = () => ADDRS[state.addr].group;
-  const groupOK = () => groupSize() >= GROUP.min;                              // group counts only at 20+
+  /* ---------------- Rules ---------------- */
+  const delivers = r => RESTS[r].delivers.includes(state.addr);              // delivery range
   const vegOK = d => !state.vegOnly || DISHES[d].veg;
-  const sharingFriends = () => FRIEND_ORDER.filter(f => FRIENDS[f].optIn);    // opted-in friends only
-  const friendPicks = () => FRIEND_PICKS.filter(p => FRIENDS[p.f].optIn && state.following[p.f] && vegOK(p.d));
-  // Keys: "f:<friend>:<dish>", "g:<dish>" (group, repeat orders), "r:<dish>" (ratings fallback)
-  const anonKeys = () => (groupOK() ? GROUP_PICKS.map(d => "g:" + d) : RATED_PICKS.map(d => "r:" + d)).filter(k => vegOK(k.split(":")[1]));
-  // "p:<profile>:<dish>" is a pick from a public profile the user follows.
-  function parseKey(k) { const p = k.split(":"); return (p[0] === "f" || p[0] === "p") ? { kind: p[0], f: p[1], d: p[2] } : { kind: p[0], d: p[1] }; }
-  const pickLabel = (kind, f, d) => (kind === "p" ? PUBLIC_PICKS : FRIEND_PICKS).find(p => p.f === f && p.d === d).label;
-  const handle = f => "@" + (FRIENDS[f] || PUBLIC[f]).user;
-  // Contacts: real name + username. Public profiles: username only.
-  const whoName = (kind, f) => kind === "p" ? `<b>${handle(f)}</b> <span class="ptag">Public</span>` : `<b>${FRIENDS[f].name}</b> <span class="un">${handle(f)}</span>`;
-  const canShow = id => (FRIENDS[id] && FRIENDS[id].optIn) || !!PUBLIC[id];
-  const commentsFor = d => (COMMENTS[d] || []).filter(c => canShow(c.by));
-  function cmtSnippet(d) {
-    const cs = commentsFor(d);
-    if (!cs.length) return "";
-    const c = cs[0], nm = FRIENDS[c.by] ? FRIENDS[c.by].name : handle(c.by);
-    return `<button class="cmt" type="button" data-comments="${d}">${av(c.by)}<span><q>${c.text}</q> <b>${nm}</b>
-      <span class="more">${cs.length > 1 ? `See all ${cs.length} comments` : "See comment"}</span></span></button>`;
-  }
-  const publicPicks = () => PUBLIC_PICKS.filter(p => state.following[p.f] && vegOK(p.d));
-  const followedPicks = () => friendPicks().map(p => Object.assign({ kind: "f" }, p)).concat(publicPicks().map(p => Object.assign({ kind: "p" }, p)));
-  const groupReason = () => `Popular with people who love the same ${GROUP.places.length} places as you`;
-  const groupLine = () => `${groupSize()} people near you who reorder the same places as you keep coming back to this.`;
+  const groupSize = () => ADDRS[state.addr].group;
+  const groupOK = () => groupSize() >= GROUP.min;                              // groups of 20+ only
+  const friendPicks = () => FRIEND_PICKS.filter(p =>
+    FRIENDS[p.f].optIn && state.chosen[p.f] &&                                 // opted in AND chosen
+    delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed["f:" + p.f + ":" + p.d]);
+  const groupPicks = () => {
+    const ok = GROUP_PICKS.filter(p => delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed["g:" + p.d]);
+    return ok.filter(p => p.kind === "group").slice(0, 2).concat(ok.filter(p => p.kind === "new").slice(0, 1));
+  };
+  const favPhrase = () => {
+    const short = { hyd: "biryani", smomo: "momos", hakka: "noodles" };
+    return `${short[FAVS[0]]} and ${short[FAVS[1]]}`;
+  };
 
-  function reasonText(k) {
-    const p = parseKey(k);
-    if (p.kind === "f") return `${FRIENDS[p.f].name} ${pickLabel("f", p.f, p.d)}`;
-    if (p.kind === "p") return `${handle(p.f)} ${pickLabel("p", p.f, p.d)}`;
-    if (p.kind === "g") return groupReason();
-    const d = DISHES[p.d];
-    return `Highly rated nearby: ${d.stars}★ from ${d.votes} ratings`;
-  }
-  const reasonBtn = k => `<button class="reason" type="button" data-why="${k}">${reasonText(k)} <span class="q">Why?</span></button>`;
-
-  /* ---------------- Rendering ---------------- */
+  /* ---------------- Render: Home ---------------- */
   function renderHome() {
     const a = ADDRS[state.addr];
     $("#loc-name").textContent = a.name;
     $("#loc-line").textContent = a.line;
-    $("#new-title").textContent = `New to ${a.area}?`;
     $("#veg-toggle").setAttribute("aria-pressed", String(state.vegOnly));
+    $("#chip-fast").setAttribute("aria-pressed", String(state.fast));
 
-    const fp = friendPicks().slice(0, 3);
-    $("#rail-friends").innerHTML = fp.map(p => {
-      const d = DISHES[p.d], k = `f:${p.f}:${p.d}`;
-      return `<div class="fcard">
-        <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${restOf(p.d).name}">
-          <div class="art a-${p.d}"><span class="chip">${av(p.f)}${FRIENDS[p.f].name}</span></div>
-          <div class="info"><span class="un">${handle(p.f)}</span><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
+    // categories
+    $("#cats").innerHTML = `<button class="meals" type="button" data-action="meals"><span class="t">MEALS UNDER</span><span class="p">₹250</span><span class="e">Explore ›</span></button>` +
+      CATS.map((c, i) => `<button class="cat" type="button" data-cat="${i}" aria-pressed="${state.cat === i}">${photo(c.photo, "", "", ["#f4ead8", "#d8bf94"])}</div>${c.label}</button>`).join("");
+
+    // A) From your friends
+    const fp = friendPicks();
+    $("#row-friends").innerHTML = fp.length ? fp.map(p => {
+      const d = DISHES[p.d], r = restOf(p.d), k = `f:${p.f}:${p.d}`;
+      return `<div class="pc">
+        <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
+          ${dishPhoto(p.d)}<span class="strip">${r.name}</span><span class="who">${ini(p.f)}${FRIENDS[p.f].name}</span></div>
+          <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
         </button>
-        <div class="why">${reasonBtn(k)}</div>
+        <button class="reason" type="button" data-why="${k}">${FRIENDS[p.f].name} ${p.label}</button>
+        <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
       </div>`;
-    }).join("") + `<button class="fcard more" type="button" data-tab="s-friends"><span class="circle">${ICON.plus}</span>${fp.length ? "See all friends' picks" : "Follow friends to see their picks"}</button>`;
+    }).join("") : `<div class="empty-row">No friends' picks deliver to ${a.name} right now. Choose whose picks you see in Profile.</div>`;
 
-    const ok = groupOK();
-    $("#sec-b").textContent = ok ? `Because you love ${DISHES[GROUP.loves].name}` : "Highly rated nearby";
-    const basis = $("#sec-b-basis");
-    basis.className = "basis " + (ok ? "repeat" : "ratings");
-    basis.textContent = ok ? "Repeat orders" : "Based on ratings";
-    $("#sec-b-sub").textContent = ok
-      ? `${groupSize()} people near you who reorder the same places as you`
-      : "Not enough people near you reorder the same places yet, so these picks use star ratings.";
-    $("#group-list").innerHTML = anonKeys().map(k => {
-      const p = parseKey(k), d = DISHES[p.d], r = restOf(p.d);
-      return `<div class="grow">
-        <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${art(p.d)}</button>
-        <div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${r.name} · ${ICON.clock} ${r.eta}</div>${reasonBtn(k)}</div>
-      </div>`;
-    }).join("");
+    // B) Because you love … (group of 20+), or the ratings fallback
+    if (groupOK()) {
+      $("#h-group").textContent = `Because you love ${DISHES[FAVS[0]].name}`;
+      $("#sub-group").textContent = `${groupSize()} people near you who reorder the same places as you`;
+      $("#basis-group").hidden = true;
+      const gp = groupPicks();
+      $("#row-group").innerHTML = gp.length ? gp.map(p => {
+        const d = DISHES[p.d], r = restOf(p.d), k = (p.kind === "new" ? "n:" : "g:") + p.d;
+        const reason = p.kind === "new"
+          ? `People who love your ${favPhrase()} now keep reordering this ${d.name.split(" ").pop()}.`
+          : "People near you who share 3 of your favourites keep reordering this";
+        return `<div class="pc">
+          <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
+            ${dishPhoto(p.d)}<span class="strip">${r.name}</span>${p.kind === "new" ? '<span class="newtag">SOMETHING NEW</span>' : ""}<span class="who grp">${ICON.repeat}Reordered nearby</span></div>
+            <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
+          </button>
+          <button class="reason" type="button" data-why="${k}">${reason}</button>
+          <button class="notforme" type="button" data-dismiss="${p.kind === "new" ? "g:" + p.d : k}">Not for me</button>
+        </div>`;
+      }).join("") : `<div class="empty-row">No picks from restaurants that deliver here yet.</div>`;
+    }
 
-    $("#rail-again").innerHTML = Object.keys(SEED_HISTORY).filter(vegOK).map(id => {
-      const d = DISHES[id];
-      return `<div class="ocard">${art(id)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(id).name}</div>
-        <button class="re" type="button" data-reorder-dish="${id}">Reorder</button></div></div>`;
-    }).join("");
-
-    $("#rest-grid").innerHTML = REST_ORDER.map(id => {
+    // Recommended for you: 3 per row
+    $("#grid-rec").innerHTML = REC_ORDER.filter(id => delivers(id) && (!state.fast || RESTS[id].fast)).map(id => {
       const r = RESTS[id];
-      return `<button class="gcard" type="button" data-rest="${id}"><div class="art a-rest-${id}"><span class="strip">${r.offer}</span><span class="pill">${ICON.star} ${r.rating}</span></div>
-        <b>${r.name}</b><span class="eta">${ICON.timer} ${r.eta}</span></button>`;
-    }).join("");
-    $("#rest-list").innerHTML = REST_ORDER.map(id => {
-      const r = RESTS[id], d = DISHES[r.menu[0]];
-      return `<div class="rwrap"><button class="rcard" type="button" data-rest="${id}"><div class="art a-rest-${id}"><span class="dishpill">${vmark(d)}${d.name} · ${rupees(d.price)} <s>${rupees(Math.round(d.price * 1.2))}</s></span></div>
-        <div class="body"><div class="row1"><b>${r.name}</b><span class="pill">${r.rating} ${ICON.star}</span></div>
-        <div class="meta">${ICON.timer} ${r.eta} · ${r.km} · ${r.cuisine}</div></div></button>
-        <button class="bmk" type="button" data-save-rest="${id}" aria-pressed="${!!state.savedRest[id]}" aria-label="Save ${r.name}">${ICON.bookmark}</button></div>`;
-    }).join("");
-    $("#friends-dot").hidden = state.seenFriends;
-  }
-
-  function renderFriends() {
-    const followed = sharingFriends().concat(PUBLIC_ORDER).filter(f => state.following[f]);
-    if (state.filter && !state.following[state.filter]) state.filter = null;
-    $("#following").innerHTML =
-      `<button class="person" type="button" data-filter="" aria-pressed="${!state.filter}"><span class="all">All</span>All</button>` +
-      followed.map(f => `<button class="person" type="button" data-filter="${f}" aria-pressed="${state.filter === f}">${av(f)}<span class="nm">${FRIENDS[f] ? FRIENDS[f].name : handle(f)}</span></button>`).join("");
-    const fname = f => FRIENDS[f] ? FRIENDS[f].name : handle(f);
-    $("#feed-title").textContent = state.filter ? `${fname(state.filter)}'s picks` : "From people you follow";
-    const items = followedPicks().filter(p => !state.filter || p.f === state.filter);
-    $("#feed").innerHTML = items.length ? items.map(p => {
-      const d = DISHES[p.d], k = `${p.kind}:${p.f}:${p.d}`;
-      return `<div class="feedcard"><div class="top">${av(p.f)}<span>${whoName(p.kind, p.f)}<br>${p.label}</span></div>
-        ${(COMMENTS[p.d] || []).filter(c => c.by === p.f).map(c => `<div class="say">"${c.text}"</div>`).join("")}
-        <div class="dish-row">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="pl">${restOf(p.d).name}</div></div>
-        <div class="acts"><button class="ghost" type="button" data-why="${k}">Why?</button><button class="add" type="button" data-quickadd="${p.d}">ADD</button></div></div></div>`;
-    }).join("") : `<div class="fempty">You aren't following anyone yet. Follow a friend below to see the dishes they keep coming back to.</div>`;
-    $("#suggest").innerHTML = sharingFriends().map(f => {
-      const on = state.following[f];
-      return `<div class="sugg">${av(f)}<div><b>${FRIENDS[f].name}</b><small>${handle(f)} · in your contacts</small></div>
-        <button class="followbtn" type="button" data-follow="${f}" aria-pressed="${on}">${on ? "Following" : "Follow"}</button></div>`;
-    }).join("");
-    $("#suggest-public").innerHTML = PUBLIC_ORDER.map(f => {
-      const on = state.following[f];
-      return `<div class="sugg">${av(f)}<div><b>${handle(f)}</b><small>Public profile${PUBLIC[f].inGroup ? " · reorders the same places as you" : ""}</small></div>
-        <button class="followbtn" type="button" data-follow="${f}" aria-pressed="${on}">${on ? "Following" : "Follow"}</button></div>`;
+      return `<button class="rc" type="button" data-rest="${id}">${photo(r.cover, "", r.name, r.tone)}<span class="strip">${r.offer}</span><span class="pill">${ICON.star} ${r.rating}</span></div>
+        <b>${r.name}</b>${r.fast ? `<span class="eta fast">${ICON.bolt} Near &amp; Fast</span>` : `<span class="eta">${ICON.timer} ${r.eta}</span>`}</button>`;
     }).join("");
   }
 
-  function ctl(id) {
-    const q = state.cart[id] || 0;
-    if (!q) return `<button class="add" type="button" data-add="${id}" aria-label="Add ${DISHES[id].name}">ADD</button>`;
-    return `<span class="stepper"><button type="button" data-dec="${id}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-add="${id}" aria-label="Add one">+</button></span>`;
-  }
-  function restPicks(rid) {
-    const keys = followedPicks().filter(p => DISHES[p.d].r === rid).map(p => `${p.kind}:${p.f}:${p.d}`);
-    return keys.concat(anonKeys().filter(k => DISHES[parseKey(k).d].r === rid)).slice(0, 3);
-  }
-  function renderRest() {
-    const rid = state.rest, r = RESTS[rid], picks = restPicks(rid);
-    const picksHtml = picks.length ? `<section class="picks" aria-labelledby="picks-title">
-        <div class="picks-head"><h2 id="picks-title">Picks for you</h2><span>Tap a reason to check it</span></div>
-        ${picks.map(k => {
-          const p = parseKey(k), d = DISHES[p.d];
-          const who = (p.kind === "f" || p.kind === "p") ? av(p.f) : `<span class="gicon ${p.kind === "g" ? "repeat" : "ratings"}">${p.kind === "g" ? ICON.repeat : ICON.star}</span>`;
-          return `<div class="prow">${art(p.d)}<div><div class="dn">${vmark(d)}${d.name}</div><div class="src">${who}<span>${reasonBtn(k)}</span></div></div>${ctl(p.d)}</div>`;
-        }).join("")}
-      </section>` : "";
-    $("#rsearch-text").textContent = `Search in ${r.name}`;
-    $("#offerbar-text").textContent = r.offer;
-    $("#rest-body").innerHTML = `
-      <div class="rest-hero">
-        <div><h1>${r.name}</h1></div>
-        <div class="rate"><span class="pill">${r.rating} ${ICON.star}</span><small>${r.count} ratings</small></div>
-        <div class="meta"><span class="time">${ICON.clock} ${r.eta}</span><span>${r.km}</span><span>${r.cuisine}</span></div>
-        <div class="offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>${r.offer}</div>
-      </div>
-      <div class="rchips">
-        <button class="rchip" type="button" data-action="veg-rest" aria-pressed="${state.vegOnly}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 22 12a14 14 0 0 1-3.4 4.4M6.6 6.6A14 14 0 0 0 2 12a10 10 0 0 0 13.4 5.4"/></svg>Hide non-veg${state.vegOnly ? " ×" : ""}</button>
-        <button class="rchip" type="button" data-action="hi-rest" aria-pressed="${state.hiOnly}"><svg class="g" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Highly reordered${state.hiOnly ? " ×" : ""}</button>
-      </div>
-      ${picksHtml}
-      <div class="menu-head" id="menu-head"><h3>Recommended for you</h3><span>${ICON.caret}</span></div>
-      <div class="menu">${r.menu.filter(vegOK).filter(id => !state.hiOnly || DISHES[id].reo >= HIGH_REO).map(id => {
-        const d = DISHES[id];
-        const reo = d.reo >= HIGH_REO ? `<div class="reo"><span class="bar"><i style="width:${Math.round(d.reo * 100)}%"></i></span>Highly reordered</div>` : "";
-        return `<div class="dish"><div class="info"><div>${vmark(d)}${d.best ? '<span class="best">Bestseller</span>' : ""}</div>
-          <div class="dn">${d.name}</div>${reo}<div class="price">${rupees(d.price)}</div><div class="desc">${d.desc}</div>${cmtSnippet(id)}
-          <div class="tools"><button class="circ" type="button" data-save-dish="${id}" aria-pressed="${!!state.savedDish[id]}" aria-label="Save ${d.name}">${ICON.bookmark}</button></div></div>
-          <div class="side">${art(id)}${ctl(id)}${d.custom ? '<span class="custom">customisable</span>' : ""}</div></div>`;
-      }).join("") || `<div class="fempty" style="margin:16px">No dishes match these filters.</div>`}
-      <div class="menu-end">${r.name} is a made-up restaurant.</div></div>`;
-    $("#offerbar").hidden = Object.keys(state.cart).length > 0 && state.cartRest === rid;
-    renderCartBar();
-  }
-
-  function totals() {
-    let items = 0, sub = 0;
-    Object.keys(state.cart).forEach(id => { items += state.cart[id]; sub += state.cart[id] * DISHES[id].price; });
-    const delivery = sub ? 30 : 0, taxes = Math.round(sub * 0.05);
-    return { items, sub, delivery, taxes, total: sub + delivery + taxes };
-  }
-  function renderCartBar() {
-    const t = totals();
-    $("#cartbar").hidden = !t.items || state.cartRest !== state.rest;
-    $("#cartbar-count").textContent = t.items + (t.items === 1 ? " item added" : " items added");
-    $("#cartbar-total").textContent = rupees(t.sub);
-  }
-  function renderCart() {
-    const ids = Object.keys(state.cart), t = totals(), a = ADDRS[state.addr];
-    $("#cart-footer").hidden = !ids.length;
-    if (!ids.length) {
-      $("#cart-body").innerHTML = `<div class="empty"><b style="color:var(--ink);font-size:16px">Your cart is empty</b>Pick something from Home.<button class="secondary" type="button" data-action="home" style="max-width:220px">Back to home</button></div>`;
-      return;
-    }
-    $("#cart-body").innerHTML = `<div class="block-title">${RESTS[state.cartRest].name}</div><div class="block">${ids.map(id => {
-        const d = DISHES[id];
-        return `<div class="line"><div class="name">${vmark(d)}${d.name}</div>${ctl(id)}<div class="amt">${rupees(d.price * state.cart[id])}</div></div>`;
-      }).join("")}</div>
-      <div class="block-title">Bill</div><div class="block" style="padding-block:8px">
-        <div class="bill"><span>Item total</span><span>${rupees(t.sub)}</span></div>
-        <div class="bill"><span>Delivery</span><span>${rupees(t.delivery)}</span></div>
-        <div class="bill"><span>Taxes</span><span>${rupees(t.taxes)}</span></div>
-        <div class="bill total"><span>To pay</span><span>${rupees(t.total)}</span></div></div>
-      <div class="block-title">Deliver to</div><div class="block"><div class="addr">${ICON.pin}<div><b>${a.name}</b>${a.line}</div></div></div>
-      <div style="height:8px"></div>`;
-    if (!placing) $("#place-order").innerHTML = `<span>${rupees(t.total)}<small>TOTAL</small></span><span>Place order ›</span>`;
-  }
-  function renderDone() {
-    const o = state.lastOrder || {}, first = Object.keys(o)[0];
-    $("#done-from").textContent = first ? `From ${restOf(first).name}. Enjoy your dinner.` : "";
-    $("#done-items").innerHTML = Object.keys(o).map(id => `<div class="line">${art(id)}<span class="name">${DISHES[id].name}</span><span class="amt">× ${o[id]}</span></div>`).join("");
-  }
-  function renderPrivacy() {
-    $("#share-toggle").setAttribute("aria-checked", String(state.share));
-    $("#off-note").hidden = state.share;
-    $("#mypicks-block").classList.toggle("sharing-off", !state.share);
-    $("#mypicks").innerHTML = state.shared.map((p, i) => {
-      const d = DISHES[p.d];
-      return `<div class="mypick${p.hidden ? " is-hidden" : ""}${p.isNew ? " is-new" : ""}">${art(p.d)}<div><div class="name">${d.name}</div>
-        <div class="sub">${restOf(p.d).name}${p.hidden ? " · Hidden from friends" : ""}</div></div>
-        <button class="hidebtn" type="button" data-hide="${i}" aria-pressed="${p.hidden}">${p.hidden ? "Unhide" : "Hide"}</button></div>`;
-    }).join("");
-    const vis = state.shared.filter(p => !p.hidden);
-    $("#public-toggle").setAttribute("aria-checked", String(state.publicProfile));
-    $("#seen-as").innerHTML = !state.share || !vis.length ? "Nothing. Your favourites are private right now."
-      : vis.map(p => `"${DISHES[p.d].name}: ${ME.name} (@${ME.user}) ${p.label}"`).join("<br>");
-    $("#seen-public").innerHTML = !state.publicProfile || !state.share || !vis.length
-      ? "Nothing. People outside your contacts can't see you or your picks."
-      : vis.map(p => `"${DISHES[p.d].name}: @${ME.user} ${p.label}"`).join("<br>");
-  }
   function renderAddr() {
-    $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => {
-      const a = ADDRS[k];
-      return `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}"><span class="ic">${ICON[k]}</span>
-        <span><b>${a.name}</b><small>${a.line}</small></span><span class="tick"></span></button>`;
-    }).join("");
-  }
-  function renderAvatars() { $$("[data-avatar]").forEach(el => { el.innerHTML = `<img alt="" src="${AV[el.dataset.avatar]}">`; }); }
-  function renderAll() { renderHome(); renderFriends(); renderRest(); renderCart(); renderPrivacy(); renderAvatars(); }
-
-  /* ---------------- Guide ---------------- */
-  function step(n) {
-    if (n) state.steps[n] = true;
-    let cur = 1; while (state.steps[cur] && cur <= 6) cur++;
-    $$("#guide-steps li").forEach(li => {
-      const s = +li.dataset.step;
-      li.classList.toggle("done", !!state.steps[s]);
-      li.classList.toggle("now", s === cur);
-    });
+    $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}">
+      <span class="ic">${ICON[k]}</span><span><b>${ADDRS[k].name}</b><small>${ADDRS[k].line}</small></span><span class="tick"></span></button>`).join("");
   }
 
-  /* ---------------- Navigation & sheets ---------------- */
-  const TABS = ["s-home", "s-friends", "s-privacy"];
-  function go(id, opts = {}) {
-    closeSheets();
-    $$(".screen").forEach(s => s.classList.toggle("active", s.id === id));
-    if (!opts.replace) state.history.push(id);
-    if (id === "s-cart") renderCart();
-    if (id === "s-home") renderHome();
-    if (id === "s-rest") renderRest();
-    if (id === "s-privacy") renderPrivacy();
-    if (id === "s-friends") { state.seenFriends = true; renderFriends(); renderHome(); }
-    $("#bottomnav").hidden = !TABS.includes(id);
-    $$("#bottomnav [data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === id));
-    $("#statusbar").classList.toggle("dark", id === "s-home");
-    const sc = document.querySelector(`#${id} .scroll`);
-    if (sc && !opts.keepScroll) sc.scrollTop = 0;
-  }
-  function back() {
-    state.history.pop();
-    let prev = state.history.pop() || "s-home";
-    if (prev === "s-done") prev = "s-home";
-    go(prev, { keepScroll: true });
-  }
-  function tab(id) { state.history = []; go(id); }
-  const home = () => tab("s-home");
-  function openRest(rid) { state.rest = rid; go("s-rest"); }
-
-  function openSheet(el) { $("#scrim").classList.add("open"); el.classList.add("open"); }
-  function closeSheets() { $("#scrim").classList.remove("open"); $$(".sheet").forEach(s => s.classList.remove("open")); }
-
-  function openWhy(k) {
-    const p = parseKey(k), d = DISHES[p.d], r = restOf(p.d);
-    state.whyKey = k;
-    $("#why-art").className = `art a-${p.d}`;
-    $("#why-name").innerHTML = vmark(d) + d.name;
-    $("#why-place").textContent = r.name;
-    const q = $("#why-quote");
-    if (p.kind === "f") {
-      q.className = "quote friends";
-      q.innerHTML = `${av(p.f)}<span>${whoName("f", p.f)}<br>${pickLabel("f", p.f, p.d)}</span>`;
-      $("#why-body").innerHTML = `<p>${FRIENDS[p.f].share}</p>
-        <p class="note">${ICON.lock}No order counts, dates, times or prices are ever shown for friends.</p>`;
-    } else if (p.kind === "p") {
-      q.className = "quote friends";
-      q.innerHTML = `${av(p.f)}<span>${whoName("p", p.f)}<br>${pickLabel("p", p.f, p.d)}</span>`;
-      $("#why-body").innerHTML = `<p>${handle(p.f)} turned on a public profile and shares their favourites. They're not in your contacts, so you only see their username.</p>
-        <p class="note">${ICON.lock}No real name, order counts, dates, times or prices are ever shown.</p>`;
-    } else if (p.kind === "g") {
-      q.className = "quote repeat";
-      q.innerHTML = `<span class="gicon repeat">${ICON.repeat}</span><span>${groupLine()}</span>`;
-      $("#why-body").innerHTML = `<span class="k">Places you have in common with this group</span>
-        <ul class="places">${GROUP.places.map(n => `<li><span>${ICON.pin}</span>${n}</li>`).join("")}</ul>
-        <div class="gsize"><b>${groupSize()}</b><span>people in this group. Groups need at least ${GROUP.min} people before we show anything.</span></div>
-        <span class="k">Public profiles in this group</span>
-        <div class="pubs">${PUBLIC_ORDER.filter(f => PUBLIC[f].inGroup).map(f => `<div>${av(f)}${handle(f)}</div>`).join("")}</div>
-        <p style="font-size:12.5px;color:var(--muted)">Everyone else in the group stays anonymous, with no name or username.</p>
-        <p class="note">${ICON.lock}Based on repeat orders, not star ratings. Nobody's individual orders are shown.</p>`;
-    } else {
-      q.className = "quote ratings";
-      q.innerHTML = `<span class="gicon ratings">${ICON.star}</span><span>Highly rated nearby: ${d.stars}★ from ${d.votes} ratings</span>`;
-      $("#why-body").innerHTML = `<p>Not enough people near you reorder the same places yet. Until a group reaches ${GROUP.min} people, this pick is based on star ratings, not repeat orders.</p>
-        <p class="note">${ICON.lock}We never show a group smaller than ${GROUP.min}, so nobody's orders can be worked out.</p>`;
-    }
-    $("#why-add").textContent = state.cart[p.d] ? "Add another" : "Add to cart";
-    $("#why-rest").textContent = `View ${r.name}`;
-    openSheet($("#sheet-why"));
-    step(1);
-  }
-  let cmtFor = null;
-  function openComments(id) {
-    const d = DISHES[id]; cmtFor = id;
-    $("#cmt-art").className = `art a-${id}`;
-    $("#cmt-name").innerHTML = vmark(d) + d.name;
-    $("#cmt-place").textContent = restOf(id).name;
-    $("#cmt-list").innerHTML = commentsFor(id).map(c => `<div class="citem">${av(c.by)}<div>
-      <div class="who">${whoName(FRIENDS[c.by] ? "f" : "p", c.by)}</div><p>${c.text}</p></div></div>`).join("");
-    $("#cmt-note").innerHTML = `${ICON.lock}Only comments from your contacts and public profiles are shown. No dates or order counts.`;
-    openSheet($("#sheet-cmt"));
-  }
-  function openFav(id) {
-    state.favFor = id;
-    $("#fav-art").className = `art a-${id}`;
-    $("#fav-preview").innerHTML = `<b>${DISHES[id].name}</b>: ${ME.name} (@${ME.user}) keeps coming back to this`;
-    openSheet($("#sheet-fav"));
-  }
+  /* ---------------- Sheets, toast ---------------- */
+  const openSheet = el => { $("#scrim").classList.add("open"); el.classList.add("open"); };
+  const closeSheets = () => { $("#scrim").classList.remove("open"); $$(".sheet").forEach(s => s.classList.remove("open")); };
   let toastTimer;
   function toast(msg) {
     const t = $("#toast"); t.innerHTML = msg; t.classList.add("show");
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
   }
 
-  /* ---------------- Actions ---------------- */
-  function refreshCartViews() {
-    if (isActive("s-rest")) renderRest();
-    if (isActive("s-cart")) renderCart();
+  /* ---------------- Deals carousel ---------------- */
+  let dealTimer;
+  function showSlide(i) {
+    state.slide = i;
+    $$(".slide").forEach((s, j) => s.classList.toggle("on", j === i));
+    $$("#deal-dots button").forEach((b, j) => b.setAttribute("aria-current", String(j === i)));
   }
-  function add(id) {
-    const rid = DISHES[id].r;
-    if (state.cartRest && state.cartRest !== rid && Object.keys(state.cart).length) {
-      state.cart = {};
-      toast(`Started a new cart for ${RESTS[rid].name}.`);
-    }
-    state.cartRest = rid;
-    state.cart[id] = (state.cart[id] || 0) + 1;
-    refreshCartViews();
-  }
-  function dec(id) {
-    state.cart[id] = (state.cart[id] || 0) - 1;
-    if (state.cart[id] <= 0) delete state.cart[id];
-    if (!Object.keys(state.cart).length) state.cartRest = null;
-    refreshCartViews();
-  }
-  function quickAdd(id) {
-    closeSheets(); add(id); state.rest = DISHES[id].r;
-    if (!isActive("s-rest")) go("s-rest"); else renderRest();
-    toast(`${DISHES[id].name} added to cart.`);
+  function startDeals() {
+    clearInterval(dealTimer);
+    dealTimer = setInterval(() => showSlide((state.slide + 1) % 3), 4000);
   }
 
-  let placing = false;
-  function placeOrder() {
-    if (placing || !Object.keys(state.cart).length) return;
-    placing = true;
-    const btn = $("#place-order"); btn.disabled = true;
-    btn.innerHTML = `<span style="margin:auto;display:flex;gap:8px;align-items:center"><span class="spinner"></span> Placing order…</span>`;
-    setTimeout(() => {
-      placing = false; btn.disabled = false;
-      state.lastOrder = Object.assign({}, state.cart);
-      Object.keys(state.cart).forEach(id => { state.orders[id] = (state.orders[id] || 0) + 1; });
-      state.cart = {}; state.cartRest = null;
-      renderDone(); step(2);
-      state.history = ["s-home"]; go("s-done");
-      const fav = Object.keys(state.lastOrder).find(id => state.orders[id] >= FAV_AT && !state.prompted[id]);
-      if (fav) { state.prompted[fav] = true; setTimeout(() => { if (isActive("s-done")) openFav(fav); }, 650); }
-    }, 900);
-  }
-  function reorderLast() {
-    if (!state.lastOrder) return home();
-    state.cart = Object.assign({}, state.lastOrder);
-    state.cartRest = DISHES[Object.keys(state.cart)[0]].r;
-    go("s-cart");
-  }
-  function reorderDish(id) {
-    state.cart = { [id]: 1 }; state.cartRest = DISHES[id].r;
-    go("s-cart");
-  }
-  function favAnswer(yes) {
-    const id = state.favFor; closeSheets(); step(3);
-    if (!yes) { toast(`No problem. We won't ask about ${DISHES[id].name} again.`); return; }
-    const ex = state.shared.find(p => p.d === id);
-    if (ex) { ex.hidden = false; ex.label = "keeps coming back to this"; }
-    else state.shared.unshift({ d: id, label: "keeps coming back to this", hidden: false, isNew: true });
-    renderPrivacy();
-    toast(state.share
-      ? `Shared. Friends will see "Ananya keeps coming back to this", nothing else.`
-      : `Added to your picks. Sharing is off, so friends won't see it until you turn it on.`);
-  }
-  function setAddr(k) {
-    state.addr = k; closeSheets(); renderAll();
-    if (!groupOK()) step(5);
-    toast(groupOK()
-      ? `Delivering to ${ADDRS[k].name}. ${groupSize()} people near you reorder the same places as you.`
-      : `Delivering to ${ADDRS[k].name}. Fewer than ${GROUP.min} people here reorder the same places as you, so you see "Highly rated nearby".`);
-  }
-  function restart() {
-    state = fresh(); placing = false;
-    $("#place-order").disabled = false;
-    closeSheets(); $("#toast").classList.remove("show");
-    renderAll();
-    $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-home"));
-    $("#bottomnav").hidden = false;
-    $$("#bottomnav [data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === "s-home"));
-    $("#statusbar").classList.add("dark");
-    $$(".scroll").forEach(s => { s.scrollTop = 0; });
-    $$(".rail, .cats, .fchips, .following").forEach(s => { s.scrollLeft = 0; });
-    step(0);
-  }
-
+  /* ---------------- Clicks ---------------- */
+  const LATER = { search: "Search", rest: "Restaurant menu", why: "Why this pick?", profile: "Profile" };
   document.addEventListener("click", e => {
     const t = e.target.closest("button, [data-action]");
     if (!t) return;
     const ds = t.dataset;
-    if (ds.why) return openWhy(ds.why);
-    if (ds.add) return add(ds.add);
-    if (ds.dec) return dec(ds.dec);
-    if (ds.quickadd) return quickAdd(ds.quickadd);
-    if (ds.reorderDish) return reorderDish(ds.reorderDish);
-    if (ds.rest) return openRest(ds.rest);
-    if (ds.tab) return tab(ds.tab);
-    if (ds.go) return go(ds.go);
-    if (ds.addr) return setAddr(ds.addr);
-    if (ds.filter !== undefined) { state.filter = ds.filter || null; return renderFriends(); }
-    if (ds.follow) {
-      const f = ds.follow; state.following[f] = !state.following[f];
-      renderFriends(); renderHome();
-      if (state.following[f]) step(4);
-      const nm = FRIENDS[f] ? FRIENDS[f].name : handle(f);
-      return toast(state.following[f]
-        ? (FRIENDS[f] ? `Following ${nm}. Their picks now show on Home.` : `Following ${nm}. Their picks now show in your Friends feed.`)
-        : `Unfollowed ${nm}.`);
+    if (ds.slide !== undefined) { showSlide(+ds.slide); return startDeals(); }
+    if (ds.cat !== undefined) { state.cat = +ds.cat; return renderHome(); }
+    if (ds.dismiss) {
+      state.dismissed[ds.dismiss] = true; renderHome();
+      return toast("Got it. You'll see fewer picks like this.");
     }
-    if (ds.hide !== undefined) {
-      const p = state.shared[+ds.hide]; p.hidden = !p.hidden; renderPrivacy(); step(6);
-      return toast(p.hidden ? `${DISHES[p.d].name} is hidden from friends.` : `${DISHES[p.d].name} is visible to friends again.`);
+    if (ds.addr) {
+      state.addr = ds.addr; closeSheets(); renderHome();
+      return toast(`Delivering to ${ADDRS[ds.addr].name}. Picks only come from restaurants that deliver here.`);
     }
-    if (t.id === "share-toggle") {
-      state.share = !state.share; renderPrivacy();
-      return toast(state.share ? "Friends can see your shared picks." : "Sharing is off. Friends can't see any of your picks.");
+    if (ds.why) return toast(`"${LATER.why}" sheet is built in step 4.`);
+    if (ds.rest) return toast(`${RESTS[ds.rest].name}: the ${LATER.rest} is built in step 3.`);
+    if (ds.nav) {
+      if (ds.nav !== "home") return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
+      return;
     }
-    if (ds.saveRest) {
-      state.savedRest[ds.saveRest] = !state.savedRest[ds.saveRest]; renderHome();
-      return toast(state.savedRest[ds.saveRest] ? `${RESTS[ds.saveRest].name} saved to your collection.` : `${RESTS[ds.saveRest].name} removed from your collection.`);
-    }
-    if (ds.comments) return openComments(ds.comments);
-    if (t.id === "cmt-add") return quickAdd(cmtFor);
-    if (ds.saveDish) {
-      state.savedDish[ds.saveDish] = !state.savedDish[ds.saveDish]; renderRest();
-      return toast(state.savedDish[ds.saveDish] ? `${DISHES[ds.saveDish].name} saved.` : `${DISHES[ds.saveDish].name} removed from saved.`);
-    }
-    if (t.id === "public-toggle") {
-      state.publicProfile = !state.publicProfile; renderPrivacy();
-      return toast(state.publicProfile ? `Public profile on. People outside your contacts see @${ME.user}, never your name.` : "Public profile off. Only your contacts can see your picks.");
-    }
-    if (t.id === "veg-toggle") {
-      state.vegOnly = !state.vegOnly; renderHome(); renderFriends();
-      return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes.");
-    }
-    if (t.classList.contains("cat")) { $$("#cats .cat").forEach(c => c.setAttribute("aria-pressed", String(c === t))); return; }
-    if (t.classList.contains("fchip")) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
-    if (t.id === "why-add") return quickAdd(parseKey(state.whyKey).d);
-    if (t.id === "why-rest") return openRest(DISHES[parseKey(state.whyKey).d].r);
-    if (t.id === "place-order") return placeOrder();
+    if (t.id === "veg-toggle") { state.vegOnly = !state.vegOnly; renderHome(); return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes."); }
+    if (t.id === "chip-fast") { state.fast = !state.fast; return renderHome(); }
+    if (t.classList.contains("chip")) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
     switch (ds.action) {
-      case "restart": return restart();
-      case "veg-rest": state.vegOnly = !state.vegOnly; renderRest(); renderHome(); renderFriends(); return;
-      case "hi-rest": state.hiOnly = !state.hiOnly; return renderRest();
-      case "jump-menu": { const h = $("#menu-head"), sc = $("#rest-body"); if (h && sc) sc.scrollTo({ top: h.offsetTop - 8, behavior: "smooth" }); return; }
       case "addr": renderAddr(); return openSheet($("#sheet-addr"));
-      case "back": return back();
-      case "home": return home();
       case "close-sheet": return closeSheets();
-      case "reorder": return reorderLast();
-      case "fav-yes": return favAnswer(true);
-      case "fav-no": return favAnswer(false);
+      case "search": return toast(`${LATER.search} is built in step 2.`);
+      case "profile": return toast(`${LATER.profile} is built in step 5.`);
+      case "meals": return toast("Meals under ₹250 isn't part of this prototype.");
     }
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheets(); });
 
-  restart();
+  state = fresh();
+  renderHome();
+  startDeals();
 })();
 </script>
