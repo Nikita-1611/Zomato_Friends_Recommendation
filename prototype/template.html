@@ -446,6 +446,11 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .cmt { display: flex; gap: 8px; align-items: flex-start; width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid #ececec; border-radius: 12px; background: #fafafa; text-align: left; font-size: 13px; line-height: 1.4; color: #3f3f3f; box-sizing: border-box; }
 .cmt .ini { width: 22px; height: 22px; font-size: 10px; }
 .cmt q { font-style: italic; }
+.lnrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cicon { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; padding: 2px 0; color: #777; font-size: 12.5px; font-weight: 700; }
+.cicon svg { width: 15px; height: 15px; }
+.cbub { position: relative; }
+.cbub .cnt { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--green-dark); color: #fff; font-size: 10.5px; font-weight: 800; display: grid; place-items: center; padding: 0 4px; box-sizing: border-box; }
 .cmt b, .drow .by b { font-size: 13.5px; font-weight: 700; }
 .drow .by .un { font-size: 12px; }
 .cmt .more { display: block; color: var(--green-dark); font-weight: 700; margin-top: 3px; font-size: 12.5px; }
@@ -889,6 +894,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
              { by: "dosadiaries", text: "Properly slow-cooked. The gravy is dark and rich." },
              { by: "meera", text: "Too spicy for me, but the mutton is so soft." }],
     butter: [{ by: "kabir", text: "A little on the sweet side. Get garlic naan with it." }],
+    kolk:   [{ by: "meera", text: "The potato is the best part. Don't skip it." },
+             { by: "midnightmasala", text: "Light and fragrant, not oily at all." }],
+    chilli: [{ by: "riya", text: "Ask for it extra dry. So good." }],
+    pizza:  [{ by: "kabir", text: "Thin crust, generous toppings. Worth it." }],
     mdosa:  [{ by: "spicyfork", text: "Crisp till the last bite, and the sambar is great." },
              { by: "riya", text: "Best breakfast near Maple Lane." }]
   };
@@ -1026,7 +1035,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
         </button>
         <button class="reason" type="button" data-why="${k}">${FRIENDS[p.f].name} ${p.label}</button>
-        <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
+        <span class="lnrow"><button class="notforme" type="button" data-dismiss="${k}">Not for me</button>${cmtIcon(p.d)}</span>
       </div>`;
     }).join("") : `<div class="empty-row">No friends' picks deliver to ${a.name} right now. Choose whose picks you see in Profile.</div>`;
 
@@ -1047,7 +1056,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
             <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
           </button>
           <button class="reason" type="button" data-why="${k}">${reason}</button>
-          <button class="notforme" type="button" data-dismiss="${p.kind === "new" ? "g:" + p.d : k}">Not for me</button>
+          <span class="lnrow"><button class="notforme" type="button" data-dismiss="${p.kind === "new" ? "g:" + p.d : k}">Not for me</button>${cmtIcon(p.d)}</span>
         </div>`;
       }).join("") : `<div class="empty-row">No picks from restaurants that deliver here yet.</div>`;
     } else {
@@ -1102,20 +1111,21 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   }
 
   const commentsFor = d => (COMMENTS[d] || []).filter(c => canShow(c.by));
-  function cmtSnippet(d) {
-    const cs = commentsFor(d);
-    if (!cs.length) return "";
-    const c = cs[0], nm = FRIENDS[c.by] ? FRIENDS[c.by].name : handle(c.by);
-    return `<button class="cmt" type="button" data-comments="${d}">${ini(c.by)}<span><q>${c.text}</q> <b>${nm}</b>
-      <span class="more">${cs.length > 1 ? `See all ${cs.length} comments` : "See comment"}</span></span></button>`;
+  // Comments stay tucked away: a small bubble with a count that opens the comments sheet.
+  const BUBBLE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+  function cmtIcon(d, round) {
+    const n = commentsFor(d).length;
+    if (!n) return "";
+    return round
+      ? `<button class="rbtn cbub" type="button" data-comments="${d}" aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}<span class="cnt">${n}</span></button>`
+      : `<button class="cicon" type="button" data-comments="${d}" aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}${n}</button>`;
   }
   function feedRow(p, kind) {
     const d = DISHES[p.d], r = restOf(p.d), k = `${kind}:${p.f}:${p.d}`;
     return `<div class="drow"><div class="info">
         <span class="by">${ini(p.f)}<span>${whoLine(p.f)}<br>${p.label}</span></span>
         <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.name} · ${r.eta}</span>
-        <button class="reason" type="button" data-why="${k}">Why this pick?</button>
-        ${cmtSnippet(p.d)}
+        <span class="lnrow"><button class="reason" type="button" data-why="${k}">Why this pick?</button>${cmtIcon(p.d)}</span>
         <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
       </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
   }
@@ -1231,6 +1241,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
         <span class="desc${open ? " open" : ""}">${d.desc}</span>${open || d.desc.length < 70 ? "" : `<button class="more" type="button" data-more="${id}">...more</button>`}
         <div class="tools"><button class="rbtn" type="button" data-savedish="${id}" aria-pressed="${!!state.savedDish[id]}" aria-label="Save ${d.name}">${BOOKMARK}</button>
           <button class="rbtn" type="button" data-share="${id}" aria-label="Share ${d.name}">${SHARE}</button>
+          ${cmtIcon(id, true)}
           ${pick && !pick.rate && !pick.grp ? `<button class="notforme" type="button" data-dismiss="${pick.dismissKey || pick.key}">Not for me</button>` : ""}</div></div>
       <div class="side">${dishPhoto(id)}</div>${ctl(id)}${d.custom ? '<span class="custom">customisable</span>' : ""}</div></div>`;
   }
