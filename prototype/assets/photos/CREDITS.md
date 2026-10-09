@@ -22,5 +22,10 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | bgn | Burnt garlic noodles | supplied by the project owner | to confirm |
 | lasagna | Spinach & mushroom lasagna (label cropped out) | supplied by the project owner | to confirm |
 | c65 | Chicken 65 | supplied by the project owner | to confirm |
+| seekh | Seekh kebab | supplied by the project owner | to confirm |
+| dal | Dal makhani | supplied by the project owner | to confirm |
+| cold | Cold coffee | supplied by the project owner | to confirm |
+| roll | Paneer kathi roll (cropped to hide packaging text) | supplied by the project owner | to confirm |
+| ptb | Paneer tikka biryani | supplied by the project owner | to confirm |
 
 Before sharing publicly, fill in the photographer, source link and licence for each photo.
