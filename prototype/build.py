@@ -11,7 +11,6 @@ Run: python3 prototype/build.py
 import base64
 import json
 import pathlib
-import re
 
 HERE = pathlib.Path(__file__).parent
 PHOTOS = HERE / "assets" / "photos"
@@ -24,14 +23,13 @@ def data_uri(path):
 
 def build():
     page = (HERE / "template.html").read_text()
-    # Every photo id the page uses is declared in the template as PHOTO_IDS = [...]
-    ids = json.loads(re.search(r"/\*@PHOTO_IDS\*/(\[.*?\])", page, re.S).group(1))
+    # Embed every photo in assets/photos; the file name (without extension) is the dish id.
     found, css = [], []
-    for pid in ids:
-        p = next((PHOTOS / f"{pid}{ext}" for ext in (".jpg", ".jpeg", ".png") if (PHOTOS / f"{pid}{ext}").exists()), None)
-        if p:
-            found.append(pid)
-            css.append(f".p-{pid} {{ background-image: url({data_uri(p)}); }}")
+    for p in sorted(PHOTOS.glob("*")) if PHOTOS.exists() else []:
+        if p.suffix.lower() not in (".jpg", ".jpeg", ".png"):
+            continue
+        found.append(p.stem)
+        css.append(f".p-{p.stem} {{ background-image: url({data_uri(p)}); }}")
     page = page.replace("/*@PHOTO_CSS@*/", "\n".join(css))
     page = page.replace("/*@HAS_PHOTO@*/[]", json.dumps(found))
 
@@ -41,7 +39,7 @@ def build():
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head>'
         '<body style="margin:0">\n' + page + "\n</body></html>\n"
     )
-    print(f"built {len(page) // 1024} KB, {len(found)}/{len(ids)} photos")
+    print(f"built {len(page) // 1024} KB, {len(found)} photos")
 
 
 if __name__ == "__main__":

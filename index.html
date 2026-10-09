@@ -223,6 +223,76 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .popular { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 16px; }
 .noresult { margin: 8px 16px; padding: 20px 16px; border: 1px dashed #d8d8d8; border-radius: 14px; font-size: 13.5px; color: var(--muted); text-align: center; line-height: 1.5; }
 
+/* ---------- Restaurant menu ---------- */
+.rtop { display: flex; gap: 10px; align-items: center; padding: 8px 16px 8px; }
+.circ { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #e3e3e3; background: #fff; display: grid; place-items: center; padding: 0; flex-shrink: 0; color: #2b2b2b; }
+.circ svg { width: 22px; height: 22px; }
+.rpill { flex: 1; min-width: 0; height: 46px; border-radius: 999px; border: 1px solid #e3e3e3; background: #f8faf8; display: flex; align-items: center; gap: 10px; padding: 0 16px; color: #8a8a8a; font-size: 16px; text-align: left; }
+.rpill svg { width: 22px; height: 22px; color: var(--green); flex-shrink: 0; }
+.rpill span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rhead { padding: 6px 16px 2px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: start; }
+.rhead h1 { margin: 0; font-size: 24px; font-weight: 800; line-height: 1.15; }
+.rhead .meta { grid-column: 1 / -1; font-size: 13.5px; color: var(--muted); }
+.rhead .offer { grid-column: 1 / -1; font-size: 13.5px; font-weight: 700; color: #2f6cf5; display: flex; align-items: center; gap: 6px; }
+.rhead .offer svg { width: 16px; height: 16px; }
+.chip .x { font-size: 16px; line-height: 1; margin-left: 2px; }
+.mhead { display: flex; justify-content: space-between; align-items: center; padding: 24px 16px 4px; border-top: 8px solid #f4f5f7; margin-top: 16px; }
+.mhead:first-of-type { margin-top: 10px; }
+.mhead h3 { margin: 0; font-size: 22px; font-weight: 800; }
+.mhead h3 small { display: block; font-size: 12.5px; font-weight: 500; color: var(--muted); margin-top: 3px; }
+.mhead button { border: 0; background: none; padding: 6px; color: #333; }
+.mhead button svg { width: 16px; height: 16px; transition: transform .2s; }
+.mhead button[aria-expanded="false"] svg { transform: rotate(180deg); }
+.dish { display: grid; grid-template-columns: 1fr 148px; gap: 16px; padding: 20px 16px; border-bottom: 1px dashed #dedede; }
+.dish:last-child { border-bottom: 0; }
+.dish .info { min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+.dish .dn { font-size: 19px; font-weight: 700; line-height: 1.25; }
+.reo { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #777; }
+.reo .bar { width: 50px; height: 8px; border-radius: 6px; background: #e6e6e6; overflow: hidden; }
+.reo .bar i { display: block; height: 100%; background: var(--green-dark); border-radius: 6px; }
+.dish .price { font-size: 17px; font-weight: 600; }
+.dish .desc { font-size: 14.5px; color: #8a8a8a; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.dish .desc.open { -webkit-line-clamp: unset; display: block; }
+.dish .more { border: 0; background: none; padding: 0; font: inherit; font-size: 14.5px; color: #555; font-weight: 800; align-self: flex-start; margin-top: -4px; }
+.dish .tools { display: flex; gap: 12px; margin-top: 6px; align-items: center; }
+.rbtn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #dcdcdc; background: #fff; display: grid; place-items: center; padding: 0; color: #555; }
+.rbtn svg { width: 20px; height: 20px; }
+.rbtn[aria-pressed="true"] { color: var(--green); border-color: var(--green-line); }
+.rbtn[aria-pressed="true"] svg { fill: currentColor; }
+.dish .side { display: flex; flex-direction: column; align-items: center; }
+.dish .side .ph { width: 148px; height: 148px; border-radius: 18px; }
+.add { margin-top: -24px; position: relative; z-index: 1; width: 120px; height: 46px; border-radius: 12px; border: 1px solid var(--green); background: #eefaf2; color: #1f7a43; font-weight: 800; font-size: 20px; letter-spacing: .02em; box-shadow: 0 4px 10px -6px rgba(0,0,0,.3); }
+.add::after { content: "+"; position: absolute; top: 2px; right: 9px; font-size: 18px; font-weight: 700; }
+.stepper { margin-top: -24px; position: relative; z-index: 1; width: 120px; height: 46px; border-radius: 12px; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 18px; box-shadow: 0 4px 10px -6px rgba(0,0,0,.3); }
+.stepper button { border: 0; background: none; color: inherit; width: 38px; height: 46px; font-size: 22px; font-weight: 800; padding: 0; }
+.custom { font-size: 14px; color: #a3a3a3; margin-top: 8px; }
+.pickwhy { display: flex; gap: 8px; align-items: flex-start; }
+.pickwhy .ini { width: 24px; height: 24px; font-size: 12px; margin-top: 1px; }
+.gico { width: 24px; height: 24px; border-radius: 50%; background: var(--green-soft); color: var(--green-dark); display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+.gico svg { width: 13px; height: 13px; }
+.gico.rate { background: #f2f2f2; color: #555; }
+.pickwhy .reason { font-size: 14px; }
+.fab { position: absolute; right: 16px; bottom: 88px; z-index: 6; display: inline-flex; align-items: center; gap: 10px; background: #2b2b2b; color: #fff; border: 0; border-radius: 18px; padding: 14px 20px; font-weight: 600; font-size: 18px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
+.fab svg { width: 22px; height: 22px; }
+.offerbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 16px 16px 20px; background: linear-gradient(180deg, #f3f6ff, #e8eeff); border-radius: 18px 18px 0 0; box-shadow: 0 -2px 10px rgba(0,0,0,.05); }
+.offerbar .pct { width: 34px; height: 34px; border-radius: 10px; background: #2f6cf5; color: #fff; display: grid; place-items: center; font-size: 17px; font-weight: 900; transform: rotate(-10deg); flex-shrink: 0; }
+.offerbar .t { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.offerbar .see { border: 0; background: none; padding: 0; color: #8a8a8a; font-weight: 600; font-size: 14.5px; white-space: nowrap; }
+.cartbar { position: absolute; left: 12px; right: 12px; bottom: 14px; z-index: 7; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 14px; border: 0; background: var(--green); color: #fff; text-align: left; box-shadow: 0 10px 24px -10px rgba(31,138,76,.7); }
+.cartbar b { font-size: 15px; display: block; }
+.cartbar small { font-size: 12.5px; opacity: .9; }
+.cartbar .go { font-weight: 800; font-size: 16px; }
+.menu-end { height: 160px; }
+.sheet .opt { display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 14px 2px; font-size: 16px; font-weight: 600; text-align: left; }
+.sheet .opt:last-child { border-bottom: 0; }
+.sheet .opt small { color: var(--muted); font-weight: 500; font-size: 14px; }
+.offer-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.offer-item .pct { width: 36px; height: 36px; border-radius: 10px; background: #2f6cf5; color: #fff; display: grid; place-items: center; font-weight: 900; flex-shrink: 0; }
+.offer-item b { display: block; font-size: 15px; }
+.offer-item small { font-size: 13px; color: var(--muted); }
+.info-row { font-size: 14.5px; line-height: 1.5; padding: 6px 0; display: flex; gap: 10px; }
+.info-row b { min-width: 90px; color: var(--muted); font-weight: 600; }
+
 /* ---------- Friends tab ---------- */
 .fhead { padding: 10px 16px 4px; }
 .fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
@@ -286,7 +356,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <li class="done">Home</li>
       <li class="done">Friends tab</li>
       <li class="done">Search</li>
-      <li>Restaurant menu</li>
+      <li class="done">Restaurant menu</li>
       <li>Why this pick? and other sheets</li>
       <li>Profile settings</li>
       <li>Demo controls</li>
@@ -372,6 +442,19 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
         </div>
       </section>
 
+      <!-- ================= RESTAURANT MENU ================= -->
+      <section class="screen" id="s-rest" aria-label="Restaurant menu">
+        <div class="rtop">
+          <button class="circ" type="button" data-action="rest-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <button class="rpill" type="button" data-action="rest-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="rpill-text"></span></button>
+          <button class="circ" type="button" data-action="rest-more" aria-label="More options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+        </div>
+        <div class="scroll" id="rest-scroll"><div id="rest-body"></div><div class="menu-end"></div></div>
+        <button class="fab" type="button" data-action="menu-sheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 0-3 2-3 5s1 4 3 4v9"/></svg>Menu</button>
+        <div class="offerbar" id="offerbar"><span class="pct">%</span><span class="t" id="offer-text"></span><button class="see" type="button" data-action="offers">See all offers</button></div>
+        <button class="cartbar" type="button" data-action="view-cart" id="cartbar" hidden><span><b id="cart-count"></b><small id="cart-total"></small></span><span class="go">View cart ›</span></button>
+      </section>
+
       <!-- ================= FRIENDS ================= -->
       <section class="screen" id="s-friends" aria-label="Friends">
         <div class="scroll">
@@ -392,6 +475,9 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     </nav>
 
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
+    <section class="sheet" id="sheet-menu" role="dialog" aria-modal="true" aria-labelledby="menu-title"><div class="grab"></div><h2 id="menu-title">Menu</h2><div id="menu-opts"></div></section>
+    <section class="sheet" id="sheet-offers" role="dialog" aria-modal="true" aria-labelledby="offers-title"><div class="grab"></div><h2 id="offers-title">Offers</h2><div id="offers-list"></div></section>
+    <section class="sheet" id="sheet-info" role="dialog" aria-modal="true" aria-labelledby="info-title"><div class="grab"></div><h2 id="info-title"></h2><div id="info-body"></div></section>
     <section class="sheet" id="sheet-addr" role="dialog" aria-modal="true" aria-labelledby="addr-title">
       <div class="grab"></div>
       <h2 id="addr-title">Deliver to</h2>
@@ -403,8 +489,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
 <script>
 (function () {
-  /* Photo ids the page uses. build.py embeds assets/photos/<id>.jpg for each one it finds. */
-  const PHOTO_IDS = /*@PHOTO_IDS*/["hyd","c65","vhyd","dkm","mirchi","kolk","kosha","luchi","mishti","fishfry","lko","galouti","sheermal","phirni","nihari","vlko","butter","roll","dal","naan","chole","jamun","smomo","vmomo","fmomo","thukpa","lasagna","pizza","pasta","tiramisu","vfr","hakka","chilli","manch","cfr","cold","sandwich","croissant","brownie","mdosa","idli","filter","cat-all"];
+  /* build.py embeds assets/photos/<id>.jpg for every photo it finds; HAS_PHOTO lists them. */
   const HAS_PHOTO = new Set([]);
 
   /* ---------------- Data (all invented) ---------------- */
@@ -421,10 +506,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     udupi: { name: "Udupi Corner",       cuisine: "South Indian",        eta: "20-25 mins", rating: "3.6", offer: "Items starting at ₹49", fast: true, cover: "mdosa",   tone: ["#f5ecd0","#caa651"], delivers: ["home"] },
     dragon:{ name: "Dragon Bowl",        cuisine: "Chinese, Pan-Asian",  eta: "40-45 mins", rating: "4.2", offer: "70% OFF up to ₹140",   fast: false, cover: "manch",   tone: ["#f1dcc8","#b5603a"], delivers: ["home", "office"] },
     hakkah:{ name: "Hakka House",        cuisine: "Chinese, Fried Rice", eta: "30-35 mins", rating: "4.1", offer: "10% OFF up to ₹40",    fast: false, cover: "cfr",     tone: ["#f4e8cf","#c79a52"], delivers: ["home"] },
-    szech: { name: "Szechuan Street",    cuisine: "Chinese, Thai",       eta: "35-40 mins", rating: "3.8", offer: "50% OFF select items", fast: false, cover: "chilli",  tone: ["#f3d6c6","#b4502f"], delivers: ["home", "office"] },
-    chop:  { name: "Chopsticks Corner",  cuisine: "Chinese, Noodles",    eta: "25-30 mins", rating: "4.3", offer: "₹50 OFF above ₹199",   fast: true,  cover: "hakka",   tone: ["#f4e9d3","#c8a25a"], delivers: ["home"] },
-    royal: { name: "Royal Handi",        cuisine: "Biryani, Kolkata",    eta: "35-40 mins", rating: "4.0", offer: "₹75 OFF above ₹199",   fast: false, cover: "kolk",    tone: ["#f2e0c6","#b98b4f"], delivers: ["home", "office"] },
-    kgali: { name: "Kebab Gali",         cuisine: "Kebabs, Biryani",     eta: "30-35 mins", rating: "4.1", offer: "20% OFF up to ₹100",   fast: false, cover: "galouti", tone: ["#efdcc8","#a8693f"], delivers: ["home"] },
+    szech: { name: "Szechuan Street",    cuisine: "Chinese, Thai",       eta: "35-40 mins", rating: "3.8", offer: "50% OFF select items", fast: false, cover: "sch",     tone: ["#f3d6c6","#b4502f"], delivers: ["home", "office"] },
+    chop:  { name: "Chopsticks Corner",  cuisine: "Chinese, Noodles",    eta: "25-30 mins", rating: "4.3", offer: "₹50 OFF above ₹199",   fast: true,  cover: "bgn",     tone: ["#f4e9d3","#c8a25a"], delivers: ["home"] },
+    royal: { name: "Royal Handi",        cuisine: "Biryani, Kolkata",    eta: "35-40 mins", rating: "4.0", offer: "₹75 OFF above ₹199",   fast: false, cover: "kmb",     tone: ["#f2e0c6","#b98b4f"], delivers: ["home", "office"] },
+    kgali: { name: "Kebab Gali",         cuisine: "Kebabs, Biryani",     eta: "30-35 mins", rating: "4.1", offer: "20% OFF up to ₹100",   fast: false, cover: "seekh",   tone: ["#efdcc8","#a8693f"], delivers: ["home"] },
     dum:   { name: "Dum Pukht Express",  cuisine: "Biryani, Mughlai",    eta: "25-30 mins", rating: "3.9", offer: "Items starting at ₹149", fast: true, cover: "vhyd",    tone: ["#f2e2c2","#c08e48"], delivers: ["home", "office"] }
   };
   const REC_ORDER = ["nizam", "spice", "nonna", "wok", "momo", "bean"];
@@ -437,32 +522,81 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   // Order search results are listed in
   const SEARCH_ORDER = ["wok", "chop", "dragon", "hakkah", "szech", "momo", "nizam", "royal", "dum", "kgali", "park", "awadh", "spice", "nonna", "bean", "udupi"];
   // Signature dish shown on the big "Featured" card: [dish id, original price]
-  const FEATURED = { chop: ["hakka", 209], szech: ["chilli", 299], royal: ["kolk", 329], kgali: ["galouti", 329], wok: ["vfr", 229], hakkah: ["cfr", 259], dragon: ["manch", 239], momo: ["smomo", 219], nizam: ["hyd", 349],
+  const FEATURED = { chop: ["bgn", 229], szech: ["sch", 329], royal: ["kmb", 399], kgali: ["seekh", 299], wok: ["vfr", 229], hakkah: ["cfr", 259], dragon: ["manch", 239], momo: ["smomo", 219], nizam: ["hyd", 349],
     dum: ["vhyd", 279], park: ["kolk", 329], awadh: ["lko", 369], spice: ["butter", 369], nonna: ["lasagna", 499], bean: ["cold", 189], udupi: ["mdosa", 139] };
   const POPULAR = ["Biryani", "Chinese", "Momos", "Fried Rice", "Butter chicken"];
-  const DISHES = {
-    hyd:     { r: "nizam", name: "Hyderabadi dum biryani", price: 299, veg: false },
-    c65:     { r: "nizam", name: "Chicken 65",             price: 249, veg: false },
-    dkm:     { r: "nizam", name: "Double ka meetha",       price: 99,  veg: true },
-    kolk:    { r: "park",  name: "Kolkata biryani",        price: 289, veg: false },
-    kosha:   { r: "park",  name: "Kosha mangsho",          price: 349, veg: false },
-    lko:     { r: "awadh", name: "Lucknowi biryani",       price: 319, veg: false },
-    galouti: { r: "awadh", name: "Galouti kebab",          price: 279, veg: false },
-    butter:  { r: "spice", name: "Butter chicken",         price: 319, veg: false },
-    roll:    { r: "spice", name: "Paneer kathi roll",      price: 189, veg: true },
-    dal:     { r: "spice", name: "Dal makhani",            price: 229, veg: true },
-    smomo:   { r: "momo",  name: "Steamed chicken momos",  price: 179, veg: false },
-    vmomo:   { r: "momo",  name: "Veg momos",              price: 149, veg: true },
-    lasagna: { r: "nonna", name: "Spinach & ricotta lasagna", price: 429, veg: true },
-    vfr:     { r: "wok",   name: "Veg Chinese fried rice", price: 189, veg: true },
-    hakka:   { r: "wok",   name: "Hakka noodles",          price: 179, veg: true },
-    chilli:  { r: "wok",   name: "Chilli chicken",         price: 249, veg: false },
-    cold:    { r: "bean",  name: "Cold coffee",            price: 159, veg: true },
-    mdosa:   { r: "udupi", name: "Masala dosa",            price: 119, veg: true },
-    manch:   { r: "dragon",name: "Veg manchurian",         price: 199, veg: true },
-    cfr:     { r: "hakkah",name: "Chicken fried rice",     price: 219, veg: false },
-    vhyd:    { r: "dum",   name: "Veg dum biryani",        price: 239, veg: true }
-  };
+  // Dishes: id, restaurant, name, price, veg, share of buyers who reorder (0-1), customisable, section, description
+  const DISH_ROWS = [
+    ["hyd",    "nizam", "Hyderabadi dum biryani", 299, 0, .92, 1, "main", "Long-grain basmati and marinated chicken sealed in a handi and slow-cooked on dum, with mirchi ka salan and raita."],
+    ["c65",    "nizam", "Chicken 65",             249, 0, .81, 0, "main", "Crisp, curry-leaf tempered chicken bites, fiery red and tangy, the Hyderabadi way."],
+    ["haleem", "nizam", "Hyderabadi haleem",      279, 0, .64, 0, "main", "Wheat, lentils and mutton pounded slowly overnight, topped with fried onions and lime."],
+    ["mirchi", "nizam", "Mirchi ka salan",         89, 1, .40, 0, "side", "Long green chillies in a peanut, sesame and tamarind gravy."],
+    ["dkm",    "nizam", "Double ka meetha",        99, 1, .55, 0, "side", "Bread pudding soaked in saffron milk with dry fruits."],
+    ["kolk",   "park",  "Kolkata biryani",        289, 0, .86, 1, "main", "Light, fragrant biryani with the classic potato and boiled egg, scented with kewra and attar."],
+    ["kosha",  "park",  "Kosha mangsho",          349, 0, .83, 0, "main", "Slow-cooked Bengali mutton curry, dark and rich with mustard oil and whole spices."],
+    ["fishfry","park",  "Kolkata fish fry",       199, 0, .58, 0, "main", "Bhetki fillet in a crumb crust, served with kasundi."],
+    ["aloo",   "park",  "Aloo posto",             149, 1, .47, 0, "main", "Potatoes in a mild poppy seed paste with green chilli."],
+    ["luchi",  "park",  "Luchi (4 pcs)",           79, 1, .52, 0, "side", "Puffed, deep-fried flatbreads made with maida."],
+    ["mishti", "park",  "Mishti doi",              69, 1, .74, 0, "side", "Set sweet yoghurt with caramelised jaggery, served in a clay pot."],
+    ["lko",    "awadh", "Lucknowi biryani",       319, 0, .88, 1, "main", "Delicate Awadhi pukki biryani with tender mutton and a hint of saffron and rose."],
+    ["galouti","awadh", "Galouti kebab",          279, 0, .79, 0, "main", "Melt-in-the-mouth minced mutton kebabs on ulte tawa ka paratha."],
+    ["nihari", "awadh", "Nihari",                 349, 0, .61, 0, "main", "Slow-cooked mutton shank stew with ginger and lime."],
+    ["vlko",   "awadh", "Veg Lucknowi biryani",   259, 1, .49, 1, "main", "Awadhi-style biryani with seasonal vegetables and paneer."],
+    ["sheermal","awadh","Sheermal",                59, 1, .45, 0, "side", "Saffron-tinted, mildly sweet flatbread."],
+    ["phirni", "awadh", "Phirni",                  99, 1, .57, 0, "side", "Ground rice pudding set in a clay bowl with pistachio."],
+    ["butter", "spice", "Butter chicken",         319, 0, .87, 1, "main", "Tandoori chicken in a smooth tomato, butter and fenugreek gravy."],
+    ["roll",   "spice", "Paneer kathi roll",      189, 1, .76, 1, "main", "Charred paneer tikka with pickled onion and mint chutney in a flaky paratha."],
+    ["dal",    "spice", "Dal makhani",            229, 1, .80, 0, "main", "Black lentils slow-cooked overnight with butter and cream."],
+    ["chole",  "spice", "Chole bhature",          199, 1, .55, 0, "main", "Spiced chickpeas with two puffed bhature and onion salad."],
+    ["naan",   "spice", "Garlic naan",             69, 1, .72, 0, "side", "Tandoor-baked, brushed with garlic butter."],
+    ["jamun",  "spice", "Gulab jamun (2 pcs)",     99, 1, .43, 0, "side", "Warm, soaked in cardamom syrup."],
+    ["smomo",  "momo",  "Steamed chicken momos",  179, 0, .90, 1, "main", "Juicy chicken momos with a fiery red chutney."],
+    ["vmomo",  "momo",  "Veg momos",              149, 1, .66, 1, "main", "Cabbage, carrot and onion filling in thin wrappers."],
+    ["fmomo",  "momo",  "Fried paneer momos",     179, 1, .58, 0, "main", "Crisp-fried momos with spiced paneer."],
+    ["thukpa", "momo",  "Chicken thukpa",         199, 0, .51, 0, "main", "Tibetan noodle soup with vegetables and chicken."],
+    ["lasagna","nonna", "Spinach & ricotta lasagna", 429, 1, .71, 0, "main", "Layers of fresh pasta, spinach, ricotta and a slow tomato sauce, baked with mozzarella."],
+    ["pizza",  "nonna", "Rustica pizza",          499, 1, .78, 1, "main", "Old-school pizza with spinach, onions, olives and cherry tomatoes."],
+    ["pasta",  "nonna", "Penne arrabbiata",       349, 1, .54, 1, "main", "Penne in a garlicky, chilli-spiked tomato sauce."],
+    ["garlic", "nonna", "Garlic bread",           179, 1, .62, 0, "side", "Toasted with garlic butter and herbs."],
+    ["tiramisu","nonna","Tiramisu",               249, 1, .60, 0, "side", "Espresso-soaked sponge with mascarpone and cocoa."],
+    ["vfr",    "wok",   "Veg Chinese fried rice", 189, 1, .84, 1, "main", "Wok-tossed rice with beans, carrot, cabbage and spring onion."],
+    ["hakka",  "wok",   "Hakka noodles",          179, 1, .80, 1, "main", "Thin noodles stir-fried with vegetables and soy."],
+    ["chilli", "wok",   "Chilli chicken",         249, 0, .82, 0, "main", "Crisp chicken tossed with peppers, onion and green chilli."],
+    ["cpan",   "wok",   "Chilli paneer",          229, 1, .63, 0, "main", "Paneer cubes in a spicy soy and chilli glaze."],
+    ["hss",    "wok",   "Hot & sour soup",        129, 1, .45, 0, "side", "Peppery, tangy soup with vegetables."],
+    ["manch",  "dragon","Veg manchurian",         199, 1, .69, 0, "main", "Vegetable dumplings in a garlicky manchurian sauce."],
+    ["kpc",    "dragon","Kung pao chicken",       299, 0, .73, 0, "main", "Chicken with peanuts, dried chillies and Sichuan pepper."],
+    ["ddn",    "dragon","Dan dan noodles",        259, 1, .58, 1, "main", "Noodles in a chilli-sesame sauce with crunchy peanuts."],
+    ["dimsum", "dragon","Dim sum basket",         279, 1, .52, 0, "side", "Six assorted steamed vegetable dim sum."],
+    ["cfr",    "hakkah","Chicken fried rice",     219, 0, .77, 1, "main", "Egg and chicken fried rice with spring onion."],
+    ["sfr",    "hakkah","Schezwan fried rice",    199, 1, .65, 1, "main", "Fried rice tossed in house Schezwan sauce."],
+    ["lolli",  "hakkah","Chicken lollipop",       249, 0, .60, 0, "side", "Frenched wings, fried crisp, with Schezwan dip."],
+    ["sch",    "szech", "Szechuan chicken",       279, 0, .62, 0, "main", "Chicken in a numbing, spicy Szechuan sauce."],
+    ["tbr",    "szech", "Thai basil rice",        249, 1, .48, 1, "main", "Jasmine rice with holy basil, chilli and vegetables."],
+    ["spr",    "szech", "Spring rolls",           169, 1, .51, 0, "side", "Crisp rolls with glass noodles and vegetables."],
+    ["bgn",    "chop",  "Burnt garlic noodles",   199, 1, .79, 1, "main", "Noodles tossed with deeply browned garlic and greens."],
+    ["ccm",    "chop",  "Chicken chow mein",      229, 0, .71, 1, "main", "Stir-fried noodles with chicken and crunchy vegetables."],
+    ["kmb",    "royal", "Kolkata mutton biryani", 349, 0, .80, 1, "main", "Mutton, potato and egg biryani, Kolkata style."],
+    ["chaap",  "royal", "Chicken chaap",          279, 0, .66, 0, "main", "Chicken slow-cooked in a rich, mildly sweet gravy."],
+    ["seekh",  "kgali", "Seekh kebab",            249, 0, .74, 0, "main", "Charcoal-grilled minced mutton skewers with onion rings."],
+    ["kgb",    "kgali", "Chicken biryani",        279, 0, .68, 1, "main", "Dum chicken biryani with fried onions."],
+    ["vhyd",   "dum",   "Veg dum biryani",        239, 1, .63, 1, "main", "Vegetables and basmati sealed and slow-cooked with saffron."],
+    ["mdb",    "dum",   "Mutton dum biryani",     349, 0, .75, 1, "main", "Tender mutton on the bone, dum-cooked with whole spices."],
+    ["ptb",    "dum",   "Paneer tikka biryani",   269, 1, .57, 1, "main", "Tandoori paneer layered with spiced rice."],
+    ["cold",   "bean",  "Cold coffee",            159, 1, .85, 1, "main", "Thick, blended with ice cream, not too sweet."],
+    ["sandwich","bean", "Grilled veggies & hummus sandwich", 279, 1, .73, 1, "main", "Bread layered with mozzarella, grilled bell peppers and hummus."],
+    ["croissant","bean","Butter croissant",       119, 1, .50, 0, "side", "Baked every morning."],
+    ["brownie","bean",  "Walnut brownie",         129, 1, .56, 0, "side", "Fudgy, with toasted walnuts."],
+    ["mdosa",  "udupi", "Masala dosa",            119, 1, .82, 0, "main", "Crisp dosa with spiced potato, sambar and coconut chutney."],
+    ["rava",   "udupi", "Rava dosa",              129, 1, .60, 0, "main", "Lacy semolina dosa with onions and green chilli."],
+    ["idli",   "udupi", "Idli vada",               89, 1, .66, 0, "main", "Two idlis and a medu vada with sambar."],
+    ["filter", "udupi", "Filter coffee",           49, 1, .88, 0, "side", "Strong decoction, frothed with hot milk."]
+  ];
+  const DISHES = {};
+  DISH_ROWS.forEach(([id, r, name, price, veg, reo, custom, section, desc]) => {
+    DISHES[id] = { r, name, price, veg: !!veg, reo, custom: !!custom, section, desc };
+  });
+  const HIGH_REO = 0.7;   // "Highly reordered" bar shows when at least 70% of buyers reorder
   const CATS = [
     { label: "All", photo: "cat-all" }, { label: "Biryani", photo: "hyd" }, { label: "Chinese", photo: "hakka" },
     { label: "Fried Rice", photo: "vfr" }, { label: "Momos", photo: "smomo" }, { label: "Bengali", photo: "kosha" }
@@ -507,7 +641,9 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const fresh = () => ({
     addr: "home", vegOnly: false, fast: false,
     chosen: { riya: true, kabir: true, meera: true, arjun: false },
-    dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {}
+    dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {},
+    rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
+    cart: {}, cartRest: null
   });
 
   const $ = s => document.querySelector(s);
@@ -680,6 +816,95 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     if (!q) setTimeout(() => $("#q").focus(), 50);
   }
 
+  /* ---------------- Render: Restaurant menu ---------------- */
+  const GROUP_REASON = "People near you who share 3 of your favourites keep reordering this";
+  const newReason = d => `People who love your ${favPhrase()} now keep reordering this ${DISHES[d].name.split(" ").pop().toLowerCase()}.`;
+  // Picks for one restaurant: chosen friends' picks + group picks (and the "something new" pick) that live here
+  function restPicks(rid) {
+    const out = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` }));
+    if (groupOK()) GROUP_PICKS.filter(p => DISHES[p.d].r === rid && vegOK(p.d) && !state.dismissed["g:" + p.d] && !out.some(o => o.d === p.d))
+      .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newReason(p.d) : GROUP_REASON, dismissKey: "g:" + p.d }));
+    return out.slice(0, 3);
+  }
+  function ctl(id) {
+    const q = state.cart[id] || 0;
+    if (!q) return `<button class="add" type="button" data-add="${id}" aria-label="Add ${DISHES[id].name}">ADD</button>`;
+    return `<span class="stepper"><button type="button" data-dec="${id}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-add="${id}" aria-label="Add one">+</button></span>`;
+  }
+  const BOOKMARK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>`;
+  const SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M14 4l7 7-7 7v-4c-6 0-9 2-11 6 0-7 4-11 11-12z"/></svg>`;
+  function dishRow(id, pick) {
+    const d = DISHES[id], open = !!state.expanded[id];
+    const signal = pick
+      ? `<div class="pickwhy">${pick.f ? ini(pick.f) : `<span class="gico">${ICON.repeat}</span>`}<button class="reason" type="button" data-why="${pick.key}">${pick.text}</button></div>`
+      : (d.reo >= HIGH_REO ? `<div class="reo"><span class="bar"><i style="width:${Math.round(d.reo * 100)}%"></i></span>Highly reordered</div>` : "");
+    return `<div class="dish"><div class="info">${vmark(d)}<span class="dn">${d.name}</span>${signal}<span class="price">₹${d.price}</span>
+        <span class="desc${open ? " open" : ""}">${d.desc}</span>${open || d.desc.length < 70 ? "" : `<button class="more" type="button" data-more="${id}">...more</button>`}
+        <div class="tools"><button class="rbtn" type="button" data-savedish="${id}" aria-pressed="${!!state.savedDish[id]}" aria-label="Save ${d.name}">${BOOKMARK}</button>
+          <button class="rbtn" type="button" data-share="${id}" aria-label="Share ${d.name}">${SHARE}</button>
+          ${pick ? `<button class="notforme" type="button" data-dismiss="${pick.dismissKey || pick.key}">Not for me</button>` : ""}</div></div>
+      <div class="side">${dishPhoto(id)}</div>${ctl(id)}${d.custom ? '<span class="custom">customisable</span>' : ""}</div></div>`;
+  }
+  function restSections(rid) {
+    const okDish = id => (!state.restVeg || DISHES[id].veg) && (!state.restHigh || DISHES[id].reo >= HIGH_REO);
+    const ids = Object.keys(DISHES).filter(id => DISHES[id].r === rid && okDish(id));
+    const picks = restPicks(rid).filter(p => okDish(p.d));
+    const secs = [];
+    if (picks.length) secs.push({ key: "picks", title: "Picks for you", sub: "From friends you chose and people who reorder the same places as you", rows: picks.map(p => dishRow(p.d, p)) });
+    const picked = new Set(picks.map(p => p.d));                               // don't repeat picks below
+    const mains = ids.filter(id => DISHES[id].section === "main" && !picked.has(id)).sort((a, b) => DISHES[b].reo - DISHES[a].reo);
+    const sides = ids.filter(id => DISHES[id].section === "side" && !picked.has(id));
+    if (mains.length) secs.push({ key: "rec", title: "Recommended for you", rows: mains.map(id => dishRow(id)) });
+    if (sides.length) secs.push({ key: "sides", title: "Sides & desserts", rows: sides.map(id => dishRow(id)) });
+    return secs;
+  }
+  function renderRest() {
+    const rid = state.rest, r = RESTS[rid];
+    const side = Object.keys(DISHES).find(id => DISHES[id].r === rid && DISHES[id].section === "side") || Object.keys(DISHES).find(id => DISHES[id].r === rid);
+    $("#rpill-text").textContent = `Search "${DISHES[side].name.replace(/\s*\(.*\)/, "").toLowerCase()}"`;
+    const nf = (state.restVeg ? 1 : 0) + (state.restHigh ? 1 : 0);
+    const secs = restSections(rid);
+    $("#rest-body").innerHTML = `
+      <div class="rhead"><h1>${r.name}</h1><span class="pill">${ICON.star} ${r.rating}</span>
+        <span class="meta">${r.cuisine} · ${r.eta}</span>
+        <span class="offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>${r.offer}</span></div>
+      <div class="chips">
+        <button class="chip" type="button" data-action="filters" aria-pressed="${nf > 0}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters${nf ? ` (${nf})` : ""}<svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px"><path d="M6 9h12l-6 7z"/></svg></button>
+        <button class="chip" type="button" data-action="rest-veg" aria-pressed="${state.restVeg}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 22 12a14 14 0 0 1-3.4 4.4M6.6 6.6A14 14 0 0 0 2 12a10 10 0 0 0 13.4 5.4"/></svg>Hide non-veg${state.restVeg ? ' <span class="x">×</span>' : ""}</button>
+        <button class="chip" type="button" data-action="rest-high" aria-pressed="${state.restHigh}"><svg class="g" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Highly reordered${state.restHigh ? ' <span class="x">×</span>' : ""}</button>
+      </div>
+      ${secs.length ? secs.map(sec => {
+        const open = !state.collapsed[sec.key];
+        return `<div class="mhead" id="sec-${sec.key}"><h3>${sec.title}${sec.sub ? `<small>${sec.sub}</small>` : ""}</h3>
+          <button type="button" data-collapse="${sec.key}" aria-expanded="${open}" aria-label="${open ? "Collapse" : "Expand"} ${sec.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16h14l-7-8z"/></svg></button></div>
+          <div ${open ? "" : "hidden"}>${sec.rows.join("")}</div>`;
+      }).join("") : `<div class="noresult">No dishes match these filters.</div>`}`;
+    $("#offer-text").textContent = r.offer.includes("OFF") && !r.offer.includes("above") ? `${r.offer} above ₹199` : r.offer;
+    renderCartBar();
+  }
+  function renderCartBar() {
+    const n = Object.values(state.cart).reduce((a, b) => a + b, 0);
+    const total = Object.keys(state.cart).reduce((a, id) => a + state.cart[id] * DISHES[id].price, 0);
+    const show = n > 0 && state.cartRest === state.rest;
+    $("#cartbar").hidden = !show; $("#offerbar").hidden = show;
+    $("#cart-count").textContent = `${n} item${n === 1 ? "" : "s"} added`;
+    $("#cart-total").textContent = `₹${total}`;
+  }
+  function openRest(rid) {
+    const cur = $(".screen.active").id.replace("s-", "");
+    if (cur !== "rest") state.restFrom = cur;
+    state.rest = rid; state.restVeg = state.vegOnly; state.restHigh = false; state.collapsed = {};
+    $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-rest"));
+    $("#bottomnav").hidden = true; $("#statusbar").classList.add("light");
+    renderRest(); $("#rest-scroll").scrollTop = 0;
+  }
+  function addDish(id) {
+    const rid = DISHES[id].r;
+    if (state.cartRest && state.cartRest !== rid && Object.keys(state.cart).length) { state.cart = {}; toast(`Started a new cart for ${RESTS[rid].name}.`); }
+    state.cartRest = rid; state.cart[id] = (state.cart[id] || 0) + 1;
+    renderRest();
+  }
+
   const TABS = ["home", "friends"];
   function showTab(name) {
     $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-" + name));
@@ -736,7 +961,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       return toast(state.saved[ds.save] ? `${RESTS[ds.save].name} saved to your collection.` : `${RESTS[ds.save].name} removed from your collection.`);
     }
     if (ds.dismiss) {
-      state.dismissed[ds.dismiss] = true; renderHome(); renderFriends();
+      state.dismissed[ds.dismiss] = true; renderHome(); renderFriends(); if (state.rest) renderRest();
       return toast("Got it. You'll see fewer picks like this.");
     }
     if (ds.addr) {
@@ -744,7 +969,27 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       return toast(`Delivering to ${ADDRS[ds.addr].name}. Picks only come from restaurants that deliver here.`);
     }
     if (ds.why) return toast(`"${LATER.why}" sheet is built in step 4.`);
-    if (ds.rest) return toast(`${RESTS[ds.rest].name}: the ${LATER.rest} is built in step 3.`);
+    if (ds.rest) return openRest(ds.rest);
+    if (ds.add) return addDish(ds.add);
+    if (ds.dec) { state.cart[ds.dec]--; if (state.cart[ds.dec] <= 0) delete state.cart[ds.dec]; if (!Object.keys(state.cart).length) state.cartRest = null; return renderRest(); }
+    if (ds.more) { state.expanded[ds.more] = true; return renderRest(); }
+    if (ds.collapse) { state.collapsed[ds.collapse] = !state.collapsed[ds.collapse]; return renderRest(); }
+    if (ds.savedish) {
+      state.savedDish[ds.savedish] = !state.savedDish[ds.savedish]; renderRest();
+      return toast(state.savedDish[ds.savedish] ? `${DISHES[ds.savedish].name} saved.` : `${DISHES[ds.savedish].name} removed from saved.`);
+    }
+    if (ds.share) {
+      const d = DISHES[ds.share], text = `${d.name} at ${restOf(ds.share).name}, ₹${d.price}`;
+      const done = () => toast("Dish link copied. Paste it into any chat.");
+      try { navigator.clipboard.writeText(text).then(done, () => toast(`Couldn't copy here. Share "${text}" by hand.`)); }
+      catch (err) { toast(`Couldn't copy here. Share "${text}" by hand.`); }
+      return;
+    }
+    if (ds.jump) {
+      closeSheets(); state.collapsed[ds.jump] = false; renderRest();
+      const h = $("#sec-" + ds.jump); if (h) $("#rest-scroll").scrollTo({ top: h.offsetTop - 60, behavior: "smooth" });
+      return;
+    }
     if (ds.nav) {
       if (TABS.includes(ds.nav)) return showTab(ds.nav);
       return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
@@ -755,11 +1000,35 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }
     if (t.id === "veg-toggle") { state.vegOnly = !state.vegOnly; renderHome(); return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes."); }
     if (t.id === "chip-fast") { state.fast = !state.fast; return renderHome(); }
-    if (t.classList.contains("chip")) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
+    if (t.classList.contains("chip") && !ds.action && !ds.q) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); return; }
     switch (ds.action) {
       case "addr": renderAddr(); return openSheet($("#sheet-addr"));
       case "close-sheet": return closeSheets();
       case "search": return openSearch("");
+      case "rest-back": return state.restFrom === "search" ? openSearch(state.q) : showTab(state.restFrom);
+      case "rest-search": return openSearch(RESTS[state.rest].cuisine.split(",")[0]);
+      case "rest-veg": state.restVeg = !state.restVeg; return renderRest();
+      case "rest-high": state.restHigh = !state.restHigh; return renderRest();
+      case "filters": state.restVeg = false; state.restHigh = false; renderRest(); return toast("Filters cleared.");
+      case "view-cart": return toast("Cart and checkout are built in step 4.");
+      case "menu-sheet": {
+        const secs = restSections(state.rest);
+        $("#menu-opts").innerHTML = secs.map(sc => `<button class="opt" type="button" data-jump="${sc.key}">${sc.title}<small>${sc.rows.length}</small></button>`).join("");
+        return openSheet($("#sheet-menu"));
+      }
+      case "offers": {
+        const r = RESTS[state.rest];
+        $("#offers-list").innerHTML = [[r.offer, "Applies automatically at checkout"], ["Free delivery with membership", "On orders above ₹49"], ["10% OFF with select cards", "Up to ₹100, once a week"]]
+          .map(([a, b]) => `<div class="offer-item"><span class="pct">%</span><span><b>${a}</b><small>${b}</small></span></div>`).join("");
+        return openSheet($("#sheet-offers"));
+      }
+      case "rest-more": {
+        const r = RESTS[state.rest];
+        $("#info-title").textContent = r.name;
+        $("#info-body").innerHTML = `<div class="info-row"><b>Cuisine</b>${r.cuisine}</div><div class="info-row"><b>Delivery</b>${r.eta} to ${ADDRS[state.addr].name}</div>
+          <div class="info-row"><b>Open</b>11 am to 1 am</div><div class="info-row"><b>Rating</b>${r.rating} ★ (ratings sit close together; picks use reorders instead)</div>`;
+        return openSheet($("#sheet-info"));
+      }
       case "search-back": state.cat = 0; return showTab("home");
       case "clear-q": state.q = ""; renderSearch(); return $("#q").focus();
       case "mic": return toast("Voice search isn't part of this prototype. Type a dish or restaurant.");
