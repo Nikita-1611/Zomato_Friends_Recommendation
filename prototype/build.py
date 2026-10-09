@@ -48,6 +48,25 @@ def dish(code):
     return data_uri(ASSETS / "dishes" / f"{code}.webp", "image/webp")
 
 
+# Real photos (assets/photos/<dish>.jpg) replace the 3D art when present. See assets/photos/CREDITS.md.
+REST_PHOTO = {"sr": ["roll", "butter", "dal"], "ll": ["vbir", "cbir"], "uc": ["mdosa", "gdosa"], "bs": ["cold", "cappu", "croissant"]}
+CAT_PHOTO = {"rolls": ["roll", "chroll"], "thali": ["dal", "butter"], "biryani": ["vbir", "cbir"], "dosa": ["mdosa", "gdosa"],
+             "dessert": ["jamun", "phirni"], "coffee": ["filter", "cappu"]}
+
+
+def photo(dish_id):
+    p = ASSETS / "photos" / f"{dish_id}.jpg"
+    return data_uri(p, "image/jpeg") if p.exists() else None
+
+
+def first_photo(ids):
+    for i in ids:
+        u = photo(i)
+        if u:
+            return u
+    return None
+
+
 def build():
     cache = {}
     def img(code):
@@ -57,13 +76,25 @@ def build():
 
     css = []
     for k, (code, a, b) in DISH_ART.items():
-        css.append(f".a-{k} {{ background: url({img(code)}) center/76% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
+        ph = photo(k)
+        if ph:
+            css.append(f".a-{k} {{ background: url({ph}) center/cover no-repeat, #eee; }}")
+        else:
+            css.append(f".a-{k} {{ background: url({img(code)}) center/76% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
         css.append(f".i-{k} {{ background: url({img(code)}) center/contain no-repeat; }}")
     for k, (c1, c2, a, b) in REST_ART.items():
-        css.append(f".a-rest-{k} {{ background: url({img(c1)}) 24% 58%/38% no-repeat, url({img(c2)}) 76% 46%/34% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
+        ph = first_photo(REST_PHOTO.get(k, []))
+        if ph:
+            css.append(f".a-rest-{k} {{ background: url({ph}) center/cover no-repeat, #eee; }}")
+        else:
+            css.append(f".a-rest-{k} {{ background: url({img(c1)}) 24% 58%/38% no-repeat, url({img(c2)}) 76% 46%/34% no-repeat, linear-gradient(135deg, {a}, {b}); }}")
 
     for k, code in CAT_ART.items():
-        css.append(f".c-{k} {{ background-image: url({img(code)}); }}")
+        ph = first_photo(CAT_PHOTO.get(k, []))
+        if ph:
+            css.append(f".c-{k} {{ background-image: url({ph}); background-size: cover !important; border-radius: 50%; }}")
+        else:
+            css.append(f".c-{k} {{ background-image: url({img(code)}); }}")
 
     avatars = {p.stem: data_uri(p, "image/svg+xml") for p in sorted((ASSETS / "avatars").glob("*.svg"))}
     av_js = "const AV = {" + ", ".join(f'{k}: "{v}"' for k, v in avatars.items()) + "};"
