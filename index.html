@@ -192,6 +192,37 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .bottomnav .ic-dine { color: #8b5cf6; }
 .home-end { height: 110px; }
 
+/* ---------- Search ---------- */
+.sbar { margin: 8px 16px 0; height: 54px; border-radius: 16px; border: 1px solid #e3e3e3; box-shadow: 0 2px 8px rgba(0,0,0,.06); display: flex; align-items: center; gap: 8px; padding: 0 12px 0 6px; }
+.sbar .back { width: 40px; height: 40px; border: 0; background: none; padding: 0; color: var(--green); display: grid; place-items: center; }
+.sbar .back svg { width: 24px; height: 24px; }
+.sbar input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 18px; font-weight: 500; color: var(--ink); background: none; }
+.sbar input::placeholder { color: #9a9a9a; }
+.sbar .x { border: 0; background: none; padding: 4px; color: #6b6b6b; display: grid; place-items: center; }
+.sbar .x svg { width: 20px; height: 20px; }
+.sbar .mic2 { border: 0; background: none; padding: 0 0 0 12px; border-left: 1px solid #e5e5e5; color: var(--green); display: grid; place-items: center; height: 26px; }
+.sbar .mic2 svg { width: 22px; height: 22px; }
+.tabline { margin: 14px 0 0; height: 1px; background: var(--line); position: relative; }
+.tabline::before { content: ""; position: absolute; left: 20px; top: -3px; width: 66px; height: 4px; border-radius: 4px; background: var(--green); }
+.chips.two { flex-wrap: wrap; overflow: visible; }
+.chips + .chips { padding-top: 10px; }
+.grid2r { display: grid; grid-template-rows: auto auto; grid-auto-flow: column; grid-auto-columns: 112px; gap: 18px 12px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none; }
+.grid2r::-webkit-scrollbar { display: none; }
+.featured-label { padding: 0 16px 12px; font-size: 15px; color: #8a8a8a; font-weight: 600; }
+.big { position: relative; margin: 0 16px 18px; }
+.big .open { display: block; width: 100%; border: 0; padding: 0; background: none; text-align: left; }
+.big .ph { width: 100%; height: 200px; border-radius: 20px; }
+.big .dchip { position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 7px; max-width: calc(100% - 76px); background: rgba(20,20,20,.72); color: #fff; font-size: 14px; font-weight: 700; padding: 6px 10px; border-radius: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.big .dchip s { opacity: .7; font-weight: 500; }
+.big .bm { position: absolute; right: 12px; top: 12px; width: 40px; height: 40px; border: 0; padding: 0; border-radius: 50%; background: rgba(20,20,20,.35); color: #fff; display: grid; place-items: center; z-index: 1; }
+.big .bm svg { width: 24px; height: 24px; }
+.big .bm[aria-pressed="true"] svg { fill: currentColor; }
+.big .meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 4px 0; }
+.big .meta b { font-size: 18px; font-weight: 700; }
+.big .meta small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.popular { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 16px; }
+.noresult { margin: 8px 16px; padding: 20px 16px; border: 1px dashed #d8d8d8; border-radius: 14px; font-size: 13.5px; color: var(--muted); text-align: center; line-height: 1.5; }
+
 /* ---------- Friends tab ---------- */
 .fhead { padding: 10px 16px 4px; }
 .fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
@@ -254,7 +285,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     <ol id="build-steps">
       <li class="done">Home</li>
       <li class="done">Friends tab</li>
-      <li>Search</li>
+      <li class="done">Search</li>
       <li>Restaurant menu</li>
       <li>Why this pick? and other sheets</li>
       <li>Profile settings</li>
@@ -317,6 +348,30 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <div class="home-end"></div>
         </div>
       </section>
+      <!-- ================= SEARCH ================= -->
+      <section class="screen" id="s-search" aria-label="Search">
+        <div class="sbar">
+          <button class="back" type="button" data-action="search-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <input id="q" type="search" placeholder="Restaurant name or a dish..." autocomplete="off" aria-label="Search">
+          <button class="x" type="button" data-action="clear-q" aria-label="Clear search" id="q-clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          <button class="mic2" type="button" data-action="mic" aria-label="Search by voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        </div>
+        <div class="tabline" aria-hidden="true"></div>
+        <div class="scroll" id="search-scroll">
+          <div class="chips">
+            <button class="chip" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Filters<svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px"><path d="M6 9h12l-6 7z"/></svg></button>
+            <button class="chip" type="button" data-sflag="fast" aria-pressed="false"><svg class="g" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Near &amp; Fast</button>
+            <button class="chip" type="button" data-sflag="gourmet" aria-pressed="false">Gourmet</button>
+          </div>
+          <div class="chips">
+            <button class="chip" type="button" data-sflag="highly" aria-pressed="false"><svg class="g" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Highly reordered</button>
+            <button class="chip" type="button" data-sflag="nopack" aria-pressed="false">No packaging charges</button>
+          </div>
+          <div id="search-body"></div>
+          <div style="height:40px"></div>
+        </div>
+      </section>
+
       <!-- ================= FRIENDS ================= -->
       <section class="screen" id="s-friends" aria-label="Friends">
         <div class="scroll">
@@ -359,17 +414,35 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     park:  { name: "Park Street Pantry", cuisine: "Bengali",             eta: "35-40 mins", rating: "4.2", offer: "₹75 OFF above ₹199",   fast: false, cover: "kosha",   tone: ["#f1d9c4","#b8714a"], delivers: ["home"] },
     awadh: { name: "Awadh Handi",        cuisine: "Lucknowi, Kebabs",    eta: "40-45 mins", rating: "4.4", offer: "60% OFF select items", fast: false, cover: "lko",     tone: ["#f2e4cc","#b88d4f"], delivers: ["office"] },
     spice: { name: "Spice Route Kitchen",cuisine: "North Indian",        eta: "25-30 mins", rating: "4.1", offer: "Flat ₹100 OFF",       fast: true,  cover: "butter",  tone: ["#f4d9c8","#c66a3e"], delivers: ["home", "office"] },
-    momo:  { name: "Momo Mountain",      cuisine: "Momos, Tibetan",      eta: "20-25 mins", rating: "4.0", offer: "Items at ₹99",        fast: true,  cover: "smomo",   tone: ["#eef0f2","#b7bcc4"], delivers: ["home", "office"] },
+    momo:  { name: "Momo Mountain",      cuisine: "Momos, Chinese",      eta: "20-25 mins", rating: "4.0", offer: "Items at ₹99",        fast: true,  cover: "smomo",   tone: ["#eef0f2","#b7bcc4"], delivers: ["home", "office"] },
     nonna: { name: "Trattoria Nonna",    cuisine: "Italian",             eta: "35-40 mins", rating: "4.4", offer: "₹150 OFF above ₹599",  fast: false, cover: "lasagna", tone: ["#f3dcc6","#c0603b"], delivers: ["home", "office"] },
     wok:   { name: "Wok Republic",       cuisine: "Chinese",             eta: "30-35 mins", rating: "3.9", offer: "70% OFF up to ₹140",   fast: false, cover: "vfr",     tone: ["#f3ead2","#c9a45e"], delivers: ["home"] },
     bean:  { name: "Bean Street",        cuisine: "Cafe, Bakes",         eta: "15-20 mins", rating: "3.8", offer: "10% OFF up to ₹40",    fast: true,  cover: "cold",    tone: ["#efe2d6","#9c7656"], delivers: ["home", "office"] },
-    udupi: { name: "Udupi Corner",       cuisine: "South Indian",        eta: "20-25 mins", rating: "3.6", offer: "Items starting at ₹49", fast: true, cover: "mdosa",   tone: ["#f5ecd0","#caa651"], delivers: ["home"] }
+    udupi: { name: "Udupi Corner",       cuisine: "South Indian",        eta: "20-25 mins", rating: "3.6", offer: "Items starting at ₹49", fast: true, cover: "mdosa",   tone: ["#f5ecd0","#caa651"], delivers: ["home"] },
+    dragon:{ name: "Dragon Bowl",        cuisine: "Chinese, Pan-Asian",  eta: "40-45 mins", rating: "4.2", offer: "70% OFF up to ₹140",   fast: false, cover: "manch",   tone: ["#f1dcc8","#b5603a"], delivers: ["home", "office"] },
+    hakkah:{ name: "Hakka House",        cuisine: "Chinese, Fried Rice", eta: "30-35 mins", rating: "4.1", offer: "10% OFF up to ₹40",    fast: false, cover: "cfr",     tone: ["#f4e8cf","#c79a52"], delivers: ["home"] },
+    szech: { name: "Szechuan Street",    cuisine: "Chinese, Thai",       eta: "35-40 mins", rating: "3.8", offer: "50% OFF select items", fast: false, cover: "chilli",  tone: ["#f3d6c6","#b4502f"], delivers: ["home", "office"] },
+    chop:  { name: "Chopsticks Corner",  cuisine: "Chinese, Noodles",    eta: "25-30 mins", rating: "4.3", offer: "₹50 OFF above ₹199",   fast: true,  cover: "hakka",   tone: ["#f4e9d3","#c8a25a"], delivers: ["home"] },
+    royal: { name: "Royal Handi",        cuisine: "Biryani, Kolkata",    eta: "35-40 mins", rating: "4.0", offer: "₹75 OFF above ₹199",   fast: false, cover: "kolk",    tone: ["#f2e0c6","#b98b4f"], delivers: ["home", "office"] },
+    kgali: { name: "Kebab Gali",         cuisine: "Kebabs, Biryani",     eta: "30-35 mins", rating: "4.1", offer: "20% OFF up to ₹100",   fast: false, cover: "galouti", tone: ["#efdcc8","#a8693f"], delivers: ["home"] },
+    dum:   { name: "Dum Pukht Express",  cuisine: "Biryani, Mughlai",    eta: "25-30 mins", rating: "3.9", offer: "Items starting at ₹149", fast: true, cover: "vhyd",    tone: ["#f2e2c2","#c08e48"], delivers: ["home", "office"] }
   };
   const REC_ORDER = ["nizam", "spice", "nonna", "wok", "momo", "bean"];
+  // Search chip flags
+  const FLAGS = {
+    highly: ["nizam", "wok", "momo", "dragon", "park", "dum", "chop", "royal"],
+    gourmet: ["nonna", "dragon", "awadh", "szech"],
+    nopack: ["bean", "udupi", "hakkah", "wok", "kgali"]
+  };
+  // Order search results are listed in
+  const SEARCH_ORDER = ["wok", "chop", "dragon", "hakkah", "szech", "momo", "nizam", "royal", "dum", "kgali", "park", "awadh", "spice", "nonna", "bean", "udupi"];
+  // Signature dish shown on the big "Featured" card: [dish id, original price]
+  const FEATURED = { chop: ["hakka", 209], szech: ["chilli", 299], royal: ["kolk", 329], kgali: ["galouti", 329], wok: ["vfr", 229], hakkah: ["cfr", 259], dragon: ["manch", 239], momo: ["smomo", 219], nizam: ["hyd", 349],
+    dum: ["vhyd", 279], park: ["kolk", 329], awadh: ["lko", 369], spice: ["butter", 369], nonna: ["lasagna", 499], bean: ["cold", 189], udupi: ["mdosa", 139] };
+  const POPULAR = ["Biryani", "Chinese", "Momos", "Fried Rice", "Butter chicken"];
   const DISHES = {
     hyd:     { r: "nizam", name: "Hyderabadi dum biryani", price: 299, veg: false },
     c65:     { r: "nizam", name: "Chicken 65",             price: 249, veg: false },
-    vhyd:    { r: "nizam", name: "Veg Hyderabadi biryani", price: 239, veg: true },
     dkm:     { r: "nizam", name: "Double ka meetha",       price: 99,  veg: true },
     kolk:    { r: "park",  name: "Kolkata biryani",        price: 289, veg: false },
     kosha:   { r: "park",  name: "Kosha mangsho",          price: 349, veg: false },
@@ -385,7 +458,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     hakka:   { r: "wok",   name: "Hakka noodles",          price: 179, veg: true },
     chilli:  { r: "wok",   name: "Chilli chicken",         price: 249, veg: false },
     cold:    { r: "bean",  name: "Cold coffee",            price: 159, veg: true },
-    mdosa:   { r: "udupi", name: "Masala dosa",            price: 119, veg: true }
+    mdosa:   { r: "udupi", name: "Masala dosa",            price: 119, veg: true },
+    manch:   { r: "dragon",name: "Veg manchurian",         price: 199, veg: true },
+    cfr:     { r: "hakkah",name: "Chicken fried rice",     price: 219, veg: false },
+    vhyd:    { r: "dum",   name: "Veg dum biryani",        price: 239, veg: true }
   };
   const CATS = [
     { label: "All", photo: "cat-all" }, { label: "Biryani", photo: "hyd" }, { label: "Chinese", photo: "hakka" },
@@ -431,7 +507,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const fresh = () => ({
     addr: "home", vegOnly: false, fast: false,
     chosen: { riya: true, kabir: true, meera: true, arjun: false },
-    dismissed: {}, cat: 0, slide: 0
+    dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {}
   });
 
   const $ = s => document.querySelector(s);
@@ -546,9 +622,68 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }).join("");
   }
 
+  /* ---------------- Render: Search ---------------- */
+  function searchMatches() {
+    const q = state.q.trim().toLowerCase();
+    if (!q) return [];
+    const words = q.replace(/s$/, "");
+    return SEARCH_ORDER.filter(id => {
+      const r = RESTS[id];
+      if (!delivers(id)) return false;                                         // only restaurants that deliver here
+      for (const f of Object.keys(state.sflags)) {
+        if (!state.sflags[f]) continue;
+        if (f === "fast" ? !r.fast : !FLAGS[f].includes(id)) return false;
+      }
+      const hay = [r.name, r.cuisine].concat(Object.values(DISHES).filter(d => d.r === id).map(d => d.name)).join(" ").toLowerCase();
+      return hay.includes(words);
+    });
+  }
+  function restCard(id) {
+    const r = RESTS[id];
+    return `<button class="rc" type="button" data-rest="${id}">${photo(r.cover, "", r.name, r.tone)}<span class="strip">${r.offer}</span><span class="pill">${ICON.star} ${r.rating}</span></div>
+      <b>${r.name}</b>${r.fast ? `<span class="eta fast">${ICON.bolt} Near &amp; Fast</span>` : `<span class="eta">${ICON.timer} ${r.eta}</span>`}</button>`;
+  }
+  function renderSearch() {
+    $("#q").value = state.q;
+    $("#q-clear").hidden = !state.q;
+    $$("[data-sflag]").forEach(b => b.setAttribute("aria-pressed", String(!!state.sflags[b.dataset.sflag])));
+    const body = $("#search-body");
+    if (!state.q.trim()) {
+      body.innerHTML = `<section class="sec"><div class="sec-h"><h2>Popular searches</h2></div>
+        <div class="popular">${POPULAR.map(p => `<button class="chip" type="button" data-q="${p}">${p}</button>`).join("")}</div></section>`;
+      return;
+    }
+    const ids = searchMatches();
+    if (!ids.length) {
+      body.innerHTML = `<div class="noresult">No restaurants that deliver to ${ADDRS[state.addr].name} match "${state.q}"${Object.values(state.sflags).some(Boolean) ? " with these filters" : ""}.</div>`;
+      return;
+    }
+    const rec = ids.slice(0, 6);
+    body.innerHTML = `<section class="sec"><div class="sec-h"><h2>Recommended for you</h2></div>
+        <div class="grid2r">${rec.map(restCard).join("")}</div></section>
+      <section class="sec"><div class="sec-h" style="padding-bottom:4px"><h2>All restaurants</h2></div><div class="featured-label">Featured</div>
+        ${ids.map(id => {
+          const r = RESTS[id], [did, orig] = FEATURED[id] || [r.cover, 0], d = DISHES[did];
+          return `<div class="big"><button class="open" type="button" data-rest="${id}" aria-label="Open ${r.name}">${photo(did, "", d ? d.name : r.name, r.tone)}
+            ${d ? `<span class="dchip">${vmark(d)}${d.name} · ₹${d.price}${orig ? ` <s>₹${orig}</s>` : ""}</span>` : ""}</div>
+            <span class="meta"><span><b>${r.name}</b><small>${r.cuisine} · ${r.eta}</small></span><span class="pill">${ICON.star} ${r.rating}</span></span></button>
+            <button class="bm" type="button" data-save="${id}" aria-pressed="${!!state.saved[id]}" aria-label="Save ${r.name}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></div>`;
+        }).join("")}</section>`;
+  }
+  function openSearch(q) {
+    state.q = q || "";
+    $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-search"));
+    $("#bottomnav").hidden = true;
+    $("#statusbar").classList.add("light");
+    renderSearch();
+    $("#search-scroll").scrollTop = 0;
+    if (!q) setTimeout(() => $("#q").focus(), 50);
+  }
+
   const TABS = ["home", "friends"];
   function showTab(name) {
     $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-" + name));
+    $("#bottomnav").hidden = false;
     $$("#bottomnav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === name));
     $("#statusbar").classList.toggle("light", name !== "home");
     if (name === "friends") { state.seenFriends = true; renderFriends(); }
@@ -590,7 +725,16 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     if (!t) return;
     const ds = t.dataset;
     if (ds.slide !== undefined) { showSlide(+ds.slide); return startDeals(); }
-    if (ds.cat !== undefined) { state.cat = +ds.cat; return renderHome(); }
+    if (ds.cat !== undefined) {
+      state.cat = +ds.cat; renderHome();
+      return state.cat === 0 ? undefined : openSearch(CATS[state.cat].label);   // a category opens search for it
+    }
+    if (ds.q) return openSearch(ds.q);
+    if (ds.sflag) { state.sflags[ds.sflag] = !state.sflags[ds.sflag]; return renderSearch(); }
+    if (ds.save) {
+      state.saved[ds.save] = !state.saved[ds.save]; renderSearch();
+      return toast(state.saved[ds.save] ? `${RESTS[ds.save].name} saved to your collection.` : `${RESTS[ds.save].name} removed from your collection.`);
+    }
     if (ds.dismiss) {
       state.dismissed[ds.dismiss] = true; renderHome(); renderFriends();
       return toast("Got it. You'll see fewer picks like this.");
@@ -615,12 +759,16 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     switch (ds.action) {
       case "addr": renderAddr(); return openSheet($("#sheet-addr"));
       case "close-sheet": return closeSheets();
-      case "search": return toast(`${LATER.search} is built in step 2.`);
+      case "search": return openSearch("");
+      case "search-back": state.cat = 0; return showTab("home");
+      case "clear-q": state.q = ""; renderSearch(); return $("#q").focus();
+      case "mic": return toast("Voice search isn't part of this prototype. Type a dish or restaurant.");
       case "profile": return toast(`${LATER.profile} is built in step 5.`);
       case "meals": return toast("Meals under ₹250 isn't part of this prototype.");
     }
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheets(); });
+  $("#q").addEventListener("input", e => { state.q = e.target.value; renderSearch(); e.target.focus(); });
 
   state = fresh();
   renderHome();
