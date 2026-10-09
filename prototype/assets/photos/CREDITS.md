@@ -27,5 +27,6 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | cold | Cold coffee | supplied by the project owner | to confirm |
 | roll | Paneer kathi roll (cropped to hide packaging text) | supplied by the project owner | to confirm |
 | ptb | Paneer tikka biryani | supplied by the project owner | to confirm |
+| cat-all | "All" category (table spread, cropped to exclude a brand sign) | supplied by the project owner | to confirm |
 
 Before sharing publicly, fill in the photographer, source link and licence for each photo.
