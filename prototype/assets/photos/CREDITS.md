@@ -17,5 +17,10 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | smomo | Steamed chicken momos | supplied by the project owner | to confirm |
 | mdosa | Masala dosa | supplied by the project owner | to confirm |
 | chilli | Chilli chicken | supplied by the project owner | to confirm |
+| mdb | Mutton dum biryani | supplied by the project owner | to confirm |
+| taloo | Tandoori aloo | supplied by the project owner | to confirm |
+| bgn | Burnt garlic noodles | supplied by the project owner | to confirm |
+| lasagna | Spinach & mushroom lasagna (label cropped out) | supplied by the project owner | to confirm |
+| c65 | Chicken 65 | supplied by the project owner | to confirm |
 
 Before sharing publicly, fill in the photographer, source link and licence for each photo.
