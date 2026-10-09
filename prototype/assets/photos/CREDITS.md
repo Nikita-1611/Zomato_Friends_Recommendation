@@ -12,5 +12,10 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | manch | Veg manchurian | same photo as hakka | to confirm |
 | pizza | Rustica pizza | supplied by the project owner | to confirm |
 | butter | Butter chicken | supplied by the project owner | to confirm |
+| kosha | Kosha mangsho | supplied by the project owner | to confirm |
+| kolk | Kolkata biryani | supplied by the project owner | to confirm |
+| smomo | Steamed chicken momos | supplied by the project owner | to confirm |
+| mdosa | Masala dosa | supplied by the project owner | to confirm |
+| chilli | Chilli chicken | supplied by the project owner | to confirm |
 
 Before sharing publicly, fill in the photographer, source link and licence for each photo.
