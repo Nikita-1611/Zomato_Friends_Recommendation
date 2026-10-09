@@ -902,8 +902,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   // Labels only: liked this / loved this / keeps coming back to this / has this on repeat
   const FRIEND_PICKS = [
     { f: "riya",  d: "kosha",  label: "keeps coming back to this" },
-    { f: "kabir", d: "lko",    label: "has this on repeat" },
     { f: "meera", d: "butter", label: "loved this" },
+    { f: "kabir", d: "chilli", label: "keeps coming back to this" },
+    { f: "riya",  d: "mdosa",  label: "has this on repeat" },
+    { f: "meera", d: "pizza",  label: "liked this" },
+    { f: "kabir", d: "cold",   label: "has this on repeat" },
+    { f: "meera", d: "dal",    label: "keeps coming back to this" },
+    { f: "kabir", d: "lko",    label: "has this on repeat" },
     { f: "arjun", d: "c65",    label: "liked this" },
     { f: "dev",   d: "dal",    label: "loved this" }
   ];
@@ -926,7 +931,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const GROUP_PICKS = [
     { d: "kolk", kind: "group" },
     { d: "lko", kind: "group" },
-    { d: "chilli", kind: "group" },
+    { d: "bgn", kind: "group" },
+    { d: "mdb", kind: "group" },
+    { d: "seekh", kind: "group" },
+    { d: "kmb", kind: "group" },
     { d: "galouti", kind: "group" },
     { d: "lasagna", kind: "new" }    // a dish the user never ordered that their taste matches recently started reordering
   ];
@@ -980,7 +988,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed["f:" + p.f + ":" + p.d]);
   const groupPicks = () => {
     const ok = GROUP_PICKS.filter(p => delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed["g:" + p.d]);
-    return ok.filter(p => p.kind === "group").slice(0, 2).concat(ok.filter(p => p.kind === "new").slice(0, 1));
+    return ok.filter(p => p.kind === "group").slice(0, 4).concat(ok.filter(p => p.kind === "new").slice(0, 1));
   };
   const favPhrase = () => {
     const short = { hyd: "biryani", smomo: "momos", hakka: "noodles" };
@@ -1201,6 +1209,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     const out = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` }));
     if (groupOK()) GROUP_PICKS.filter(p => DISHES[p.d].r === rid && vegOK(p.d) && !state.dismissed["g:" + p.d] && !out.some(o => o.d === p.d))
       .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newReason(p.d) : GROUP_REASON, dismissKey: "g:" + p.d }));
+    // Top up with this restaurant's dishes the group reorders most, so every menu has a few picks
+    if (groupOK()) Object.keys(DISHES).filter(id => DISHES[id].r === rid && DISHES[id].reo >= 0.6 && vegOK(id) && !FAVS.includes(id) && !state.dismissed["g:" + id] && !out.some(o => o.d === id))
+      .sort((x, y) => DISHES[y].reo - DISHES[x].reo)
+      .forEach(id => out.push({ key: "g:" + id, d: id, text: GROUP_REASON, dismissKey: "g:" + id }));
     return out.slice(0, 3);
   }
   function ctl(id) {
