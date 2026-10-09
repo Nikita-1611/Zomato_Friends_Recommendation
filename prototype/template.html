@@ -413,7 +413,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .drow .info { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
 .drow .by { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
 .drow .by .ini { width: 26px; height: 26px; font-size: 12px; }
-.drow b { font-size: 17px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+.drow .info > b { font-size: 17px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
 .drow .rn { font-size: 13px; color: var(--muted); }
 .drow .ph { width: 120px; height: 120px; border-radius: 16px; }
 .drow .open { border: 0; background: none; padding: 0; }
@@ -427,6 +427,56 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .cbtn[aria-pressed="true"] { background: #fff; color: var(--green-dark); }
 .fnote { margin: 12px 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; display: flex; gap: 8px; }
 .fnote svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; }
+
+/* ---------- Usernames, stories, comments, locals ---------- */
+.un { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+.ltag { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #0c6b7a; background: #e3f6f8; border-radius: 5px; padding: 1px 5px; vertical-align: 1px; }
+.stories { display: flex; gap: 14px; overflow-x: auto; padding: 14px 16px 4px; scrollbar-width: none; }
+.stories::-webkit-scrollbar { display: none; }
+.story { flex-shrink: 0; width: 70px; border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #333; }
+.story .ring { width: 66px; height: 66px; border-radius: 50%; padding: 3px; background: conic-gradient(#f59f00, #e8590c, #d6336c, #f59f00); box-sizing: border-box; }
+.story.seen .ring { background: #d6d6d6; }
+.story .ring .ph { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+.story .ring .ph.stand-in::after { content: none; }
+.story .ring .ini { position: absolute; right: -2px; bottom: -2px; width: 22px; height: 22px; font-size: 10px; box-shadow: 0 0 0 2px #fff; }
+.story .ring { position: relative; }
+.story .nm { max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.story.mine .ring { background: none; border: 2px dashed #cfcfcf; }
+.story.mine .plus { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: #f6f6f6; color: var(--green); font-size: 28px; font-weight: 400; }
+.cmt { display: flex; gap: 8px; align-items: flex-start; width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid #ececec; border-radius: 12px; background: #fafafa; text-align: left; font-size: 13px; line-height: 1.4; color: #3f3f3f; box-sizing: border-box; }
+.cmt .ini { width: 22px; height: 22px; font-size: 10px; }
+.cmt q { font-style: italic; }
+.cmt b, .drow .by b { font-size: 13.5px; font-weight: 700; }
+.drow .by .un { font-size: 12px; }
+.cmt .more { display: block; color: var(--green-dark); font-weight: 700; margin-top: 3px; font-size: 12.5px; }
+.citem { display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding: 12px 0; }
+.citem + .citem { border-top: 1px dashed var(--line); }
+.citem .ini { width: 36px; height: 36px; font-size: 15px; }
+.citem p { margin: 4px 0 0; font-size: 14.5px; line-height: 1.45; }
+.viewer { position: absolute; inset: 0; z-index: 70; background: #111; color: #fff; display: flex; flex-direction: column; }
+.viewer .bars { display: flex; gap: 4px; padding: 52px 12px 8px; }
+.viewer .bars i { flex: 1; height: 3px; border-radius: 3px; background: rgba(255,255,255,.3); }
+.viewer .bars i.on { background: #fff; }
+.viewer .vhead { display: flex; align-items: center; gap: 10px; padding: 4px 14px; }
+.viewer .vhead .ini { width: 34px; height: 34px; font-size: 14px; }
+.viewer .vhead .un { color: rgba(255,255,255,.7); }
+.viewer .vhead .x { margin-left: auto; border: 0; background: none; color: #fff; padding: 6px; }
+.viewer .vhead .x svg { width: 24px; height: 24px; }
+.viewer .vimg { flex: 1; margin: 12px 0; position: relative; }
+.viewer .vimg .ph { position: absolute; inset: 0; border-radius: 0; }
+.viewer .vimg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.viewer .tap { position: absolute; top: 0; bottom: 0; width: 40%; border: 0; background: none; padding: 0; z-index: 1; }
+.viewer .tap.l { left: 0; } .viewer .tap.r { right: 0; width: 60%; }
+.viewer .cap { padding: 0 16px; font-size: 17px; font-weight: 700; }
+.viewer .vdish { padding: 6px 16px 0; font-size: 14px; color: rgba(255,255,255,.75); }
+.viewer .vacts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 16px 22px; }
+.viewer .vacts button { height: 46px; border-radius: 12px; font-weight: 800; font-size: 15px; border: 1px solid rgba(255,255,255,.4); background: none; color: #fff; }
+.viewer .vacts button.go { background: var(--green); border-color: var(--green); }
+.storyform { display: flex; flex-direction: column; gap: 12px; }
+.storyform .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.storyform input[type="text"] { height: 44px; border: 1px solid #dcdcdc; border-radius: 12px; padding: 0 12px; font: inherit; font-size: 15px; }
+.filebtn { display: inline-flex; align-items: center; gap: 8px; border: 1px dashed #bdbdbd; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 600; color: #444; cursor: pointer; }
+.filebtn input { display: none; }
 
 /* ---------- Sheets & toast ---------- */
 .scrim { position: absolute; inset: 0; background: rgba(20,20,20,.48); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
@@ -608,10 +658,12 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <section class="screen" id="s-profile" aria-label="Profile">
         <div class="ptop"><button class="circ" type="button" data-action="profile-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button></div>
         <div class="scroll">
-          <div class="phead"><span class="big-ini">A</span><span><b>Ananya</b><small id="prof-addr"></small></span></div>
+          <div class="phead"><span class="big-ini">A</span><span><b>Ananya</b><span class="un" style="display:block;font-size:14px;color:var(--ink);font-weight:600">@ananya_newintown</span><small id="prof-addr"></small></span></div>
           <section class="sec" style="margin-top:18px"><div class="sec-h"><h2>Sharing &amp; privacy</h2></div>
             <div class="pcard"><div class="trow"><div><b id="share-label">Share my favourites with friends</b><p>Friends who chose you see the dish and a label like "keeps coming back to this". Never how often, when, or what you pay.</p></div>
-              <button class="switch" type="button" role="switch" id="share-toggle" aria-checked="true" aria-labelledby="share-label"></button></div></div>
+              <button class="switch" type="button" role="switch" id="share-toggle" aria-checked="true" aria-labelledby="share-label"></button></div>
+              <div class="trow" style="border-top:1px solid var(--line)"><div><b id="pub-label">Public profile</b><p>Let people near you who aren't contacts see your username and shared picks. Never your real name.</p></div>
+              <button class="switch" type="button" role="switch" id="pub-toggle" aria-checked="false" aria-labelledby="pub-label"></button></div></div>
           </section>
           <section class="sec"><div class="sec-h"><h2>Choose whose picks you see</h2><p>From your contacts who share their favourites.</p></div><div class="choose" id="prof-choose"></div></section>
           <section class="sec"><div class="sec-h"><h2>My shared picks</h2></div><div class="pcard" id="prof-picks"></div></section>
@@ -630,7 +682,9 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <section class="screen" id="s-friends" aria-label="Friends">
         <div class="scroll">
           <div class="fhead"><h1>Friends' picks</h1><p>Dishes the friends you chose keep coming back to. Only friends who opted in to sharing are listed.</p></div>
-          <section class="sec" style="margin-top:18px"><div class="sec-h" style="padding-bottom:4px"><h2>From your friends</h2></div><div id="friends-feed"></div></section>
+          <div class="stories" id="stories" aria-label="Stories"></div>
+          <section class="sec" style="margin-top:14px"><div class="sec-h" style="padding-bottom:4px"><h2>From your friends</h2></div><div id="friends-feed"></div></section>
+          <section class="sec"><div class="sec-h" style="padding-bottom:4px"><h2>Local picks</h2><p>From people near you who turned on a public profile. You only see their username.</p></div><div id="local-feed"></div></section>
           <section class="sec"><div class="sec-h"><h2>Choose whose picks you see</h2><p>From your contacts who share their favourites.</p></div><div class="choose" id="choose-list"></div></section>
           <p class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Friends never see how often you order, when, or what you pay. Only picks from restaurants that deliver to your address appear.</p>
           <div class="home-end"></div>
@@ -646,6 +700,18 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     </nav>
 
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
+    <section class="sheet" id="sheet-cmt" role="dialog" aria-modal="true" aria-labelledby="cmt-title">
+      <div class="grab"></div><h2 id="cmt-title">Comments</h2><div class="wdish" id="cmt-dish"></div><div id="cmt-list"></div>
+      <div class="wnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Only comments from your contacts and public-profile locals. No dates or order counts.</span></div>
+    </section>
+    <section class="sheet" id="sheet-story" role="dialog" aria-modal="true" aria-labelledby="story-title">
+      <div class="grab"></div><h2 id="story-title">Add to your story</h2>
+      <div class="storyform"><span class="wk">Which dish?</span><div class="opts" id="story-dishes"></div>
+        <label class="filebtn"><input type="file" accept="image/*" id="story-file">Add your photo (optional)</label>
+        <input type="text" id="story-cap" maxlength="60" placeholder="Say something about it (optional)">
+        <div class="wnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Friends who chose you see the photo and dish. Never when you ordered or what you paid.</span></div>
+        <button class="primary" type="button" id="story-post">Post to story</button></div>
+    </section>
     <section class="sheet" id="sheet-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
       <div class="grab"></div><h2 id="why-title">Why this pick?</h2>
       <div class="wdish" id="why-dish"></div>
@@ -670,6 +736,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <h2 id="addr-title">Deliver to</h2>
       <div id="addr-opts" style="display:flex;flex-direction:column;gap:10px"></div>
     </section>
+    <div class="viewer" id="viewer" hidden></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
 </div>
@@ -796,12 +863,42 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   // Friends from contacts. Shown only if they opted in AND the user chose them.
   const FRIENDS = {
-    riya:  { name: "Riya",  optIn: true,  color: "#d9480f", share: "Riya chose to share her favourites. She's ordered this more than once." },
-    kabir: { name: "Kabir", optIn: true,  color: "#1971c2", share: "Kabir chose to share their favourites. They've ordered this more than once." },
-    meera: { name: "Meera", optIn: true,  color: "#7048e8", share: "Meera chose to share their favourites. They've ordered this more than once." },
-    arjun: { name: "Arjun", optIn: true,  color: "#2b8a3e", share: "Arjun chose to share their favourites. They've ordered this more than once." },
-    dev:   { name: "Dev",   optIn: false, color: "#868e96", share: "" }
+    riya:  { name: "Riya",  user: "riya.eats", optIn: true,  color: "#d9480f", share: "Riya chose to share her favourites. She's ordered this more than once." },
+    kabir: { name: "Kabir", user: "kabirbrews", optIn: true,  color: "#1971c2", share: "Kabir chose to share their favourites. They've ordered this more than once." },
+    meera: { name: "Meera", user: "meeramunches", optIn: true,  color: "#7048e8", share: "Meera chose to share their favourites. They've ordered this more than once." },
+    arjun: { name: "Arjun", user: "arjun_tadka", optIn: true,  color: "#2b8a3e", share: "Arjun chose to share their favourites. They've ordered this more than once." },
+    dev:   { name: "Dev",   user: "devdines", optIn: false, color: "#868e96", share: "" }
   };
+  // Local people who turned on a public profile: shown by username only, never a real name.
+  // Strangers without a public profile never appear on their own; they only count in groups of 20+.
+  const LOCALS = {
+    dosadiaries:    { user: "dosadiaries",    color: "#0c8599" },
+    spicyfork:      { user: "spicyfork_42",   color: "#e8590c" },
+    midnightmasala: { user: "midnightmasala", color: "#5f3dc4" }
+  };
+  const LOCAL_PICKS = [
+    { f: "dosadiaries",    d: "mdosa",  label: "has this on repeat" },
+    { f: "spicyfork",      d: "c65",    label: "keeps coming back to this" },
+    { f: "midnightmasala", d: "lko",    label: "loved this" },
+    { f: "midnightmasala", d: "chilli", label: "keeps coming back to this" }
+  ];
+  const ME = { name: "Ananya", user: "ananya_newintown" };
+  // A few comments on some dishes (not all). Only from opted-in contacts or public-profile locals. No dates or counts.
+  const COMMENTS = {
+    kosha:  [{ by: "riya", text: "Order the luchi with it. Trust me." },
+             { by: "dosadiaries", text: "Properly slow-cooked. The gravy is dark and rich." },
+             { by: "meera", text: "Too spicy for me, but the mutton is so soft." }],
+    butter: [{ by: "kabir", text: "A little on the sweet side. Get garlic naan with it." }],
+    mdosa:  [{ by: "spicyfork", text: "Crisp till the last bite, and the sambar is great." },
+             { by: "riya", text: "Best breakfast near Maple Lane." }]
+  };
+  // Stories: dish photos friends chose to post. No timestamps.
+  const STORIES = [
+    { f: "riya",  d: "kosha",  caption: "Sunday dinner sorted." },
+    { f: "meera", d: "butter", caption: "Comfort food after a long week." },
+    { f: "kabir", d: "chilli", caption: "Late-night craving, fixed." },
+    { f: "arjun", d: "c65",    caption: "Crunchiest Chicken 65 I've had here." }
+  ];
   // Labels only: liked this / loved this / keeps coming back to this / has this on repeat
   const FRIEND_PICKS = [
     { f: "riya",  d: "kosha",  label: "keeps coming back to this" },
@@ -840,6 +937,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     addr: "home", vegOnly: false, fast: false,
     chosen: { riya: true, kabir: true, meera: true, arjun: false },
     dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {},
+    seenStory: {}, myStory: null, pub: false, storyDish: null, storyImg: null,
     quiet: false, newUser: false, quiz: {}, quizDone: false,
     rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
     cart: {}, cartRest: null, orders: Object.assign({}, SEED_ORDERS), prompted: { smomo: true, hakka: true },
@@ -857,7 +955,12 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     office: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>`
   };
   const vmark = d => `<span class="vmark${d.veg ? "" : " nv"}" title="${d.veg ? "Vegetarian" : "Non-vegetarian"}"></span>`;
-  const ini = f => `<span class="ini" style="background:${FRIENDS[f].color}">${FRIENDS[f].name[0]}</span>`;
+  const person = id => FRIENDS[id] || LOCALS[id];
+  const ini = f => `<span class="ini" style="background:${person(f).color}">${(person(f).name || person(f).user)[0].toUpperCase()}</span>`;
+  const handle = id => "@" + person(id).user;
+  // Contacts: name + username. Locals: username + Local tag.
+  const whoLine = id => FRIENDS[id] ? `<b>${FRIENDS[id].name}</b> <span class="un">${handle(id)}</span>` : `<b>${handle(id)}</b> <span class="ltag">Local</span>`;
+  const canShow = id => (FRIENDS[id] && FRIENDS[id].optIn) || !!LOCALS[id];
   const restOf = d => RESTS[DISHES[d].r];
   // Real photo if the build found one, otherwise a neutral stand-in tinted for the restaurant.
   function photo(id, extra = "", label = "", tone) {
@@ -967,7 +1070,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   const chooseRows = () => Object.keys(FRIENDS).filter(f => FRIENDS[f].optIn).map(f => {
     const on = !!state.chosen[f];
-    return `<div class="crow">${ini(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares favourites</small></div>
+    return `<div class="crow">${ini(f)}<div><b>${FRIENDS[f].name}</b><small>${handle(f)} · in your contacts</small></div>
       <button class="cbtn" type="button" data-choose="${f}" aria-pressed="${on}">${on ? "Showing" : "Show picks"}</button></div>`;
   }).join("");
   function renderProfile() {
@@ -990,17 +1093,40 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     renderProfile(); showScreen("s-profile");
   }
 
+  const commentsFor = d => (COMMENTS[d] || []).filter(c => canShow(c.by));
+  function cmtSnippet(d) {
+    const cs = commentsFor(d);
+    if (!cs.length) return "";
+    const c = cs[0], nm = FRIENDS[c.by] ? FRIENDS[c.by].name : handle(c.by);
+    return `<button class="cmt" type="button" data-comments="${d}">${ini(c.by)}<span><q>${c.text}</q> <b>${nm}</b>
+      <span class="more">${cs.length > 1 ? `See all ${cs.length} comments` : "See comment"}</span></span></button>`;
+  }
+  function feedRow(p, kind) {
+    const d = DISHES[p.d], r = restOf(p.d), k = `${kind}:${p.f}:${p.d}`;
+    return `<div class="drow"><div class="info">
+        <span class="by">${ini(p.f)}<span>${whoLine(p.f)}<br>${p.label}</span></span>
+        <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.name} · ${r.eta}</span>
+        <button class="reason" type="button" data-why="${k}">Why this pick?</button>
+        ${cmtSnippet(p.d)}
+        <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
+      </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
+  }
+  const localPicks = () => LOCAL_PICKS.filter(p => delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed[`l:${p.f}:${p.d}`]);
+  const storyList = () => STORIES.filter(st => FRIENDS[st.f].optIn && state.chosen[st.f]).concat(state.myStory ? [state.myStory] : []);
+  function renderStories() {
+    const list = STORIES.filter(st => FRIENDS[st.f].optIn && state.chosen[st.f]);
+    $("#stories").innerHTML = `<button class="story mine" type="button" data-action="add-story"><span class="ring">${state.myStory
+        ? (state.myStory.img ? `<span class="ph" style="background-image:url(${state.myStory.img})"></span>` : `${dishPhoto(state.myStory.d)}</div>`)
+        : `<span class="plus">+</span>`}</span><span class="nm">Your story</span></button>` +
+      list.map((st, i) => `<button class="story${state.seenStory[st.f] ? " seen" : ""}" type="button" data-story="${i}"><span class="ring">${dishPhoto(st.d)}</div>${ini(st.f)}</span><span class="nm">${FRIENDS[st.f].name}</span></button>`).join("");
+  }
   function renderFriends() {
+    renderStories();
     const fp = friendPicks();
-    $("#friends-feed").innerHTML = fp.length ? fp.map(p => {
-      const d = DISHES[p.d], r = restOf(p.d), k = `f:${p.f}:${p.d}`;
-      return `<div class="drow"><div class="info">
-          <span class="by">${ini(p.f)}<span><b style="display:inline;font-size:14px">${FRIENDS[p.f].name}</b> ${p.label}</span></span>
-          <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.name} · ${r.eta}</span>
-          <button class="reason" type="button" data-why="${k}">Why this pick?</button>
-          <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
-        </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
-    }).join("") : `<div class="empty-row" style="margin-top:8px">No picks to show. Choose friends below, or switch address: only restaurants that deliver to ${ADDRS[state.addr].name} count.</div>`;
+    $("#friends-feed").innerHTML = fp.length ? fp.map(p => feedRow(p, "f")).join("")
+      : `<div class="empty-row" style="margin-top:8px">No picks to show. Choose friends below, or switch address: only restaurants that deliver to ${ADDRS[state.addr].name} count.</div>`;
+    const lp = localPicks();
+    $("#local-feed").innerHTML = lp.length ? lp.map(p => feedRow(p, "l")).join("") : `<div class="empty-row" style="margin-top:8px">No local picks deliver here yet.</div>`;
     $("#choose-list").innerHTML = chooseRows();
   }
 
@@ -1142,7 +1268,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     $("#cart-total").textContent = `₹${total}`;
   }
   function openRest(rid) {
-    closeSheets();
+    closeSheets(); $("#viewer").hidden = true;
     const cur = $(".screen.active").id.replace("s-", "");
     if (["home", "friends", "search"].includes(cur)) state.restFrom = cur;
     state.rest = rid; state.restVeg = state.vegOnly; state.restHigh = false; state.collapsed = {};
@@ -1154,16 +1280,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const LOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
   const favChips = () => `<div class="favs">${FAVS.map(id => `<span class="favchip">${photo(id, "", "", restOf(id).tone)}</div>${DISHES[id].name}</span>`).join("")}</div>`;
   function openWhy(key) {
-    const [kind, a, b] = key.split(":"), d = kind === "f" ? b : a, dish = DISHES[d], r = restOf(d);
+    const [kind, a, b] = key.split(":"), d = (kind === "f" || kind === "l") ? b : a, dish = DISHES[d], r = restOf(d);
     state.whyKey = key; state.whyDish = d;
     $("#why-dish").innerHTML = `${dishPhoto(d)}</div><div><b>${vmark(dish)}${dish.name}</b><small>${r.name} · ${r.eta}</small></div>`;
     const q = $("#why-quote"), body = $("#why-body");
     if (kind === "f") {
       const p = FRIEND_PICKS.find(x => x.f === a && x.d === d);
       q.className = "wquote friend";
-      q.innerHTML = `${ini(a)}<span>${FRIENDS[a].name} ${p.label}</span>`;
+      q.innerHTML = `${ini(a)}<span>${whoLine(a)}<br>${p.label}</span>`;
       body.innerHTML = `<p>${FRIENDS[a].share}</p>
         <div class="wnote">${LOCK}<span>You see this because you chose ${FRIENDS[a].name} in "Choose whose picks you see". No order counts, dates, times or prices are ever shown for friends.</span></div>`;
+    } else if (kind === "l") {
+      const p = LOCAL_PICKS.find(x => x.f === a && x.d === d);
+      q.className = "wquote friend";
+      q.innerHTML = `${ini(a)}<span>${whoLine(a)}<br>${p.label}</span>`;
+      body.innerHTML = `<p>${handle(a)} lives near you and turned on a public profile, so their shared favourites are visible to people nearby. They're not in your contacts, so you only see their username.</p>
+        <div class="wnote">${LOCK}<span>No real name, order counts, dates, times or prices are ever shown.</span></div>`;
     } else if (kind === "a") {
       q.className = "wquote";
       q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>Based on your answers</span>`;
@@ -1303,6 +1435,25 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }
   }
 
+  /* ---------------- Stories ---------------- */
+  function renderStoryForm() {
+    const ids = Object.keys(state.orders).filter(id => DISHES[id]);
+    $("#story-dishes").innerHTML = ids.map(id => `<button class="qopt" type="button" data-sdish="${id}" aria-pressed="${state.storyDish === id}">${DISHES[id].name}</button>`).join("");
+  }
+  function openStory(i) {
+    const list = STORIES.filter(st => FRIENDS[st.f].optIn && state.chosen[st.f]);
+    if (i >= list.length) { $("#viewer").hidden = true; return renderStories(); }
+    state.storyIdx = i;
+    const st = list[i], d = DISHES[st.d], r = restOf(st.d);
+    state.seenStory[st.f] = true; state.whyDish = st.d;
+    $("#viewer").innerHTML = `<div class="bars">${list.map((_, j) => `<i class="${j <= i ? "on" : ""}"></i>`).join("")}</div>
+      <div class="vhead">${ini(st.f)}<span>${whoLine(st.f)}</span><button class="x" type="button" data-action="story-close" aria-label="Close story"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="vimg">${dishPhoto(st.d)}</div><button class="tap l" type="button" data-action="story-prev" aria-label="Previous story"></button><button class="tap r" type="button" data-action="story-next" aria-label="Next story"></button></div>
+      <div class="cap">${st.caption}</div><div class="vdish">${vmark(d)} ${d.name} · ${r.name}</div>
+      <div class="vacts"><button type="button" data-rest="${d.r}">View restaurant</button><button class="go" type="button" id="why-add">Add to cart</button></div>`;
+    $("#viewer").hidden = false;
+  }
+
   function renderAddr() {
     $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}">
       <span class="ic">${ICON[k]}</span><span><b>${ADDRS[k].name}</b><small>${ADDRS[k].line}</small></span><span class="tick"></span></button>`).join("");
@@ -1383,6 +1534,14 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       if (TABS.includes(ds.nav)) return showTab(ds.nav);
       return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
     }
+    if (ds.comments) {
+      const d = ds.comments, dish = DISHES[d];
+      $("#cmt-dish").innerHTML = `${dishPhoto(d)}</div><div><b>${vmark(dish)}${dish.name}</b><small>${restOf(d).name}</small></div>`;
+      $("#cmt-list").innerHTML = commentsFor(d).map(c => `<div class="citem">${ini(c.by)}<div><div>${whoLine(c.by)}</div><p>${c.text}</p></div></div>`).join("");
+      return openSheet($("#sheet-cmt"));
+    }
+    if (ds.story !== undefined) return openStory(+ds.story);
+    if (ds.sdish) { state.storyDish = ds.sdish; return renderStoryForm(); }
     if (ds.quiz) {
       const [k, v] = ds.quiz.split(":"); state.quiz[k] = v;
       state.quizDone = QUIZ.every(q => state.quiz[q.key]);
@@ -1395,6 +1554,15 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       return toast(state.chosen[f] ? `You'll see ${FRIENDS[f].name}'s picks.` : `${FRIENDS[f].name}'s picks are hidden.`);
     }
     if (t.id === "place-order") return placeOrder();
+    if (t.id === "pub-toggle") {
+      state.pub = !state.pub; t.setAttribute("aria-checked", String(state.pub));
+      return toast(state.pub ? "Public profile on. People nearby see @ananya_newintown and your shared picks, never your name." : "Public profile off. Only contacts who chose you can see your picks.");
+    }
+    if (t.id === "story-post") {
+      state.myStory = { f: "me", d: state.storyDish, caption: $("#story-cap").value.trim(), img: state.storyImg };
+      closeSheets(); renderStories();
+      return toast("Posted to your story. Friends who chose you can see it.");
+    }
     if (t.id === "share-toggle") {
       state.share = !state.share; renderProfile();
       return toast(state.share ? "Friends who chose you can see your shared picks." : "Sharing is off. Friends can't see any of your picks.");
@@ -1449,6 +1617,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       case "clear-q": state.q = ""; renderSearch(); return $("#q").focus();
       case "mic": return toast("Voice search isn't part of this prototype. Type a dish or restaurant.");
       case "profile": return openProfile();
+      case "add-story":
+        if (!state.share) return toast("Turn on \"Share my favourites\" in Profile to post a story.");
+        state.storyDish = state.storyDish || FAVS[0]; state.storyImg = null; $("#story-cap").value = ""; $("#story-file").value = "";
+        renderStoryForm(); return openSheet($("#sheet-story"));
+      case "story-close": $("#viewer").hidden = true; return renderStories();
+      case "story-next": return openStory(state.storyIdx + 1);
+      case "story-prev": return openStory(Math.max(0, state.storyIdx - 1));
       case "restart": {
         state = fresh(); closeSheets(); showTab("home"); $("#home-scroll").scrollTop = 0; renderFriends();
         return toast("Demo restarted.");
@@ -1470,6 +1645,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheets(); });
+  $("#story-file").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { state.storyImg = rd.result; toast("Photo added."); };
+    rd.readAsDataURL(f);
+  });
   $("#q").addEventListener("input", e => { state.q = e.target.value; renderSearch(); e.target.focus(); });
 
   state = fresh();
