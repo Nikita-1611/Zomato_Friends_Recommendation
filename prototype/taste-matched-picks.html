@@ -472,6 +472,20 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .cmt b, .drow .by b { font-size: 13.5px; font-weight: 700; }
 .drow .by .un { font-size: 12px; }
 .cmt .more { display: block; color: var(--green-dark); font-weight: 700; margin-top: 3px; font-size: 12.5px; }
+.cmt-write { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.cmt-write textarea { width: 100%; box-sizing: border-box; min-height: 64px; resize: none; border: 1.5px solid #dcdcdc; border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 14.5px; }
+.cmt-write textarea:focus { outline: none; border-color: var(--green); }
+.cmt-write .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cmt-write small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.cmt-write .post { flex: none; height: 38px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--green); color: #fff; font-weight: 800; font-size: 14px; }
+.cmt-write .post:disabled { opacity: .45; }
+.cmt-lock { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+.cmt-empty { padding: 12px 0; font-size: 14px; color: var(--muted); }
+.done .rate { width: 100%; box-sizing: border-box; text-align: left; background: #f6faf7; border: 1px solid #dcebe1; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.done .rate b { font-size: 15.5px; }
+.done .rate p { margin: 0; font-size: 13px; }
+.done .rate button { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1.5px solid #cfe3d6; background: #fff; font-weight: 700; font-size: 14px; color: var(--green); text-align: left; }
+.done .rate button svg { width: 17px; height: 17px; flex: none; }
 .citem { display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding: 12px 0; }
 .citem + .citem { border-top: 1px dashed var(--line); }
 .citem .ini { width: 36px; height: 36px; font-size: 15px; }
@@ -657,6 +671,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
           <div><h2>Order delivered</h2><p id="done-from"></p></div>
           <div class="cbox" id="done-items"></div>
+          <div class="rate" id="done-cmt"></div>
           <div class="acts"><button class="primary" type="button" data-action="order-again">Order again</button><button class="secondary" type="button" data-action="go-home">Back to home</button></div>
         </div></div>
       </section>
@@ -708,7 +723,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
     <div class="scrim" id="scrim" data-action="close-sheet"></div>
     <section class="sheet" id="sheet-cmt" role="dialog" aria-modal="true" aria-labelledby="cmt-title">
-      <div class="grab"></div><h2 id="cmt-title">Comments</h2><div class="wdish" id="cmt-dish"></div><div id="cmt-list"></div>
+      <div class="grab"></div><h2 id="cmt-title">Comments</h2><div class="wdish" id="cmt-dish"></div><div id="cmt-list"></div><div id="cmt-write"></div>
       <div class="wnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="cmt-note">Only comments from your contacts and public-profile locals. No dates or order counts.</span></div>
     </section>
     <section class="sheet" id="sheet-story" role="dialog" aria-modal="true" aria-labelledby="story-title">
@@ -962,7 +977,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     quiet: false, newUser: false, quiz: {}, quizDone: false,
     rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
     cart: {}, cartRest: null, orders: Object.assign({}, SEED_ORDERS), prompted: { smomo: true, hakka: true },
-    shared: SEED_SHARED.map(x => Object.assign({}, x)), share: true, profileFrom: "home", lastOrder: null, whyKey: null, favFor: null
+    shared: SEED_SHARED.map(x => Object.assign({}, x)), share: true, profileFrom: "home", lastOrder: null, whyKey: null, favFor: null, myComments: {}, cmtDish: null, cmtLocal: false
   });
 
   const $ = s => document.querySelector(s);
@@ -976,11 +991,12 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     office: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>`
   };
   const vmark = d => `<span class="vmark${d.veg ? "" : " nv"}" title="${d.veg ? "Vegetarian" : "Non-vegetarian"}"></span>`;
-  const person = id => FRIENDS[id] || LOCALS[id];
+  const ME_P = { name: "Ananya", user: ME.user, color: "#2f7d4f" };
+  const person = id => id === "me" ? ME_P : (FRIENDS[id] || LOCALS[id]);
   const ini = f => `<span class="ini" style="background:${person(f).color}">${(person(f).name || person(f).user)[0].toUpperCase()}</span>`;
   const handle = id => "@" + person(id).user;
   // Contacts: name + username. Locals: username + Local tag.
-  const whoLine = id => FRIENDS[id] ? `<b>${FRIENDS[id].name}</b> <span class="un">${handle(id)}</span>` : `<b>${handle(id)}</b> <span class="ltag">Local</span>`;
+  const whoLine = id => id === "me" ? `<b>You</b> <span class="un">${handle(id)}</span>` : FRIENDS[id] ? `<b>${FRIENDS[id].name}</b> <span class="un">${handle(id)}</span>` : `<b>${handle(id)}</b> <span class="ltag">Local</span>`;
   const canShow = id => (FRIENDS[id] && FRIENDS[id].optIn) || !!LOCALS[id];
   const restOf = d => RESTS[DISHES[d].r];
   // Real photo if the build found one, otherwise a neutral stand-in tinted for the restaurant.
@@ -1115,7 +1131,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   }
 
   // Local picks show only locals' comments; everywhere else shows contacts and locals.
-  const commentsFor = (d, localOnly) => (COMMENTS[d] || []).filter(c => canShow(c.by) && (!localOnly || LOCALS[c.by]));
+  const commentsFor = (d, localOnly) => (!localOnly && state.myComments[d] ? [{ by: "me", text: state.myComments[d] }] : [])
+    .concat((COMMENTS[d] || []).filter(c => canShow(c.by) && (!localOnly || LOCALS[c.by])));
+  // You can comment only on dishes you've ordered.
+  const canComment = d => !state.newUser && !!state.orders[d];
   // Comments stay tucked away: a small bubble with a count that opens the comments sheet.
   const BUBBLE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
   function cmtIcon(d, round, localOnly) {
@@ -1126,6 +1145,16 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       ? `<button class="rbtn cbub" type="button" data-comments="${d}"${lo} aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}<span class="cnt">${n}</span></button>`
       : `<button class="cicon" type="button" data-comments="${d}"${lo} aria-label="See ${n} comment${n > 1 ? "s" : ""}">${BUBBLE}${n}</button>`;
   }
+  function renderCmtList() {
+    const d = state.cmtDish, list = commentsFor(d, state.cmtLocal);
+    $("#cmt-list").innerHTML = list.length ? list.map(c => `<div class="citem">${ini(c.by)}<div><div>${whoLine(c.by)}</div><p>${esc(c.text)}</p></div></div>`).join("")
+      : `<div class="cmt-empty">No comments yet.</div>`;
+    $("#cmt-write").innerHTML = state.cmtLocal ? "" : canComment(d)
+      ? `<div class="cmt-write"><textarea id="cmt-text" maxlength="140" placeholder="What did you like about the ${DISHES[d].name}?">${esc(state.myComments[d] || "")}</textarea>
+          <div class="row"><small>Friends who chose you see this with your name. No date or order details.</small><button class="post" type="button" data-action="post-comment">${state.myComments[d] ? "Update" : "Post"}</button></div></div>`
+      : `<div class="cmt-lock">Order this dish to add your comment.</div>`;
+  }
+  const esc = t => String(t).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
   function feedRow(p, kind) {
     const d = DISHES[p.d], r = restOf(p.d), k = `${kind}:${p.f}:${p.d}`;
     return `<div class="drow"><div class="info">
@@ -1394,6 +1423,8 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     const r = RESTS[state.lastRest];
     $("#done-from").textContent = `From ${r.name}. Enjoy your dinner.`;
     $("#done-items").innerHTML = Object.keys(state.lastOrder).map(id => `<div class="cline">${dishPhoto(id)}</div><span class="nm">${DISHES[id].name}</span><span class="amt">× ${state.lastOrder[id]}</span></div>`).join("");
+    $("#done-cmt").innerHTML = `<b>How was it?</b><p>Tell friends who chose you. Optional.</p>` + Object.keys(state.lastOrder).map(id =>
+      `<button type="button" data-comments="${id}" data-write="1">${BUBBLE}${state.myComments[id] ? "Edit your comment on" : "Comment on"} ${DISHES[id].name}</button>`).join("");
     showScreen("s-done");
     // Recommend prompt on the 3rd order of the same dish
     const fav = Object.keys(state.lastOrder).find(id => state.orders[id] >= FAV_AT && !state.prompted[id]);
@@ -1566,9 +1597,12 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     if (ds.comments) {
       const d = ds.comments, dish = DISHES[d];
       $("#cmt-dish").innerHTML = `${dishPhoto(d)}</div><div><b>${vmark(dish)}${dish.name}</b><small>${restOf(d).name}</small></div>`;
-      $("#cmt-list").innerHTML = commentsFor(d, !!ds.local).map(c => `<div class="citem">${ini(c.by)}<div><div>${whoLine(c.by)}</div><p>${c.text}</p></div></div>`).join("");
+      state.cmtDish = d; state.cmtLocal = !!ds.local;
+      renderCmtList();
       $("#cmt-note").textContent = ds.local ? "Only comments from public-profile locals. No dates or order counts." : "Only comments from your contacts and public-profile locals. No dates or order counts.";
-      return openSheet($("#sheet-cmt"));
+      openSheet($("#sheet-cmt"));
+      if (ds.write && $("#cmt-text")) setTimeout(() => $("#cmt-text").focus(), 250);
+      return;
     }
     if (ds.story !== undefined) return openStory(+ds.story);
     if (ds.sdish) { state.storyDish = ds.sdish; return renderStoryForm(); }
@@ -1622,6 +1656,15 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       case "view-cart": return openCart();
       case "cart-back": return state.cartRest ? openRest(state.cartRest) : showTab("home");
       case "go-home": return showTab("home");
+      case "post-comment": {
+        const d = state.cmtDish, text = ($("#cmt-text").value || "").trim();
+        if (!text) return toast("Write a few words first.");
+        const edited = !!state.myComments[d];
+        state.myComments[d] = text; renderCmtList();
+        renderHome(); renderFriends(); if (state.rest) renderRest();
+        if (state.lastOrder && state.lastOrder[d]) $$(`#done-cmt [data-comments="${d}"]`).forEach(b => { b.innerHTML = `${BUBBLE}Edit your comment on ${DISHES[d].name}`; });
+        return toast(edited ? "Comment updated." : "Comment posted. Friends who chose you will see it.");
+      }
       case "order-again": state.cart = Object.assign({}, state.lastOrder); state.cartRest = state.lastRest; return openCart();
       case "fav-yes": return favAnswer(true);
       case "fav-no": return favAnswer(false);
