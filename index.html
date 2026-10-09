@@ -363,6 +363,35 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .done .acts { width: 100%; display: flex; flex-direction: column; gap: 10px; }
 .emptycart { padding: 60px 24px; text-align: center; color: var(--muted); display: flex; flex-direction: column; gap: 14px; align-items: center; }
 
+/* ---------- Profile ---------- */
+.ptop { display: flex; align-items: center; gap: 12px; padding: 8px 16px 6px; }
+.phead { display: flex; align-items: center; gap: 14px; padding: 10px 16px 6px; }
+.phead .big-ini { width: 60px; height: 60px; border-radius: 50%; background: #ffd6a5; color: #6b3d0a; display: grid; place-items: center; font-size: 26px; font-weight: 800; }
+.phead b { display: block; font-size: 22px; font-weight: 800; }
+.phead small { font-size: 13.5px; color: var(--muted); }
+.pcard { margin: 0 16px; border: 1px solid var(--line); border-radius: 16px; padding: 2px 14px; }
+.trow { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 14px 0; }
+.trow b { display: block; font-size: 15.5px; margin-bottom: 4px; }
+.trow p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.switch { width: 50px; height: 30px; border-radius: 999px; border: 0; background: #c8c8c8; position: relative; padding: 0; transition: background .2s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.switch[aria-checked="true"] { background: var(--green); }
+.switch[aria-checked="true"]::after { transform: translateX(20px); }
+.mypick { display: grid; grid-template-columns: 48px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
+.mypick + .mypick { border-top: 1px solid var(--line); }
+.mypick .ph { width: 48px; height: 48px; border-radius: 10px; }
+.mypick .ph.stand-in::after { content: none; }
+.mypick b { font-size: 14.5px; display: block; }
+.mypick small { font-size: 12.5px; color: var(--muted); }
+.mypick.off .ph, .mypick.off b { opacity: .45; }
+.newbadge { font-size: 10px; font-weight: 800; color: var(--green-dark); background: var(--green-soft); border-radius: 5px; padding: 1px 5px; margin-left: 6px; vertical-align: 1px; }
+.hidebtn { border: 1.5px solid #dcdcdc; background: #fff; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 700; }
+.hidebtn[aria-pressed="true"] { background: #2b2b2b; border-color: #2b2b2b; color: #fff; }
+.offmsg { margin: 10px 0 2px; padding: 10px 12px; border-radius: 10px; background: #fff6e8; color: #7a5208; font-size: 13px; line-height: 1.45; }
+.seeas { margin: 0 16px; padding: 12px 14px; border-radius: 14px; background: #fff6e8; border: 1px solid #f3dfb6; font-size: 13.5px; line-height: 1.6; }
+.rules { margin: 0 16px; padding-left: 18px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.rules li { padding: 3px 0; }
+
 /* ---------- Friends tab ---------- */
 .fhead { padding: 10px 16px 4px; }
 .fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
@@ -428,7 +457,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <li class="done">Search</li>
       <li class="done">Restaurant menu</li>
       <li class="done">Why this pick?, cart, order, recommend prompt</li>
-      <li>Profile settings</li>
+      <li class="done">Profile settings</li>
       <li>Demo controls</li>
     </ol>
     <p class="fine">Concept prototype. Not affiliated with any company. Invented restaurants, people and prices. Photo tiles are stand-ins until real, credited stock photos are added.</p>
@@ -540,6 +569,28 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <div class="cbox" id="done-items"></div>
           <div class="acts"><button class="primary" type="button" data-action="order-again">Order again</button><button class="secondary" type="button" data-action="go-home">Back to home</button></div>
         </div></div>
+      </section>
+
+      <!-- ================= PROFILE ================= -->
+      <section class="screen" id="s-profile" aria-label="Profile">
+        <div class="ptop"><button class="circ" type="button" data-action="profile-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button></div>
+        <div class="scroll">
+          <div class="phead"><span class="big-ini">A</span><span><b>Ananya</b><small id="prof-addr"></small></span></div>
+          <section class="sec" style="margin-top:18px"><div class="sec-h"><h2>Sharing &amp; privacy</h2></div>
+            <div class="pcard"><div class="trow"><div><b id="share-label">Share my favourites with friends</b><p>Friends who chose you see the dish and a label like "keeps coming back to this". Never how often, when, or what you pay.</p></div>
+              <button class="switch" type="button" role="switch" id="share-toggle" aria-checked="true" aria-labelledby="share-label"></button></div></div>
+          </section>
+          <section class="sec"><div class="sec-h"><h2>Choose whose picks you see</h2><p>From your contacts who share their favourites.</p></div><div class="choose" id="prof-choose"></div></section>
+          <section class="sec"><div class="sec-h"><h2>My shared picks</h2></div><div class="pcard" id="prof-picks"></div></section>
+          <section class="sec"><div class="sec-h"><h2>What friends see</h2></div><div class="seeas" id="prof-seeas"></div></section>
+          <section class="sec"><div class="sec-h"><h2>How we protect you</h2></div>
+            <ul class="rules">
+              <li>Strangers never see your name. Your orders only count inside groups of 20 or more nearby people.</li>
+              <li>Friends only see your picks if you share them and they chose you. You only see friends who opted in and whom you chose.</li>
+              <li>No order counts, dates, times or prices are ever shown next to a name.</li>
+            </ul></section>
+          <div class="home-end"></div>
+        </div>
       </section>
 
       <!-- ================= FRIENDS ================= -->
@@ -751,7 +802,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {},
     rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
     cart: {}, cartRest: null, orders: Object.assign({}, SEED_ORDERS), prompted: { smomo: true, hakka: true },
-    shared: SEED_SHARED.map(x => Object.assign({}, x)), lastOrder: null, whyKey: null, favFor: null
+    shared: SEED_SHARED.map(x => Object.assign({}, x)), share: true, profileFrom: "home", lastOrder: null, whyKey: null, favFor: null
   });
 
   const $ = s => document.querySelector(s);
@@ -848,6 +899,31 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }).join("");
   }
 
+  const chooseRows = () => Object.keys(FRIENDS).filter(f => FRIENDS[f].optIn).map(f => {
+    const on = !!state.chosen[f];
+    return `<div class="crow">${ini(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares favourites</small></div>
+      <button class="cbtn" type="button" data-choose="${f}" aria-pressed="${on}">${on ? "Showing" : "Show picks"}</button></div>`;
+  }).join("");
+  function renderProfile() {
+    $("#prof-addr").textContent = `${ADDRS[state.addr].name} · ${ADDRS[state.addr].line}`;
+    $("#share-toggle").setAttribute("aria-checked", String(state.share));
+    $("#prof-choose").innerHTML = chooseRows();
+    const list = state.shared;
+    $("#prof-picks").innerHTML = (!state.share ? `<div class="offmsg">Sharing is off, so friends can't see any of these.</div>` : "") +
+      (list.length ? list.map((x, i) => `<div class="mypick${x.hidden || !state.share ? " off" : ""}">${dishPhoto(x.d)}</div>
+        <span><b>${DISHES[x.d].name}${x.isNew ? '<span class="newbadge">NEW</span>' : ""}</b><small>${restOf(x.d).name}${x.hidden ? " · Hidden from friends" : ""}</small></span>
+        <button class="hidebtn" type="button" data-hide="${i}" aria-pressed="${!!x.hidden}">${x.hidden ? "Unhide" : "Hide"}</button></div>`).join("")
+        : `<p style="font-size:13.5px;color:var(--muted)">No shared picks yet. You'll be asked when a dish becomes a favourite.</p>`);
+    const vis = list.filter(x => !x.hidden);
+    $("#prof-seeas").innerHTML = !state.share || !vis.length ? "Nothing. Your favourites are private right now."
+      : vis.map(x => `"${DISHES[x.d].name}: Ananya ${x.label}"`).join("<br>");
+  }
+  function openProfile() {
+    const cur = $(".screen.active").id.replace("s-", "");
+    state.profileFrom = ["home", "friends"].includes(cur) ? cur : "home";
+    renderProfile(); showScreen("s-profile");
+  }
+
   function renderFriends() {
     const fp = friendPicks();
     $("#friends-feed").innerHTML = fp.length ? fp.map(p => {
@@ -859,11 +935,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
         </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
     }).join("") : `<div class="empty-row" style="margin-top:8px">No picks to show. Choose friends below, or switch address: only restaurants that deliver to ${ADDRS[state.addr].name} count.</div>`;
-    $("#choose-list").innerHTML = Object.keys(FRIENDS).filter(f => FRIENDS[f].optIn).map(f => {
-      const on = !!state.chosen[f];
-      return `<div class="crow">${ini(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares favourites</small></div>
-        <button class="cbtn" type="button" data-choose="${f}" aria-pressed="${on}">${on ? "Showing" : "Show picks"}</button></div>`;
-    }).join("");
+    $("#choose-list").innerHTML = chooseRows();
   }
 
   /* ---------------- Render: Search ---------------- */
@@ -1203,10 +1275,18 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
     }
     if (ds.choose) {
-      const f = ds.choose; state.chosen[f] = !state.chosen[f]; renderFriends(); renderHome();
+      const f = ds.choose; state.chosen[f] = !state.chosen[f]; renderFriends(); renderHome(); renderProfile();
       return toast(state.chosen[f] ? `You'll see ${FRIENDS[f].name}'s picks.` : `${FRIENDS[f].name}'s picks are hidden.`);
     }
     if (t.id === "place-order") return placeOrder();
+    if (t.id === "share-toggle") {
+      state.share = !state.share; renderProfile();
+      return toast(state.share ? "Friends who chose you can see your shared picks." : "Sharing is off. Friends can't see any of your picks.");
+    }
+    if (ds.hide !== undefined) {
+      const x = state.shared[+ds.hide]; x.hidden = !x.hidden; renderProfile();
+      return toast(x.hidden ? `${DISHES[x.d].name} is hidden from friends.` : `${DISHES[x.d].name} is visible to friends again.`);
+    }
     if (t.id === "why-add") {
       const d = state.whyDish; closeSheets();
       if (!$("#s-rest").classList.contains("active") || state.rest !== DISHES[d].r) openRest(DISHES[d].r);
@@ -1252,7 +1332,8 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       case "search-back": state.cat = 0; return showTab("home");
       case "clear-q": state.q = ""; renderSearch(); return $("#q").focus();
       case "mic": return toast("Voice search isn't part of this prototype. Type a dish or restaurant.");
-      case "profile": return toast(`${LATER.profile} is built in step 5.`);
+      case "profile": return openProfile();
+      case "profile-back": return showTab(state.profileFrom || "home");
       case "meals": return toast("Meals under ₹250 isn't part of this prototype.");
     }
   });
