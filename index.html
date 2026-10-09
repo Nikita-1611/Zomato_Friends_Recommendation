@@ -392,6 +392,21 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .rules { margin: 0 16px; padding-left: 18px; font-size: 13px; color: var(--muted); line-height: 1.55; }
 .rules li { padding: 3px 0; }
 
+/* ---------- Demo controls & new-user card ---------- */
+.demo { margin: 30px 16px 0; padding: 12px; border: 1px dashed #cfcfcf; border-radius: 14px; background: #fafafa; }
+.demo .lbl { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #9a9a9a; margin-bottom: 8px; }
+.demo .btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.dbtn { border: 1px solid #dcdcdc; background: #fff; border-radius: 999px; padding: 6px 11px; font-size: 12px; font-weight: 600; color: #444; }
+.dbtn[aria-pressed="true"] { background: #2b2b2b; border-color: #2b2b2b; color: #fff; }
+.quiz { margin: 0 16px; border: 1px solid var(--green-line); background: linear-gradient(180deg, var(--green-soft), #fff 70%); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.quiz h3 { margin: 0; font-size: 17px; font-weight: 800; }
+.quiz p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.quiz .q { display: flex; flex-direction: column; gap: 6px; }
+.quiz .q span { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #777; }
+.quiz .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.qopt { border: 1px solid #dcdcdc; background: #fff; border-radius: 999px; padding: 7px 13px; font-size: 13.5px; font-weight: 600; }
+.qopt[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fff; }
+
 /* ---------- Friends tab ---------- */
 .fhead { padding: 10px 16px 4px; }
 .fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
@@ -458,7 +473,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       <li class="done">Restaurant menu</li>
       <li class="done">Why this pick?, cart, order, recommend prompt</li>
       <li class="done">Profile settings</li>
-      <li>Demo controls</li>
+      <li class="done">Demo controls</li>
     </ol>
     <p class="fine">Concept prototype. Not affiliated with any company. Invented restaurants, people and prices. Photo tiles are stand-ins until real, credited stock photos are added.</p>
   </aside>
@@ -500,6 +515,17 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
             <button class="chip" type="button" aria-pressed="false">No packaging charges</button>
           </div>
 
+          <section class="sec" id="sec-newuser" hidden aria-labelledby="h-new">
+            <div class="sec-h"><h2 id="h-new">Highly reordered near you</h2><p>What people around you order again and again.</p></div>
+            <div class="hrow" id="row-newhot"></div>
+            <div style="height:20px"></div>
+            <div class="quiz" id="quiz"></div>
+          </section>
+          <section class="sec" id="sec-answers" hidden aria-labelledby="h-ans">
+            <div class="sec-h"><h2 id="h-ans">Based on your answers</h2><p id="sub-ans"></p></div>
+            <div class="hrow" id="row-answers"></div>
+          </section>
+
           <section class="sec" id="sec-friends" aria-labelledby="h-friends">
             <div class="sec-h"><h2 id="h-friends">From your friends</h2></div>
             <div class="hrow" id="row-friends"></div>
@@ -514,6 +540,15 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
             <div class="sec-h"><h2 id="h-rec">Recommended for you</h2></div>
             <div class="grid3" id="grid-rec"></div>
           </section>
+          <div class="demo" aria-label="Demo controls">
+            <div class="lbl">Demo controls</div>
+            <div class="btns">
+              <button class="dbtn" type="button" data-action="restart">Restart demo</button>
+              <button class="dbtn" type="button" data-action="quiet" id="d-quiet" aria-pressed="false">Simulate quiet area</button>
+              <button class="dbtn" type="button" data-action="sim3">Simulate 3rd reorder</button>
+              <button class="dbtn" type="button" data-action="newuser" id="d-new" aria-pressed="false">Simulate new user (0 orders)</button>
+            </div>
+          </div>
           <div class="home-end"></div>
         </div>
       </section>
@@ -780,6 +815,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   // The user's three favourites (dishes they reorder). The group = nearby people who reorder the same places.
   const FAVS = ["hyd", "smomo", "hakka"];
+  // Ratings fallback when the group is under 20 (dish rating, number of ratings)
+  const RATED = [{ d: "butter", stars: "4.5", votes: "1.2K" }, { d: "kmb", stars: "4.4", votes: "860" }, { d: "pizza", stars: "4.4", votes: "2.1K" }];
+  // Spice level for the new-user quiz
+  const SPICE = { hyd: "hot", c65: "hot", haleem: "medium", kolk: "mild", kosha: "medium", lko: "mild", galouti: "mild", butter: "mild", roll: "medium", dal: "mild",
+    chole: "medium", smomo: "medium", vmomo: "mild", fmomo: "medium", lasagna: "mild", pizza: "mild", pasta: "hot", vfr: "mild", hakka: "mild", chilli: "hot",
+    cpan: "hot", manch: "medium", kpc: "hot", ddn: "hot", cfr: "mild", sfr: "hot", sch: "hot", tbr: "medium", bgn: "mild", ccm: "medium", kmb: "mild",
+    seekh: "medium", kgb: "medium", vhyd: "medium", mdb: "medium", ptb: "medium", cold: "mild", sandwich: "mild", mdosa: "mild", rava: "medium", idli: "mild" };
   // The user's past orders (dish -> times ordered). Ordering Hyderabadi dum biryani once more is its 3rd order.
   const SEED_ORDERS = { hyd: 2, smomo: 4, hakka: 3, cold: 1 };
   const SEED_SHARED = [{ d: "smomo", label: "has this on repeat", hidden: false }, { d: "hakka", label: "keeps coming back to this", hidden: false }];
@@ -800,6 +842,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     addr: "home", vegOnly: false, fast: false,
     chosen: { riya: true, kabir: true, meera: true, arjun: false },
     dismissed: {}, cat: 0, slide: 0, q: "", sflags: {}, saved: {},
+    quiet: false, newUser: false, quiz: {}, quizDone: false,
     rest: null, restFrom: "home", restVeg: false, restHigh: false, collapsed: {}, expanded: {}, savedDish: {},
     cart: {}, cartRest: null, orders: Object.assign({}, SEED_ORDERS), prompted: { smomo: true, hakka: true },
     shared: SEED_SHARED.map(x => Object.assign({}, x)), share: true, profileFrom: "home", lastOrder: null, whyKey: null, favFor: null
@@ -829,7 +872,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   /* ---------------- Rules ---------------- */
   const delivers = r => RESTS[r].delivers.includes(state.addr);              // delivery range
   const vegOK = d => !state.vegOnly || DISHES[d].veg;
-  const groupSize = () => ADDRS[state.addr].group;
+  const groupSize = () => state.quiet ? 12 : ADDRS[state.addr].group;   // quiet area: under 20, so never shown
   const groupOK = () => groupSize() >= GROUP.min;                              // groups of 20+ only
   const friendPicks = () => FRIEND_PICKS.filter(p =>
     FRIENDS[p.f].optIn && state.chosen[p.f] &&                                 // opted in AND chosen
@@ -854,6 +897,15 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     // categories
     $("#cats").innerHTML = `<button class="meals" type="button" data-action="meals"><span class="t">MEALS UNDER</span><span class="p">₹250</span><span class="e">Explore ›</span></button>` +
       CATS.map((c, i) => `<button class="cat" type="button" data-cat="${i}" aria-pressed="${state.cat === i}">${photo(c.photo, "", "", ["#f4ead8", "#d8bf94"])}</div>${c.label}</button>`).join("");
+
+    // New user (0 orders): no personal picks; show what's reordered nearby + 3 quick taps
+    $("#sec-newuser").hidden = !state.newUser;
+    $("#sec-answers").hidden = !(state.newUser && state.quizDone);
+    $("#sec-friends").hidden = state.newUser;
+    $("#sec-group").hidden = state.newUser;
+    $("#d-quiet").setAttribute("aria-pressed", String(state.quiet));
+    $("#d-new").setAttribute("aria-pressed", String(state.newUser));
+    if (state.newUser) renderNewUser();
 
     // A) From your friends
     const fp = friendPicks();
@@ -889,6 +941,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <button class="notforme" type="button" data-dismiss="${p.kind === "new" ? "g:" + p.d : k}">Not for me</button>
         </div>`;
       }).join("") : `<div class="empty-row">No picks from restaurants that deliver here yet.</div>`;
+    } else {
+      // Fewer than 20 people: no group, no count. Fall back to ratings and say so.
+      $("#h-group").textContent = "Highly rated nearby";
+      $("#sub-group").textContent = "Not enough people near you reorder the same places yet.";
+      $("#basis-group").hidden = false;
+      $("#basis-group").textContent = "Based on ratings";
+      $("#row-group").innerHTML = RATED.filter(x => delivers(DISHES[x.d].r) && vegOK(x.d)).map(x => {
+        const d = DISHES[x.d], r = restOf(x.d);
+        return `<div class="pc">
+          <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
+            ${dishPhoto(x.d)}<span class="strip">${r.name}</span><span class="pill" style="position:absolute;left:4px;bottom:-10px;border:3px solid #fff">${ICON.star} ${x.stars}</span></div>
+            <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
+          </button>
+          <button class="reason" type="button" data-why="r:${x.d}">Highly rated nearby: ${x.stars}★ from ${x.votes} ratings</button>
+        </div>`;
+      }).join("");
     }
 
     // Recommended for you: 3 per row
@@ -1001,6 +1069,11 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const newReason = d => `People who love your ${favPhrase()} now keep reordering this ${DISHES[d].name.split(" ").pop().toLowerCase()}.`;
   // Picks for one restaurant: chosen friends' picks + group picks (and the "something new" pick) that live here
   function restPicks(rid) {
+    if (state.newUser) return state.quizDone ? answerPicks().filter(id => DISHES[id].r === rid).map(id => ({ key: "a:" + id, d: id, text: "Matches your answers", grp: true })) : [];
+    if (!groupOK()) {
+      const rated = RATED.filter(x => DISHES[x.d].r === rid && vegOK(x.d)).map(x => ({ key: "r:" + x.d, d: x.d, text: `Highly rated nearby: ${x.stars}★ from ${x.votes} ratings`, rate: true }));
+      return friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` })).concat(rated).slice(0, 3);
+    }
     const out = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` }));
     if (groupOK()) GROUP_PICKS.filter(p => DISHES[p.d].r === rid && vegOK(p.d) && !state.dismissed["g:" + p.d] && !out.some(o => o.d === p.d))
       .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newReason(p.d) : GROUP_REASON, dismissKey: "g:" + p.d }));
@@ -1016,13 +1089,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   function dishRow(id, pick) {
     const d = DISHES[id], open = !!state.expanded[id];
     const signal = pick
-      ? `<div class="pickwhy">${pick.f ? ini(pick.f) : `<span class="gico">${ICON.repeat}</span>`}<button class="reason" type="button" data-why="${pick.key}">${pick.text}</button></div>`
+      ? `<div class="pickwhy">${pick.f ? ini(pick.f) : pick.rate ? `<span class="gico rate">${ICON.star}</span>` : `<span class="gico">${ICON.repeat}</span>`}<button class="reason" type="button" data-why="${pick.key}">${pick.text}</button></div>`
       : (d.reo >= HIGH_REO ? `<div class="reo"><span class="bar"><i style="width:${Math.round(d.reo * 100)}%"></i></span>Highly reordered</div>` : "");
     return `<div class="dish"><div class="info">${vmark(d)}<span class="dn">${d.name}</span>${signal}<span class="price">₹${d.price}</span>
         <span class="desc${open ? " open" : ""}">${d.desc}</span>${open || d.desc.length < 70 ? "" : `<button class="more" type="button" data-more="${id}">...more</button>`}
         <div class="tools"><button class="rbtn" type="button" data-savedish="${id}" aria-pressed="${!!state.savedDish[id]}" aria-label="Save ${d.name}">${BOOKMARK}</button>
           <button class="rbtn" type="button" data-share="${id}" aria-label="Share ${d.name}">${SHARE}</button>
-          ${pick ? `<button class="notforme" type="button" data-dismiss="${pick.dismissKey || pick.key}">Not for me</button>` : ""}</div></div>
+          ${pick && !pick.rate && !pick.grp ? `<button class="notforme" type="button" data-dismiss="${pick.dismissKey || pick.key}">Not for me</button>` : ""}</div></div>
       <div class="side">${dishPhoto(id)}</div>${ctl(id)}${d.custom ? '<span class="custom">customisable</span>' : ""}</div></div>`;
   }
   function restSections(rid) {
@@ -1093,6 +1166,11 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       q.innerHTML = `${ini(a)}<span>${FRIENDS[a].name} ${p.label}</span>`;
       body.innerHTML = `<p>${FRIENDS[a].share}</p>
         <div class="wnote">${LOCK}<span>You see this because you chose ${FRIENDS[a].name} in "Choose whose picks you see". No order counts, dates, times or prices are ever shown for friends.</span></div>`;
+    } else if (kind === "a") {
+      q.className = "wquote";
+      q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>Based on your answers</span>`;
+      body.innerHTML = `<p>You haven't ordered yet, so we used your 3 quick taps and picked dishes people near you reorder most that match them.</p>
+        <div class="wnote">${LOCK}<span>Once you've reordered a few dishes, picks switch to people near you who reorder the same places as you.</span></div>`;
     } else if (kind === "r") {
       q.className = "wquote rate";
       q.innerHTML = `<span class="gico rate">${ICON.star}</span><span>Highly rated nearby (based on ratings)</span>`;
@@ -1194,6 +1272,39 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     const sc = document.querySelector(`#s-${name} .scroll`); if (sc) sc.scrollTop = 0;
   }
 
+  /* ---------------- New user ---------------- */
+  const QUIZ = [
+    { key: "diet", label: "Veg or non-veg?", opts: [["veg", "Veg"], ["nonveg", "Non-veg"]] },
+    { key: "spice", label: "Spice", opts: [["mild", "Mild"], ["medium", "Medium"], ["hot", "Hot"]] },
+    { key: "budget", label: "Budget for one", opts: [["low", "Under ₹200"], ["mid", "₹200–400"], ["high", "₹400+"]] }
+  ];
+  const inBudget = (price, b) => b === "low" ? price < 200 : b === "mid" ? price >= 200 && price <= 400 : price > 400;
+  function answerPicks() {
+    const a = state.quiz;
+    const base = Object.keys(DISHES).filter(id => delivers(DISHES[id].r) && (a.diet === "veg" ? DISHES[id].veg : true) && DISHES[id].section === "main");
+    const score = id => (SPICE[id] === a.spice ? 2 : 0) + (inBudget(DISHES[id].price, a.budget) ? 2 : 0) + (a.diet === "nonveg" && !DISHES[id].veg ? 1 : 0) + DISHES[id].reo;
+    return base.sort((x, y) => score(y) - score(x)).slice(0, 2);
+  }
+  function card(id, reasonHtml, extra = "") {
+    const d = DISHES[id], r = restOf(id);
+    return `<div class="pc"><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
+        ${dishPhoto(id)}<span class="strip">${r.name}</span>${extra}</div>
+        <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta} · ₹${d.price}</span></button>${reasonHtml}</div>`;
+  }
+  function renderNewUser() {
+    const hot = Object.keys(DISHES).filter(id => delivers(DISHES[id].r) && DISHES[id].reo >= 0.84 && vegOK(id)).sort((a, b) => DISHES[b].reo - DISHES[a].reo).slice(0, 5);
+    $("#row-newhot").innerHTML = hot.map(id => card(id, `<span class="rn" style="color:var(--green-dark);font-weight:600">Reordered by most people who try it</span>`,
+      `<span class="who grp">${ICON.repeat}Highly reordered</span>`)).join("");
+    $("#quiz").innerHTML = `<h3>New here? 3 quick taps</h3><p>Answer these and we'll pick 2 dishes for you until you've ordered a few times.</p>` +
+      QUIZ.map(q => `<div class="q"><span>${q.label}</span><div class="opts">${q.opts.map(([v, l]) =>
+        `<button class="qopt" type="button" data-quiz="${q.key}:${v}" aria-pressed="${state.quiz[q.key] === v}">${l}</button>`).join("")}</div></div>`).join("");
+    if (state.quizDone) {
+      const a = state.quiz, label = k => QUIZ.find(q => q.key === k).opts.find(o => o[0] === a[k])[1];
+      $("#sub-ans").textContent = `${label("diet")} · ${label("spice")} spice · ${label("budget")}`;
+      $("#row-answers").innerHTML = answerPicks().map(id => card(id, `<button class="reason" type="button" data-why="a:${id}">Matches your answers: ${label("diet")}, ${label("spice").toLowerCase()} spice, ${label("budget")}</button>`)).join("");
+    }
+  }
+
   function renderAddr() {
     $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}">
       <span class="ic">${ICON[k]}</span><span><b>${ADDRS[k].name}</b><small>${ADDRS[k].line}</small></span><span class="tick"></span></button>`).join("");
@@ -1274,6 +1385,13 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       if (TABS.includes(ds.nav)) return showTab(ds.nav);
       return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
     }
+    if (ds.quiz) {
+      const [k, v] = ds.quiz.split(":"); state.quiz[k] = v;
+      state.quizDone = QUIZ.every(q => state.quiz[q.key]);
+      renderHome();
+      if (state.quizDone) toast("Thanks. Your 2 picks are below.");
+      return;
+    }
     if (ds.choose) {
       const f = ds.choose; state.chosen[f] = !state.chosen[f]; renderFriends(); renderHome(); renderProfile();
       return toast(state.chosen[f] ? `You'll see ${FRIENDS[f].name}'s picks.` : `${FRIENDS[f].name}'s picks are hidden.`);
@@ -1333,6 +1451,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       case "clear-q": state.q = ""; renderSearch(); return $("#q").focus();
       case "mic": return toast("Voice search isn't part of this prototype. Type a dish or restaurant.");
       case "profile": return openProfile();
+      case "restart": {
+        state = fresh(); closeSheets(); showTab("home"); $("#home-scroll").scrollTop = 0; renderFriends();
+        return toast("Demo restarted.");
+      }
+      case "quiet":
+        state.quiet = !state.quiet; renderHome(); renderFriends();
+        return toast(state.quiet ? "Quiet area: fewer than 20 people here reorder the same places as you, so you see \"Highly rated nearby (based on ratings)\"." : "Back to normal: 42 people near you reorder the same places as you.");
+      case "newuser":
+        state.newUser = !state.newUser; state.quiz = {}; state.quizDone = false; renderHome();
+        return toast(state.newUser ? "New user with 0 orders: personal picks are hidden." : "Back to Ananya's account.");
+      case "sim3": {
+        const id = "hyd";
+        state.orders[id] = Math.max(state.orders[id] || 0, 2);
+        state.cart = { [id]: 1 }; state.cartRest = DISHES[id].r; state.prompted[id] = false;
+        openCart(); return placeOrder();
+      }
       case "profile-back": return showTab(state.profileFrom || "home");
       case "meals": return toast("Meals under ₹250 isn't part of this prototype.");
     }

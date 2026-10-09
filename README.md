@@ -1,27 +1,37 @@
 # Taste-matched picks: clickable prototype
 
-A PM portfolio prototype for a food delivery feature: use **repeat orders**, not star ratings, as the taste signal, and show 1–3 dish picks with a one-line reason you can check. Fake data only, no backend.
+A PM portfolio prototype for a food delivery feature: dish picks based on **repeat orders, not star ratings**, from friends you choose and from groups of 20+ nearby people who reorder the same places as you. The layout follows a mainstream Indian food delivery app (home, search, restaurant menu). No logo or brand name; restaurants, people and prices are invented.
 
-Open `index.html` in a browser. On a laptop it shows a phone with a short presenter guide beside it; on a phone it fills the screen. There are no demo controls inside the app: every moment is reached through normal app actions.
+Open `index.html` in a browser. On a laptop it shows a phone with a short note beside it; on a phone it fills the screen.
 
-## 60-second run
-1. Home: tap the reason under Riya's pick → "Why this pick?"
-2. Add to cart → View cart → Place order → "Order delivered"
-3. Home → Order again → Reorder Ghee roast dosa → Place order. It's the user's 3rd order of that dish, so "Looks like a favourite. Recommend it to your friends?" appears → Recommend
-4. Friends tab: follow Arjun (contact: name + username) and @dosadiaries (public profile: username only), filter by person, tap Why? on any pick
-5. Tap "Home ▾" and switch the address to Office: fewer than 20 people there reorder the same places, so "Highly rated nearby" (labelled as ratings) replaces the group section
-6. Profile: toggle sharing, turn on Public profile, hide a shared pick
+## Screens
+- **Home**: address switcher, search, VEG toggle, deals carousel, membership strip, categories, filter chips, then
+  - **From your friends**: picks from friends who opted in and whom you chose ("Riya keeps coming back to this")
+  - **Because you love Hyderabadi dum biryani**: "42 people near you who reorder the same places as you", including one **Something new** pick
+  - **Recommended for you**: 3-per-row restaurant cards
+  - Floating bar: Home | Healthy | Friends | Dining
+- **Friends tab**: chosen friends' picks and "Choose whose picks you see"
+- **Search**: chips, 3 x 2 recommended grid, All restaurants > Featured cards
+- **Restaurant menu**: Picks for you above Recommended for you, Highly reordered bars, ADD, Menu button, offers bar
+- **Why this pick?** sheet, cart, order delivered, and the recommend prompt on the 3rd order of a dish
+- **Profile**: Share my favourites, Choose whose picks you see, My shared picks with Hide
 
-"Restart demo" sits in the presenter guide and at the bottom of Home and Profile.
-
-## Privacy rules the prototype enforces
+## Rules the prototype enforces
 - No order counts, dates, times or prices next to a friend's name.
-- Everyone has a username. Contacts show real name + username (e.g. Riya @riya.eats).
-- Strangers never show a real name. A stranger appears individually only if they turned on a public profile, and then only by username (e.g. @dosadiaries). Everyone else appears only as a group.
-- Group counts only show when the group is 20 people or more; below that, the ratings fallback appears and no count is shown.
-- Only opted-in friends appear (the data includes a friend who hasn't opted in, and they never show).
+- Strangers are never named, only shown as a group of 20 or more.
+- Friends appear only if they opted in **and** you chose them.
+- Picks only come from restaurants that deliver to the current address (switch Home / Office to see it).
+- Every pick has **Not for me**.
+
+## Demo controls (bottom of Home)
+- **Restart demo**
+- **Simulate quiet area**: group under 20, so "Highly rated nearby (based on ratings)" replaces the group section
+- **Simulate 3rd reorder**: places a 3rd order of Hyderabadi dum biryani and shows the recommend prompt
+- **Simulate new user (0 orders)**: hides personal picks, shows "Highly reordered near you" and 3 quick taps, then 2 picks "Based on your answers"
+
+## Photos
+Photo slots load `prototype/assets/photos/<dish id>.jpg` when present and show a plain stand-in tile otherwise. Use free stock photos and list each in `prototype/assets/photos/CREDITS.md`. Then run `python3 prototype/build.py`.
 
 ## Files
-- `prototype/template.html`: the page source (HTML, CSS, JS).
-- `prototype/build.py`: embeds the images and writes `prototype/taste-matched-picks.html` and `index.html`. Run `python3 prototype/build.py` after editing the template.
-- `prototype/assets/`: dish art and avatars. See `prototype/assets/CREDITS.md`.
+- `prototype/template.html`: page source
+- `prototype/build.py`: embeds photos, writes `prototype/taste-matched-picks.html` and `index.html`
