@@ -67,7 +67,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .guide .fine { font-size: 11.5px; }
 
 /* ---------- Phone ---------- */
-.phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #121417, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; flex-shrink: 0; }
+.phone { position: relative; width: 390px; height: min(820px, calc(100vh - 40px)); min-height: 640px; border-radius: 44px; background: var(--app-bg); color: var(--ink); box-shadow: 0 0 0 10px #121417, 0 30px 60px -20px rgba(0,0,0,.45); overflow: hidden; overflow: clip; flex-shrink: 0; }
 .statusbar { position: absolute; inset: 0 0 auto 0; height: 44px; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: #fff; background: var(--banner-1); }
 .statusbar.light { background: #fff; color: var(--ink); }
 .statusbar .icons { display: flex; gap: 6px; align-items: center; }
@@ -183,12 +183,37 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
 /* ---------- Bottom nav ---------- */
 .bottomnav { position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 6; background: #fff; border-radius: 999px; box-shadow: 0 6px 24px -6px rgba(0,0,0,.3); display: flex; padding: 6px; gap: 2px; }
-.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 54px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600; }
+.bottomnav button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; height: 54px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; font-weight: 600; position: relative; }
 .bottomnav button svg { width: 22px; height: 22px; flex-shrink: 0; }
-.bottomnav button.on { background: #2b2b2b; color: #fff; flex: 1.25; }
+.bottomnav button.on { background: #2b2b2b; color: #fff; flex: 1.35; }
+.bottomnav .ic-friends { color: #f08c00; }
+.bottomnav .dot { position: absolute; top: 9px; right: 12px; width: 7px; height: 7px; border-radius: 50%; background: #e23744; }
 .bottomnav .ic-home { color: #4cc46e; }
 .bottomnav .ic-dine { color: #8b5cf6; }
 .home-end { height: 110px; }
+
+/* ---------- Friends tab ---------- */
+.fhead { padding: 10px 16px 4px; }
+.fhead h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.fhead p { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.drow { display: grid; grid-template-columns: 1fr 120px; gap: 14px; padding: 18px 16px; border-bottom: 1px dashed #e0e0e0; }
+.drow .info { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.drow .by { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.drow .by .ini { width: 26px; height: 26px; font-size: 12px; }
+.drow b { font-size: 17px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+.drow .rn { font-size: 13px; color: var(--muted); }
+.drow .ph { width: 120px; height: 120px; border-radius: 16px; }
+.drow .open { border: 0; background: none; padding: 0; }
+.choose { margin: 0 16px; border: 1px solid var(--line); border-radius: 16px; padding: 2px 14px; }
+.crow { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; }
+.crow + .crow { border-top: 1px solid var(--line); }
+.crow .ini { width: 36px; height: 36px; font-size: 15px; }
+.crow b { display: block; font-size: 15px; }
+.crow small { font-size: 12.5px; color: var(--muted); }
+.cbtn { border: 1px solid var(--green); background: var(--green); color: #fff; border-radius: 10px; height: 34px; min-width: 92px; font-weight: 700; font-size: 13px; }
+.cbtn[aria-pressed="true"] { background: #fff; color: var(--green-dark); }
+.fnote { margin: 12px 16px 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; display: flex; gap: 8px; }
+.fnote svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; }
 
 /* ---------- Sheets & toast ---------- */
 .scrim { position: absolute; inset: 0; background: rgba(20,20,20,.48); z-index: 40; opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
@@ -228,6 +253,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     <p>Dish picks from repeat orders, not star ratings: from friends you choose, and from groups of 20+ nearby people who reorder the same places as you.</p>
     <ol id="build-steps">
       <li class="done">Home</li>
+      <li class="done">Friends tab</li>
       <li>Search</li>
       <li>Restaurant menu</li>
       <li>Why this pick? and other sheets</li>
@@ -291,11 +317,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
           <div class="home-end"></div>
         </div>
       </section>
+      <!-- ================= FRIENDS ================= -->
+      <section class="screen" id="s-friends" aria-label="Friends">
+        <div class="scroll">
+          <div class="fhead"><h1>Friends' picks</h1><p>Dishes the friends you chose keep coming back to. Only friends who opted in to sharing are listed.</p></div>
+          <section class="sec" style="margin-top:18px"><div class="sec-h" style="padding-bottom:4px"><h2>From your friends</h2></div><div id="friends-feed"></div></section>
+          <section class="sec"><div class="sec-h"><h2>Choose whose picks you see</h2><p>From your contacts who share their favourites.</p></div><div class="choose" id="choose-list"></div></section>
+          <p class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Friends never see how often you order, when, or what you pay. Only picks from restaurants that deliver to your address appear.</p>
+          <div class="home-end"></div>
+        </div>
+      </section>
     </div>
 
     <nav class="bottomnav" id="bottomnav" aria-label="Main">
       <button type="button" class="on" data-nav="home"><svg class="ic-home" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>Home</button>
       <button type="button" data-nav="healthy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9-9c-1.3-3 .6-6.5 4-6.5 2 0 3.4 1 5 2.8 1.6-1.8 3-2.8 5-2.8 3.4 0 5.3 3.5 4 6.5-2 4.6-9 9-9 9z"/><path d="M14 9l1 2 2 .5-2 .5-1 2-1-2-2-.5 2-.5z" fill="currentColor"/></svg>Healthy</button>
+      <button type="button" data-nav="friends"><svg class="ic-friends" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5M16 14.6c2.6 0 4.6 1.7 5.5 4.9"/></svg>Friends<span class="dot" id="friends-dot"></span></button>
       <button type="button" data-nav="dining"><svg class="ic-dine" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17h18v2H3zM12 6a8 8 0 0 0-8 8v1h16v-1a8 8 0 0 0-8-8zm-1-3h2v2h-2z"/></svg>Dining</button>
     </nav>
 
@@ -491,6 +528,35 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }).join("");
   }
 
+  function renderFriends() {
+    const fp = friendPicks();
+    $("#friends-feed").innerHTML = fp.length ? fp.map(p => {
+      const d = DISHES[p.d], r = restOf(p.d), k = `f:${p.f}:${p.d}`;
+      return `<div class="drow"><div class="info">
+          <span class="by">${ini(p.f)}<span><b style="display:inline;font-size:14px">${FRIENDS[p.f].name}</b> ${p.label}</span></span>
+          <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.name} · ${r.eta}</span>
+          <button class="reason" type="button" data-why="${k}">Why this pick?</button>
+          <button class="notforme" type="button" data-dismiss="${k}">Not for me</button>
+        </div><button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">${dishPhoto(p.d)}</div></button></div>`;
+    }).join("") : `<div class="empty-row" style="margin-top:8px">No picks to show. Choose friends below, or switch address: only restaurants that deliver to ${ADDRS[state.addr].name} count.</div>`;
+    $("#choose-list").innerHTML = Object.keys(FRIENDS).filter(f => FRIENDS[f].optIn).map(f => {
+      const on = !!state.chosen[f];
+      return `<div class="crow">${ini(f)}<div><b>${FRIENDS[f].name}</b><small>In your contacts · shares favourites</small></div>
+        <button class="cbtn" type="button" data-choose="${f}" aria-pressed="${on}">${on ? "Showing" : "Show picks"}</button></div>`;
+    }).join("");
+  }
+
+  const TABS = ["home", "friends"];
+  function showTab(name) {
+    $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-" + name));
+    $$("#bottomnav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === name));
+    $("#statusbar").classList.toggle("light", name !== "home");
+    if (name === "friends") { state.seenFriends = true; renderFriends(); }
+    if (name === "home") renderHome();
+    $("#friends-dot").hidden = !!state.seenFriends;
+    const sc = document.querySelector(`#s-${name} .scroll`); if (sc) sc.scrollTop = 0;
+  }
+
   function renderAddr() {
     $("#addr-opts").innerHTML = Object.keys(ADDRS).map(k => `<button class="addr-opt" type="button" data-addr="${k}" aria-pressed="${state.addr === k}">
       <span class="ic">${ICON[k]}</span><span><b>${ADDRS[k].name}</b><small>${ADDRS[k].line}</small></span><span class="tick"></span></button>`).join("");
@@ -526,18 +592,22 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     if (ds.slide !== undefined) { showSlide(+ds.slide); return startDeals(); }
     if (ds.cat !== undefined) { state.cat = +ds.cat; return renderHome(); }
     if (ds.dismiss) {
-      state.dismissed[ds.dismiss] = true; renderHome();
+      state.dismissed[ds.dismiss] = true; renderHome(); renderFriends();
       return toast("Got it. You'll see fewer picks like this.");
     }
     if (ds.addr) {
-      state.addr = ds.addr; closeSheets(); renderHome();
+      state.addr = ds.addr; closeSheets(); renderHome(); renderFriends();
       return toast(`Delivering to ${ADDRS[ds.addr].name}. Picks only come from restaurants that deliver here.`);
     }
     if (ds.why) return toast(`"${LATER.why}" sheet is built in step 4.`);
     if (ds.rest) return toast(`${RESTS[ds.rest].name}: the ${LATER.rest} is built in step 3.`);
     if (ds.nav) {
-      if (ds.nav !== "home") return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
-      return;
+      if (TABS.includes(ds.nav)) return showTab(ds.nav);
+      return toast(`${ds.nav === "healthy" ? "Healthy" : "Dining"} isn't part of this prototype.`);
+    }
+    if (ds.choose) {
+      const f = ds.choose; state.chosen[f] = !state.chosen[f]; renderFriends(); renderHome();
+      return toast(state.chosen[f] ? `You'll see ${FRIENDS[f].name}'s picks.` : `${FRIENDS[f].name}'s picks are hidden.`);
     }
     if (t.id === "veg-toggle") { state.vegOnly = !state.vegOnly; renderHome(); return toast(state.vegOnly ? "Showing vegetarian dishes only." : "Showing all dishes."); }
     if (t.id === "chip-fast") { state.fast = !state.fast; return renderHome(); }
@@ -554,6 +624,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   state = fresh();
   renderHome();
+  renderFriends();
   startDeals();
 })();
 </script>
