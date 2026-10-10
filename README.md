@@ -4,7 +4,6 @@ A PM portfolio prototype for a food delivery feature: dish picks based on **repe
 
 ## Links
 - **▶ Live prototype:** https://nikita-1611.github.io/Zomato_Friends_Recommendation/
-- **Slide deck:** https://claude.ai/artifact/NEk7dT15dS5UvC1nAD6RAD (private until shared); slide sources are in `deck/`
 
 
 ## Screens
