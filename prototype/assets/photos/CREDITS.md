@@ -64,6 +64,11 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | idli | (stand-in crop) | another crop of the `mdosa` photo above | same as that photo |
 | rava | (stand-in crop) | another crop of the `mdosa` photo above | same as that photo |
 | filter | (stand-in crop) | another crop of the `cold` photo above | same as that photo |
+| dkm | Double ka meetha | supplied by the project owner | to confirm |
+| mishti | Mishti doi | supplied by the project owner | to confirm |
+| phirni | Phirni | supplied by the project owner | to confirm |
+| jamun | Gulab jamun | supplied by the project owner | to confirm |
+| tiramisu | Tiramisu | supplied by the project owner | to confirm |
 
 Rows marked "stand-in crop" reuse a nearby dish's photo until a real one is added.
 
