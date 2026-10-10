@@ -1112,8 +1112,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       $("#row-group").innerHTML = gp.length ? gp.map(p => {
         const d = DISHES[p.d], r = restOf(p.d), k = (p.kind === "new" ? "n:" : "g:") + p.d;
         const reason = p.kind === "new"
-          ? `People who love your ${favPhrase()} now keep reordering this ${d.name.split(" ").pop()}.`
-          : "People near you who share 3 of your favourites keep reordering this";
+          ? newShort() : GROUP_SHORT;
         return `<div class="pc">
           <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
             ${dishPhoto(p.d)}<span class="strip">${r.name}</span>${p.kind === "new" ? '<span class="newtag">SOMETHING NEW</span>' : ""}<span class="who grp">${ICON.repeat}Reordered nearby</span></div>
@@ -1287,6 +1286,9 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   /* ---------------- Render: Restaurant menu ---------------- */
   const GROUP_REASON = "People near you who share 3 of your favourites keep reordering this";
+  // Short versions for cards and menus; the Why this pick? sheet keeps the full sentence.
+  const GROUP_SHORT = "Loved by people like you";
+  const newShort = () => "New favourite nearby";
   const newReason = d => `People who love your ${favPhrase()} now keep reordering this ${DISHES[d].name.split(" ").pop().toLowerCase()}.`;
   // Picks for one restaurant: chosen friends' picks + group picks (and the "something new" pick) that live here
   function restPicks(rid) {
@@ -1297,11 +1299,11 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }
     const out = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` }));
     if (groupOK()) GROUP_PICKS.filter(p => DISHES[p.d].r === rid && vegOK(p.d) && !state.dismissed["g:" + p.d] && !out.some(o => o.d === p.d))
-      .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newReason(p.d) : GROUP_REASON, dismissKey: "g:" + p.d }));
+      .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newShort() : GROUP_SHORT, dismissKey: "g:" + p.d }));
     // Top up with this restaurant's dishes the group reorders most, so every menu has a few picks
     if (groupOK()) Object.keys(DISHES).filter(id => DISHES[id].r === rid && DISHES[id].reo >= 0.6 && vegOK(id) && !FAVS.includes(id) && !state.dismissed["g:" + id] && !out.some(o => o.d === id))
       .sort((x, y) => DISHES[y].reo - DISHES[x].reo)
-      .forEach(id => out.push({ key: "g:" + id, d: id, text: GROUP_REASON, dismissKey: "g:" + id }));
+      .forEach(id => out.push({ key: "g:" + id, d: id, text: GROUP_SHORT, dismissKey: "g:" + id }));
     return out.slice(0, 3);
   }
   function ctl(id) {
