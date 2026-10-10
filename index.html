@@ -239,6 +239,10 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .pc .rn { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .reason { border: 0; background: none; padding: 0; text-align: left; font-size: 12.5px; line-height: 1.4; color: #3f3f3f; text-decoration: underline dotted #a8a8a8; text-underline-offset: 3px; margin-top: 2px; }
 .pc .reason { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; align-self: stretch; }
+/* Group picks: wider cards so "Because you reorder …" stays on one line */
+#row-group .pc { flex-basis: 204px; }
+#row-group .pc .ph { width: 204px; }
+#row-group .pc .reason { display: block; white-space: nowrap; text-overflow: ellipsis; }
 .pc .lnrow { margin-top: auto; padding-top: 2px; }
 .notforme { align-self: flex-start; border: 0; background: none; padding: 2px 0; font-size: 12px; color: var(--faint); font-weight: 600; }
 .empty-row { margin: 0 16px; padding: 16px; border: 1px dashed #d8d8d8; border-radius: 14px; font-size: 13px; color: var(--muted); line-height: 1.45; }
@@ -334,6 +338,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .gico svg { width: 13px; height: 13px; }
 .gico.rate { background: #f2f2f2; color: #555; }
 .pickwhy .reason { font-size: 14px; }
+.pickwhy .reason.one { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .fab { position: absolute; right: 16px; bottom: 88px; z-index: 6; display: inline-flex; align-items: center; gap: 10px; background: #2b2b2b; color: #fff; border: 0; border-radius: 18px; padding: 14px 20px; font-weight: 600; font-size: 18px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
 .fab svg { width: 22px; height: 22px; }
 .offerbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 16px 16px 20px; background: linear-gradient(180deg, #f3f6ff, #e8eeff); border-radius: 18px 18px 0 0; box-shadow: 0 -2px 10px rgba(0,0,0,.05); }
@@ -987,8 +992,17 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     { f: "dev",   d: "dal",    label: "loved this" }
   ];
 
-  // The user's three favourites (dishes they reorder). The group = nearby people who reorder the same places.
+  // The user's three favourites: dishes they reorder, from their order history in any city.
+  // The group = people near you who reorder the same dishes.
   const FAVS = ["hyd", "smomo", "hakka"];
+  // Short names for one-line reasons ("Because you reorder dum biryani")
+  const FAV_SHORT = { hyd: "dum biryani", smomo: "momos", hakka: "Hakka noodles" };
+  // Dish style, so a headline naming one style never sits over another (Kolkata biryani is not Hyderabadi dum biryani).
+  const STYLE = { hyd: "hyderabadi-biryani", vhyd: "hyderabadi-biryani", mdb: "hyderabadi-biryani", kolk: "kolkata-biryani", kmb: "kolkata-biryani",
+    lko: "lucknowi-biryani", vlko: "lucknowi-biryani", smomo: "momos", vmomo: "momos", fmomo: "momos", hakka: "hakka-noodles" };
+  // For a pick with no stated favourite, the favourite that best explains it at this restaurant.
+  const VIA_BY_REST = { nizam: "hyd", royal: "hyd", dum: "hyd", kgali: "hyd", park: "hyd", awadh: "hyd", spice: "hyd", udupi: "hyd",
+    momo: "smomo", bean: "smomo", wok: "hakka", dragon: "hakka", hakkah: "hakka", szech: "hakka", chop: "hakka", nonna: "hakka" };
   // Ratings fallback when the group is under 20 (dish rating, number of ratings)
   const RATED = [{ d: "butter", stars: "4.5", votes: "1.2K" }, { d: "kmb", stars: "4.4", votes: "860" }, { d: "pizza", stars: "4.4", votes: "2.1K" }];
   // Spice level for the new-user quiz
@@ -1003,14 +1017,15 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   const GROUP = { min: 20 };
   // Group picks in priority order; the first ones from restaurants that deliver here are shown.
   const GROUP_PICKS = [
-    { d: "kolk", kind: "group" },
-    { d: "lko", kind: "group" },
-    { d: "bgn", kind: "group" },
-    { d: "mdb", kind: "group" },
-    { d: "seekh", kind: "group" },
-    { d: "kmb", kind: "group" },
-    { d: "galouti", kind: "group" },
-    { d: "lasagna", kind: "new" }    // a dish the user never ordered that their taste matches recently started reordering
+    { d: "kolk", kind: "group", via: "hyd" },
+    { d: "lko", kind: "group", via: "hyd" },
+    { d: "bgn", kind: "group", via: "hakka" },
+    { d: "thukpa", kind: "group", via: "smomo" },
+    { d: "mdb", kind: "group", via: "hyd" },
+    { d: "seekh", kind: "group", via: "hyd" },
+    { d: "kmb", kind: "group", via: "hyd" },
+    { d: "galouti", kind: "group", via: "hyd" },
+    { d: "lasagna", kind: "new", via: "smomo" }    // a dish the user never ordered that their taste matches recently started reordering
   ];
 
   /* ---------------- State ---------------- */
@@ -1065,6 +1080,14 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     const ok = GROUP_PICKS.filter(p => delivers(DISHES[p.d].r) && vegOK(p.d) && !state.dismissed["g:" + p.d]);
     return ok.filter(p => p.kind === "group").slice(0, 4).concat(ok.filter(p => p.kind === "new").slice(0, 1));
   };
+  const viaFor = d => (GROUP_PICKS.find(p => p.d === d) || {}).via || VIA_BY_REST[DISHES[d].r] || FAVS[0];
+  const becauseLine = d => `Because you reorder ${FAV_SHORT[viaFor(d)]}`;
+  const menuLine = d => `You reorder ${FAV_SHORT[viaFor(d)]}`;   // menu column is narrower; same reason, one line
+  // Name a dish in the headline only if every card is that dish's style; otherwise use a neutral title.
+  const groupTitle = picks => {
+    const st = STYLE[FAVS[0]];
+    return picks.length && picks.every(p => st && STYLE[p.d] === st) ? `Because you love ${DISHES[FAVS[0]].name}` : "Picks from people with your taste";
+  };
   const favPhrase = () => {
     const short = { hyd: "biryani", smomo: "momos", hakka: "noodles" };
     return `${short[FAVS[0]]} and ${short[FAVS[1]]}`;
@@ -1107,17 +1130,16 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
     // B) Because you love … (group of 20+), or the ratings fallback
     if (groupOK()) {
-      $("#h-group").textContent = `Because you love ${DISHES[FAVS[0]].name}`;
-      $("#sub-group").textContent = `${groupSize()} people near you who reorder the same places as you`;
-      $("#basis-group").hidden = true;
       const gp = groupPicks();
+      $("#h-group").textContent = groupTitle(gp);
+      $("#sub-group").textContent = `${groupSize()} people near you who reorder the same dishes as you`;
+      $("#basis-group").hidden = true;
       $("#row-group").innerHTML = gp.length ? gp.map(p => {
         const d = DISHES[p.d], r = restOf(p.d), k = (p.kind === "new" ? "n:" : "g:") + p.d;
-        const reason = p.kind === "new"
-          ? newShort() : GROUP_SHORT;
+        const reason = becauseLine(p.d);
         return `<div class="pc">
           <button class="open" type="button" data-rest="${d.r}" aria-label="Open ${r.name}">
-            ${dishPhoto(p.d)}<span class="strip">${r.name}</span>${p.kind === "new" ? '<span class="newtag">SOMETHING NEW</span>' : ""}<span class="who grp">${ICON.repeat}Reordered nearby</span></div>
+            ${dishPhoto(p.d)}<span class="strip">${r.name}</span>${p.kind === "new" ? '<span class="newtag">SOMETHING NEW</span>' : ""}</div>
             <b>${vmark(d)}<span>${d.name}</span></b><span class="rn">${r.eta}</span>
           </button>
           <button class="reason" type="button" data-why="${k}">${reason}</button>
@@ -1127,7 +1149,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     } else {
       // Fewer than 20 people: no group, no count. Fall back to ratings and say so.
       $("#h-group").textContent = "Highly rated nearby";
-      $("#sub-group").textContent = "Not enough people near you reorder the same places yet.";
+      $("#sub-group").textContent = "Not enough people near you reorder the same dishes yet.";
       $("#basis-group").hidden = false;
       $("#basis-group").textContent = "Based on ratings";
       $("#row-group").innerHTML = RATED.filter(x => delivers(DISHES[x.d].r) && vegOK(x.d)).map(x => {
@@ -1288,10 +1310,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
   /* ---------------- Render: Restaurant menu ---------------- */
   const GROUP_REASON = "People near you who share 3 of your favourites keep reordering this";
-  // Short versions for cards and menus; the Why this pick? sheet keeps the full sentence.
-  const GROUP_SHORT = "Loved by people like you";
-  const newShort = () => "New favourite nearby";
-  const newReason = d => `People who love your ${favPhrase()} now keep reordering this ${DISHES[d].name.split(" ").pop().toLowerCase()}.`;
+  // Cards and menus show a one-line "Because you reorder …"; the Why this pick? sheet adds the full sentence.
   // Picks for one restaurant: chosen friends' picks + group picks (and the "something new" pick) that live here
   function restPicks(rid) {
     if (state.newUser) return state.quizDone ? answerPicks().filter(id => DISHES[id].r === rid).map(id => ({ key: "a:" + id, d: id, text: "Matches your answers", grp: true })) : [];
@@ -1301,11 +1320,11 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     }
     const out = friendPicks().filter(p => DISHES[p.d].r === rid).map(p => ({ key: `f:${p.f}:${p.d}`, d: p.d, f: p.f, text: `${FRIENDS[p.f].name} ${p.label}` }));
     if (groupOK()) GROUP_PICKS.filter(p => DISHES[p.d].r === rid && vegOK(p.d) && !state.dismissed["g:" + p.d] && !out.some(o => o.d === p.d))
-      .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: p.kind === "new" ? newShort() : GROUP_SHORT, dismissKey: "g:" + p.d }));
+      .forEach(p => out.push({ key: (p.kind === "new" ? "n:" : "g:") + p.d, d: p.d, text: menuLine(p.d), one: true, dismissKey: "g:" + p.d }));
     // Top up with this restaurant's dishes the group reorders most, so every menu has a few picks
     if (groupOK()) Object.keys(DISHES).filter(id => DISHES[id].r === rid && DISHES[id].reo >= 0.6 && vegOK(id) && !FAVS.includes(id) && !state.dismissed["g:" + id] && !out.some(o => o.d === id))
       .sort((x, y) => DISHES[y].reo - DISHES[x].reo)
-      .forEach(id => out.push({ key: "g:" + id, d: id, text: GROUP_SHORT, dismissKey: "g:" + id }));
+      .forEach(id => out.push({ key: "g:" + id, d: id, text: menuLine(id), one: true, dismissKey: "g:" + id }));
     return out.slice(0, 3);
   }
   function ctl(id) {
@@ -1318,7 +1337,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   function dishRow(id, pick) {
     const d = DISHES[id], open = !!state.expanded[id];
     const signal = pick
-      ? `<div class="pickwhy">${pick.f ? ini(pick.f) : pick.rate ? `<span class="gico rate">${ICON.star}</span>` : `<span class="gico">${ICON.repeat}</span>`}<button class="reason" type="button" data-why="${pick.key}">${pick.text}</button></div>`
+      ? `<div class="pickwhy">${pick.f ? ini(pick.f) : pick.rate ? `<span class="gico rate">${ICON.star}</span>` : `<span class="gico">${ICON.repeat}</span>`}<button class="reason${pick.one ? " one" : ""}" type="button" data-why="${pick.key}">${pick.text}</button></div>`
       : (d.reo >= HIGH_REO ? `<div class="reo"><span class="bar"><i style="width:${Math.round(d.reo * 100)}%"></i></span>Highly reordered</div>` : "");
     return `<div class="dish"><div class="info">${vmark(d)}<span class="dn">${d.name}</span>${signal}<span class="price">₹${d.price}</span>
         <span class="desc${open ? " open" : ""}">${d.desc}</span>${open || d.desc.length < 70 ? "" : `<button class="more" type="button" data-more="${id}">...more</button>`}
@@ -1333,7 +1352,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     const ids = Object.keys(DISHES).filter(id => DISHES[id].r === rid && okDish(id));
     const picks = restPicks(rid).filter(p => okDish(p.d));
     const secs = [];
-    if (picks.length) secs.push({ key: "picks", title: "Picks for you", sub: "From friends you chose and people who reorder the same places as you", rows: picks.map(p => dishRow(p.d, p)) });
+    if (picks.length) secs.push({ key: "picks", title: "Picks for you", sub: "From friends you chose and people who reorder the same dishes as you", rows: picks.map(p => dishRow(p.d, p)) });
     const picked = new Set(picks.map(p => p.d));                               // don't repeat picks below
     const mains = ids.filter(id => DISHES[id].section === "main" && !picked.has(id)).sort((a, b) => DISHES[b].reo - DISHES[a].reo);
     const sides = ids.filter(id => DISHES[id].section === "side" && !picked.has(id));
@@ -1406,19 +1425,19 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       q.className = "wquote";
       q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>Based on your answers</span>`;
       body.innerHTML = `<p>You haven't ordered yet, so we used your 3 quick taps and picked dishes people near you reorder most that match them.</p>
-        <div class="wnote">${LOCK}<span>Once you've reordered a few dishes, picks switch to people near you who reorder the same places as you.</span></div>`;
+        <div class="wnote">${LOCK}<span>Once you've reordered a few dishes, picks switch to people near you who reorder the same dishes as you.</span></div>`;
     } else if (kind === "r") {
       q.className = "wquote rate";
       q.innerHTML = `<span class="gico rate">${ICON.star}</span><span>Highly rated nearby (based on ratings)</span>`;
-      body.innerHTML = `<p>Not enough people near you reorder the same places yet. Until a group reaches ${GROUP.min} people, picks here use star ratings instead of repeat orders.</p>
+      body.innerHTML = `<p>Not enough people near you reorder the same dishes yet. Until a group reaches ${GROUP.min} people, picks here use star ratings instead of repeat orders.</p>
         <div class="wnote">${LOCK}<span>We never show a group smaller than ${GROUP.min}, so nobody's orders can be worked out.</span></div>`;
     } else {
       q.className = "wquote";
-      q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>${kind === "n" ? newReason(d) : GROUP_REASON}</span>`;
-      body.innerHTML = `${kind === "n" ? `<p>You've never ordered this. People who share your favourites recently started reordering it, so it's something new to try.</p>` : ""}
+      q.innerHTML = `<span class="gico">${ICON.repeat}</span><span>${becauseLine(d)}</span>`;
+      body.innerHTML = `<p>${kind === "n" ? "You've never ordered this. People who share your favourites recently started reordering it, so it's something new to try." : GROUP_REASON + "."}</p>
         <span class="wk">Your 3 favourites they share</span>${favChips()}
-        <div class="gsize"><b>${groupSize()}</b><span>people near you who reorder the same places as you. We only show groups of ${GROUP.min} or more.</span></div>
-        <div class="wnote">${LOCK}<span>Based on repeat orders, not star ratings. Nobody's individual orders are shown.</span></div>`;
+        <div class="gsize"><b>${groupSize()}</b><span>people near you who reorder the same dishes as you. We only show groups of ${GROUP.min} or more.</span></div>
+        <div class="wnote">${LOCK}<span>Based on repeat orders, not star ratings. Your taste comes from your order history in any city. Nobody's individual orders are shown.</span></div>`;
     }
     $("#why-add").textContent = state.cart[d] ? "Add another" : "Add to cart";
     $("#why-rest").textContent = `View ${r.name}`;
@@ -1751,7 +1770,7 @@ button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
       }
       case "quiet":
         state.quiet = !state.quiet; renderHome(); renderFriends();
-        return toast(state.quiet ? "Quiet area: fewer than 20 people here reorder the same places as you, so you see \"Highly rated nearby (based on ratings)\"." : "Back to normal: 42 people near you reorder the same places as you.");
+        return toast(state.quiet ? "Quiet area: fewer than 20 people here reorder the same dishes as you, so you see \"Highly rated nearby (based on ratings)\"." : "Back to normal: 42 people near you reorder the same dishes as you.");
       case "newuser":
         state.newUser = !state.newUser; state.quiz = {}; state.quizDone = false; renderHome();
         return toast(state.newUser ? "New user with 0 orders: personal picks are hidden." : "Back to Ananya's account.");
