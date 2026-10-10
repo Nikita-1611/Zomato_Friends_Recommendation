@@ -5,9 +5,7 @@ A PM portfolio prototype for a food delivery feature: dish picks based on **repe
 ## Links
 - **▶ Live prototype:** https://nikita-1611.github.io/Zomato_Friends_Recommendation/
 - **Slide deck:** https://claude.ai/artifact/NEk7dT15dS5UvC1nAD6RAD (private until shared); slide sources are in `deck/`
-- Backup prototype link: https://raw.githack.com/nikita-1611/Zomato_Friends_Recommendation/claude/taste-matched-picks-prototype-5lh87a/index.html
 
-Or download `index.html` and open it in a browser. On a laptop it shows a phone; on a phone it fills the screen.
 
 ## Screens
 - **Home**: address switcher, search, VEG toggle, deals carousel, membership strip, categories, filter chips, then
