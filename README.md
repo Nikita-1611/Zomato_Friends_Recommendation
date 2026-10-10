@@ -35,7 +35,7 @@ A PM portfolio prototype for a food delivery feature: dish picks based on **repe
 - **Simulate new user (0 orders)**: hides personal picks, shows "Highly reordered near you" and 3 quick taps, then 2 picks "Based on your answers"
 
 ## Photos
-Every main dish has a photo (some are crops of a similar dish until a real one is added); a few desserts and cafe items still in `prototype/assets/photos/<dish id>.jpg` show a plain tile. Sources and licences are listed in `prototype/assets/photos/CREDITS.md` and still need confirming before wide sharing. After adding a photo, run `python3 prototype/build.py`.
+Every main dish shows a photo from `prototype/assets/photos/<dish id>.jpg`; some are crops of a similar dish until a real one is added. A few desserts and cafe items still show a plain tile. Sources and licences are listed in `prototype/assets/photos/CREDITS.md` and still need confirming before wide sharing. After adding a photo, run `python3 prototype/build.py`.
 
 ## Deploying
 Every push to this branch republishes the site to GitHub Pages (`.github/workflows/deploy.yml`), live in about a minute.
