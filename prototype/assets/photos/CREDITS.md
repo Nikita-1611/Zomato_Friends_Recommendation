@@ -32,8 +32,6 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | nihari | (stand-in crop) | another crop of the `cat-all` photo above | same as that photo |
 | mirchi | (stand-in crop) | another crop of the `cat-all` photo above | same as that photo |
 | fishfry | (stand-in crop) | another crop of the `c65` photo above | same as that photo |
-| aloo | (stand-in crop) | another crop of the `taloo` photo above | same as that photo |
-| luchi | (stand-in crop) | another crop of the `paratha` photo above | same as that photo |
 | galouti | (stand-in crop) | another crop of the `seekh` photo above | same as that photo |
 | sheermal | (stand-in crop) | another crop of the `paratha` photo above | same as that photo |
 | chole | (stand-in crop) | another crop of the `cat-all` photo above | same as that photo |
@@ -69,6 +67,11 @@ Food photos go in this folder as `<dish id>.jpg` (dish ids are in `DISH_ROWS` in
 | phirni | Phirni | supplied by the project owner | to confirm |
 | jamun | Gulab jamun | supplied by the project owner | to confirm |
 | tiramisu | Tiramisu | supplied by the project owner | to confirm |
+| brownie | Walnut brownie | supplied by the project owner | to confirm |
+| croissant | Butter croissant | supplied by the project owner | to confirm |
+| sandwich | Grilled veggies & hummus sandwich (cropped to leave out sausage) | supplied by the project owner | to confirm |
+| luchi | Luchi (cropped to leave out a website watermark) | supplied by the project owner | to confirm |
+| aloo | Aloo posto | supplied by the project owner | to confirm |
 
 Rows marked "stand-in crop" reuse a nearby dish's photo until a real one is added.
 
